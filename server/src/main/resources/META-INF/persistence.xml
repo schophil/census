@@ -1,0 +1,12 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+    <persistence-unit name="CensusData" transaction-type="RESOURCE_LOCAL">
+        <description>The statistics data.</description>
+        <class>lb.census.model.Subject</class>
+        <class>lb.census.model.DayStats</class>
+        <class>lb.census.model.UserStats</class>
+        <class>lb.census.model.User</class>
+        <class>lb.census.model.SourceIp</class>
+        <class>lb.census.model.TotalActivityPerHour</class>
+        <class>lb.census.model.UserActivityPerHour</class>
+    </persistence-unit>
+</persistence>
