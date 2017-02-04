@@ -1,4 +1,5 @@
 // vim: set sw=2 ts=2:
+'use strict';
 
 var census = census || {};
 
@@ -19,14 +20,10 @@ var census = census || {};
 			});
 	}
 
-	function drawGraph() {
-		console.log('Drawing the graph in ', this.uid);
+	function drawGraphs() {
 		// prepare graph data
 		var labels = this.data.map(function (el) {
 			return el.date.format('dd D.M.YY');
-		});
-		var data = this.data.map(function (el) {
-			return el.totalRequests;
 		});
 		var backgrounds = this.data.map(function (el) {
 			switch (el.date.day()) {
@@ -64,18 +61,37 @@ var census = census || {};
 					return 'rgba(255, 157, 15, 1)';
 			}
 		});
-		// start drawing
+		// draw graph for total requests
+		{		
+			var data = this.data.map(function (el) {
+				return el.totalRequests;
+			});
+			(_drawGraph.bind(this))(this.uida, '# requests', labels, data, backgrounds, borders);
+		}
+		// draw graph for response time
+		{
+			var data = this.data.map(function (el) {
+				return el.averageResponseTime;
+			});
+			(_drawGraph.bind(this))(this.uidb, 'avg response time (seconds)', labels, data, backgrounds, borders);
+		}
+	}
+
+	function _drawGraph(el, title, label, data, background, border) {
+		console.log('Drawing single graph on ', el);
 		var vm = this;
-		var ctx = document.getElementById(this.uid);
+		var ctx = document.getElementById(el);
+		console.log('Drawing single graph on id ', el);
+		console.log('Drawing single graph on ctx ', ctx);
 		var myChart = new Chart(ctx, {
 			type: 'bar',
 			data: {
-				labels: labels,
+				labels: label,
 				datasets: [
 					{
 						data: data,
-						backgroundColor: backgrounds,
-						borderColor: borders,
+						backgroundColor: background,
+						borderColor: border,
 						borderWidth: 1
 					}
 				]
@@ -83,7 +99,7 @@ var census = census || {};
 			options: {
 				title: {
 					display: true,
-					text: 'Total number of requests per day'
+					text: title
         },
 				legend: {
 					display: false
@@ -102,13 +118,15 @@ var census = census || {};
 				}
 			}
 		});	
-		this.chart = myChart;
 	}
 
 	Vue.component('census-dashboard-subject', {
 		template: `
 			<census-panel v-bind:title="subject.name">
-					<canvas v-bind:id="uid" width="400" height="100"></canvas>
+					<div class="row">
+						<div class="col-md-6"><canvas v-bind:id="uida" width="400" height="200"></canvas></div>
+						<div class="col-md-6"><canvas v-bind:id="uidb" width="400" height="200"></canvas></div>
+					</div>
 					<div>
 						<p><button class="btn btn-default" v-on:click="toggleDetails">Toggle details</button></p>
 						<table v-if="showDetails" class="table table-striped">
@@ -146,8 +164,11 @@ var census = census || {};
 			};
 		},
 		computed: {
-			uid: function () {
-				return 'censusDashboardApp' + this.id;
+			uida: function () {
+				return 'census_dashboard_ga_' + this.id;
+			},
+			uidb: function () {
+				return 'census_dashboard_gb_' + this.id;
 			}
 		},
 		methods: {
@@ -163,7 +184,7 @@ var census = census || {};
 			}
 		},
 		watch: {
-			data: drawGraph
+			data: drawGraphs
 		},
 		created: fetchData
 	});
