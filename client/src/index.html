@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!-- vim: set sw=2 ts=2: -->
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Census</title>
+		<link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.min.css">
+		<link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap-theme.min.css">
+		<link rel="stylesheet" href="css/census-theme.css">
+	</head>
+	<body>
+		<div id="spinner"></div>	
+		<div class="main-frame" id="censusApp">
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="#">Census</a>
+					</div>
+					<ul class="nav navbar-nav">
+						<li v-bind:class="{ active: inDashboard }"><a href="#" v-on:click.stop="goToDashboard">Dashboard</a></li>
+						<li><a href="#">Report</a></li>
+						<li><a href="#">Sources</a></li>
+						<li><a href="#">Admin</a></li>
+					</ul>
+				</div>
+			</nav>
+			<div class="container-fluid">
+				<census-dashboard v-if="inDashboard" v-bind:subjects="subjects"></census-dashboard>
+				
+				<!--
+
+				<census-dashboard v-if="inDashboard"></census-dashboard>
+				<census-report></census-report>
+				<census-sources></census-sources>
+
+				-->
+
+				
+			</div>
+		</div>
+		<!-- vendors -->
+		<script src="vendor/moment/moment.js" charset="utf-8"></script>
+		<script src="vendor/chart.js/dist/Chart.min.js" charset="utf-8"></script>
+		<script src="vendor/spin.js/spin.min.js" charset="utf-8"></script>
+		<script src="vendor/axios/dist/axios.min.js" charset="utf-8"></script>
+		<script src="vendor/jquery/dist/jquery.min.js" charset="utf-8"></script>
+		<script src="vendor/bootstrap/dist/js/bootstrap.min.js" charset="utf-8"></script>
+		<script src="vendor/vue/dist/vue.min.js" charset="utf-8"></script>
+		<script src="vendor/vue-router/dist/vue-router.min.js" charset="utf-8"></script>
+		<!-- app code -->
+		<script src="app/app-config.js" charset="utf-8"></script>
+		<script src="app/panel/panel-component.js" charset="utf-8"></script>
+		<script src="app/spinner/spinner-service.js" charset="utf-8"></script>
+		<script src="app/app-service.js" charset="utf-8"></script>
+		<script src="app/dashboard/dashboard-service.js" charset="utf-8"></script>
+		<script src="app/dashboard/dashboard-subject-component.js" charset="utf-8"></script>
+		<script src="app/dashboard/dashboard-component.js" charset="utf-8"></script>
+		<script src="app/app.js" charset="utf-8"></script>
+	</body>
+</html>

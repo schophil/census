@@ -1,0 +1,68 @@
+/* vim: set sw=2 ts=2: */ 
+
+@base: #868990;
+@highlight: #FFFAF6;
+@menu-text: #2C2F35;
+@menu-text-hover: #131825;
+
+html, body {
+	background-color: @base;
+}
+
+/* Customize the menu */
+/* ================== */
+.navbar {
+	background-color: @base;
+	background-image: none;
+	border-color: @base;
+	box-shadow: none;
+}
+
+.navbar-default .navbar-brand {
+	color: @highlight;
+	background-image: none;
+	box-shadow: none;
+	text-shadow: none;
+}
+
+.navbar-default .navbar-brand:hover {
+	color: @menu-text-hover;
+	border-bottom: 1px solid @highlight;
+}
+
+.navbar-default .navbar-nav li.active > a {
+	background-color: @base;
+	background-image: none;
+	box-shadow: none;
+	color: @menu-text;
+	font-weight: bold;
+	border-bottom: 1px solid @base;
+}
+
+.navbar-default .navbar-nav li.active > a:hover {
+	background-color: @base;
+	background-image: none;
+	box-shadow: none;
+	color: @menu-text-hover;
+	border-bottom: 1px solid @highlight;
+}
+
+.navbar-default .navbar-nav li a {
+	color: @menu-text;
+} 
+
+.navbar-default .navbar-nav li a:hover {
+	color: @menu-text-hover;
+	border-bottom: 1px solid @highlight;
+}
+
+/* Blocs */
+/* ===== */
+.panel {
+	box-shadow: 2px 2px 3px @menu-text;
+}
+
+.panel .panel-heading a {
+	float: right;
+}
+
