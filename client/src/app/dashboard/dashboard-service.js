@@ -20,7 +20,7 @@ census.DashboardService = function (mock, moment) {
 				// invent data
 				day.totalRequests = this._invent(30000, 50000);
 				day.totalRequestsInError = this._invent(500, 1000);
-				day.averageResponseTime = 0.2;
+				day.averageResponseTime = this._invent(0, 10);
 				day.maxResponseTime = 5;
 				day.minResponseTime = 0.01;
 				day.totalUserIds = 45;
