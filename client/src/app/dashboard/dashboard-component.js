@@ -6,6 +6,15 @@ var census = census || {};
 
 	function drill(target) {
 		console.log('Drill to ', target);
+		if (target) {
+			this.target.subject = target.subject;
+			this.target.date = target.date;
+			this.level = 2;
+		}
+	}
+
+	function goToStart() {
+		this.level = 1;
 	}
 
 	Vue.component('census-dashboard', {
@@ -13,22 +22,41 @@ var census = census || {};
 		<div id="censusDashboard">
 			<div>
 				<ol class="breadcrumb">
-					<li><a href="#">Home</a></li>
-					<li><a href="#">Library</a></li>
-					<li class="active">Data</li>
+					<li><a href="#" v-on:click.stop="goToStart">Start</a></li>
+					<li v-if="!isLevel1">{{target.subject.name}}</li>
+					<li v-if="isLevel2">{{target.date.format('dd D.M.YY')}}</li>
 				</ol>
 			</div>
-			<div id="censusDashboardLevel1">	
+			<div id="censusDashboardLevel1" v-if="isLevel1">	
 				<census-dashboard-subject v-on:drill="drill" v-bind:id="idx" days="30" v-for="(s, idx) in subjects" v-bind:subject="s"></census-dashboard-subject>
 			</div>
-			<div id="censusDashboardLevel2">
-				
+			<div id="censusDashboardLevel2" v-if="isLevel2">
+				<p>TODO looking at {{target.subject.name}} on {{target.date.format('dd D.M.YY')}}</p>
 			</div>	
 		</div>
 		`,
 		props: ['subjects'],
+		data: function () {
+			return {
+				level: 1,
+				crumbs: [],
+				target: {
+					subject: null,
+					date: null
+				}
+			};
+		},
 		methods: {
-			drill: drill
+			drill: drill,
+			goToStart: goToStart
+		},
+		computed: {
+			isLevel1: function () {
+				return this.level === 1;
+			},
+			isLevel2: function () {
+				return this.level === 2;
+			}
 		}
 	});
 
