@@ -7,7 +7,7 @@ var census = census || {};
 	function fetchData() {
 		var vm = this;
 		census.SpinService.up();
-
+		// fetch the data
 		census.DashboardService.list(this.subject, this.days)
 			.then(function (response) {
 				console.log(response);
@@ -65,6 +65,7 @@ var census = census || {};
 			}
 		});
 		// start drawing
+		var vm = this;
 		var ctx = document.getElementById(this.uid);
 		var myChart = new Chart(ctx, {
 			type: 'bar',
@@ -88,7 +89,9 @@ var census = census || {};
 					display: false
 				},
 				onClick: function (ev, el) {
-
+					if (el && el.length > 0) {
+						vm.drillDown(el[0]._index);
+					}
 				},
 				scales: {
 					yAxes: [{
@@ -151,8 +154,12 @@ var census = census || {};
 			toggleDetails: function () {
 				this.showDetails = !this.showDetails;
 			},
-			drillDown: function () {
-				console.log('DRILL DOWN', this.chart);
+			drillDown: function (idx) {
+				console.log('Drilling down to ', this.data[idx].date.format('DD/MM/YYYY'));
+				this.$emit('drill', { 
+					subject: this.subject, 
+					date: this.data[idx].date 
+				});
 			}
 		},
 		watch: {
