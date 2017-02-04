@@ -27,7 +27,7 @@ var census = census || {};
 					<li v-if="isLevel2">{{target.date.format('dd D.M.YY')}}</li>
 				</ol>
 			</div>
-			<div id="censusDashboardLevel1" v-if="isLevel1">	
+			<div id="censusDashboardLevel1" v-show="isLevel1">	
 				<census-dashboard-subject v-on:drill="drill" v-bind:id="idx" days="30" v-for="(s, idx) in subjects" v-bind:subject="s"></census-dashboard-subject>
 			</div>
 			<div id="censusDashboardLevel2" v-if="isLevel2">
