@@ -5,6 +5,9 @@ var census = census || {};
 census.DashboardService = function (mock, moment) {
 
 	function DashboardService() {
+		this.list = function (subject, days) {
+			return axios.get('/api/' + subject + '/stats/list/' + days);
+		}
 	}
 
 	function MockDashboardService() {
