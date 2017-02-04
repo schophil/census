@@ -11,6 +11,13 @@ var census = census || {};
 	Vue.component('census-dashboard', {
 		template: `
 		<div id="censusDashboard">
+			<div>
+				<ol class="breadcrumb">
+					<li><a href="#">Home</a></li>
+					<li><a href="#">Library</a></li>
+					<li class="active">Data</li>
+				</ol>
+			</div>
 			<div id="censusDashboardLevel1">	
 				<census-dashboard-subject v-on:drill="drill" v-bind:id="idx" days="30" v-for="(s, idx) in subjects" v-bind:subject="s"></census-dashboard-subject>
 			</div>
