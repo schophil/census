@@ -31,7 +31,7 @@ var census = census || {};
 				<census-dashboard-subject v-on:drill="drill" v-bind:id="idx" days="30" v-for="(s, idx) in subjects" v-bind:subject="s"></census-dashboard-subject>
 			</div>
 			<div id="censusDashboardLevel2" v-if="isLevel2">
-				<p>TODO looking at {{target.subject.name}} on {{target.date.format('dd D.M.YY')}}</p>
+				<census-dashboard-subject-day v-bind:subject="target.subject" v-bind:date="target.date"></census-dashboard-subject-day>
 			</div>	
 		</div>
 		`,

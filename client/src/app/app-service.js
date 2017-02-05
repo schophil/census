@@ -25,8 +25,7 @@ census.AppService = function (census) {
 					window.setTimeout(
 						function () {
 							resolve(data);
-						}, 5000
-					);
+						}, census.mockDelay);
 				}
 			);
 			return p;

@@ -2,7 +2,7 @@
 
 var census = census || {};
 
-census.DashboardService = function (mock, moment) {
+census.DashboardService = function (mock, mockDelay, moment) {
 
 	function DashboardService() {
 		this.list = function (subject, days) {
@@ -11,6 +11,40 @@ census.DashboardService = function (mock, moment) {
 	}
 
 	function MockDashboardService() {
+
+		this.dayDetails = function (subject, date, delayed) {
+			var yesterday = {
+				activityPerHour: []
+			};
+			
+			var target = {
+				activityPerHour: []
+			};
+
+			var tomorrow = {
+				activityPerHour: []
+			};
+
+			var group = [yesterday, target, tomorrow];
+			// create fictional data
+			for (var i = 0; i < 24; i++) {
+				group.forEach(g => {
+					var hour = {
+						totalRequests: this._invent(100, 5000),
+						hour: i
+					};
+					g.activityPerHour.push(hour);
+				});
+			}
+
+			var p = new Promise(function (resolve, reject) {
+				window.setTimeout(function () {
+					resolve(group);
+				}, mockDelay);
+			});
+			return p;
+		};
+
 		this.list = function (subject, days) {
 			var data = [];
 			var total = 0;
@@ -41,7 +75,7 @@ census.DashboardService = function (mock, moment) {
 			var p = new Promise(function (resolve, reject) {
 				window.setTimeout(function () {
 					resolve(data);
-				}, 5000);
+				}, mockDelay);
 			});
 			return p;
 		};
@@ -53,4 +87,4 @@ census.DashboardService = function (mock, moment) {
 
 	return mock ? new MockDashboardService() : new DashboardService();
 
-}(census.mock, moment);
+}(census.mock, census.mockDelay, moment);
