@@ -34,7 +34,7 @@ public class TotalActivityPerHourDaoImpl extends BaseDaoImpl implements TotalAct
     @Override
     public List<TotalActivityPerHour> getDayActivity(Date date) {
         TypedQuery<TotalActivityPerHour> query = getEntityManager().createQuery(
-                "SELECT a FROM TotalActivityPerHour a, DayStats d WHERE d.date = :date and a.dayStats = d", TotalActivityPerHour.class);
+                "SELECT a FROM TotalActivityPerHour a, DayStats d WHERE d.date = :date and a.dayStats = d ORDER BY a.hour", TotalActivityPerHour.class);
         query.setParameter("date", date);
         return query.getResultList();
     }
@@ -42,7 +42,7 @@ public class TotalActivityPerHourDaoImpl extends BaseDaoImpl implements TotalAct
     @Override
     public List<TotalActivityPerHour> getDayActivity(DayStats dayStats) {
         TypedQuery<TotalActivityPerHour> query = getEntityManager().createQuery(
-                "SELECT a FROM TotalActivityPerHour a WHERE a.dayStats = :d", TotalActivityPerHour.class);
+                "SELECT a FROM TotalActivityPerHour a WHERE a.dayStats = :d order by a.hour", TotalActivityPerHour.class);
         query.setParameter("d", dayStats);
         return query.getResultList();
     }
