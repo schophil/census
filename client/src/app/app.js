@@ -17,7 +17,7 @@ var census = census || {};
 		census.AppService.getApps()
 			.then(function (response) {
 				console.log(response);
-				vm.subjects = response;
+				vm.subjects = response.data;
 				census.SpinService.down();
 			}).catch(function (error) {
 				console.log(error);

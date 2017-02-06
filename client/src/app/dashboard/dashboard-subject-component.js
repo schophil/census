@@ -12,7 +12,7 @@ var census = census || {};
 		census.DashboardService.list(this.subject, this.days)
 			.then(function (response) {
 				console.log(response);
-				vm.data = response;
+				vm.data = response.data;
 				census.SpinService.down();
 			}).catch(function (error) {
 				console.log(error);

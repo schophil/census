@@ -8,10 +8,10 @@ var census = census || {};
 		var vm = this;
 		census.SpinService.up();
 		// fetch the data
-		census.DashboardService.dayDetails(this.subject.id, this.date)
+		census.DashboardService.dayDetails(this.subject, this.date)
 			.then(function (response) {
 				console.log(response);
-				vm.data = response;
+				vm.data = response.data;
 				census.SpinService.down();
 			}).catch(function (error) {
 				console.log(error);

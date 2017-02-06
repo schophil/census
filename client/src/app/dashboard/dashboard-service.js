@@ -2,17 +2,62 @@
 
 var census = census || {};
 
-census.DashboardService = function (mock, mockDelay, moment) {
+census.DashboardService = function (census, moment) {
 
+	/**
+	 * Concrete implementation of the service using AXIOS.js to make the HTTP calls.
+	 */
 	function DashboardService() {
 		this.list = function (subject, days) {
-			return axios.get('/api/' + subject + '/stats/list/' + days);
+			return axios.get('/api/' + subject.id + '/stats/list/' + days, {
+				transformResponse: [
+					function (data) {
+						console.log('DashboardService.list transform > ', data);
+						data = JSON.parse(data);
+						data.forEach(g => {
+							g.date = moment(g.date, 'YYYY-MM-DD');
+						});
+						return data;
+					}
+				]
+			});
+		};
+
+		this.dayDetails = function (subject, date) {
+			var yesterday = moment(date).subtract(1, 'days');
+			var tomorrow = moment(date).add(1, 'days');
+
+			var self = this;
+			var p = new Promise(function (resolve, reject) {
+				axios.all([ 
+					self._getOneDay(subject, yesterday), 
+					self._getOneDay(subject, date),
+					self._getOneDay(subject, tomorrow), 
+				])
+					.then(axios.spread(function (y, d, t) {
+						resolve({
+							data: [y.data, d.data, t.data]
+						});
+					}));
+			});
+
+			return p;
+		};
+
+		this._getOneDay = function (subject, date) {
+			var dateAsString = date.format('YYYY-MM-DD');
+			var url = '/api/' + subject.id + '/stats/details/' + dateAsString;
+
+			return axios.get(url);
 		}
 	}
 
+	/**
+	 * A mocked version of the service for testing and developing.
+	 */
 	function MockDashboardService() {
 
-		this.dayDetails = function (subject, date, delayed) {
+		this.dayDetails = function (subject, date) {
 			var yesterday = {
 				activityPerHour: []
 			};
@@ -39,8 +84,8 @@ census.DashboardService = function (mock, mockDelay, moment) {
 
 			var p = new Promise(function (resolve, reject) {
 				window.setTimeout(function () {
-					resolve(group);
-				}, mockDelay);
+					resolve({ data: group} );
+				}, census.mockDelay);
 			});
 			return p;
 		};
@@ -74,8 +119,8 @@ census.DashboardService = function (mock, mockDelay, moment) {
 
 			var p = new Promise(function (resolve, reject) {
 				window.setTimeout(function () {
-					resolve(data);
-				}, mockDelay);
+					resolve({ data: data });
+				}, census.mockDelay);
 			});
 			return p;
 		};
@@ -85,6 +130,6 @@ census.DashboardService = function (mock, mockDelay, moment) {
 		};
 	}
 
-	return mock ? new MockDashboardService() : new DashboardService();
+	return census.mock ? new MockDashboardService() : new DashboardService();
 
-}(census.mock, census.mockDelay, moment);
+}(census, moment);
