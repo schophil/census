@@ -30,7 +30,7 @@ public class ConfigController {
         return censusConfig;
     }
 
-    @RequestMapping(value = "/subjects")
+    @RequestMapping(value = "/subjects", produces = "application/json")
     public List<OneSubject> getSubjects() {
         List<OneSubject> oneSubjects = new ArrayList<>();
         subjectDao.getSubjects().stream().forEach(s -> {
