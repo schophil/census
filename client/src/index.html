@@ -18,14 +18,18 @@
 					</div>
 					<ul class="nav navbar-nav">
 						<li v-bind:class="{ active: inDashboard }"><a href="#" v-on:click.stop="goToDashboard">Dashboard</a></li>
+						<li v-bind:class="{ active: inAbout }"><a href="#" v-on:click.stop="goToAbout">About</a></li>
+						<!--
 						<li><a href="#">Report</a></li>
 						<li><a href="#">Sources</a></li>
 						<li><a href="#">Admin</a></li>
+						-->
 					</ul>
 				</div>
 			</nav>
 			<div class="container-fluid">
 				<census-dashboard v-if="inDashboard" v-bind:subjects="subjects"></census-dashboard>
+				<census-about v-if="inAbout"></census-about>
 				
 				<!--
 
@@ -50,6 +54,7 @@
 		<!-- app code -->
 		<script src="app/app-config.js" charset="utf-8"></script>
 		<script src="app/panel/panel-component.js" charset="utf-8"></script>
+		<script src="app/about/about-component.js" charset="utf-8"></script>
 		<script src="app/spinner/spinner-service.js" charset="utf-8"></script>
 		<script src="app/app-service.js" charset="utf-8"></script>
 		<script src="app/dashboard/dashboard-service.js" charset="utf-8"></script>

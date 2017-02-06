@@ -5,7 +5,7 @@
 	Vue.component('census-panel', {
 		template: `
 			<div class="panel panel-default">
-			 	<div class="panel-heading">
+			 	<div class="panel-heading" v-if="title">
 					<span>{{title}}</span> 
 					<a href="#" v-on:click.stop="togglePanel">
 						<span v-if="!showPanel" class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>

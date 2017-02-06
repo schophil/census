@@ -7,6 +7,12 @@ var census = census || {};
 
 	function goToDashboard() {
 		this.inDashboard = true;
+		this.inAbout = false;
+	}
+
+	function goToAbout() {
+		this.inDashboard = false;
+		this.inAbout = true;
 	}
 
 	function _created() {
@@ -29,10 +35,12 @@ var census = census || {};
 		el: '#censusApp',
 		data: {
 			subjects: [],
-			inDashboard: true
+			inDashboard: true,
+			inAbout: false
 		},
 		methods: {
-			goToDashboard: goToDashboard
+			goToDashboard: goToDashboard,
+			goToAbout: goToAbout
 		},
 		created: _created
 	});
