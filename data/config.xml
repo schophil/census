@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<census acid="true" retrievalHour="2" autoRetrieve="true">
+	<subjects>
+        <subject id="epis" name="EPIS">
+            <!-- the files containing the daily logs; can be more than one -->
+            <sources>
+                <source url="file:///Users/philippeschottey/Projects/census/data/access_log.txt" datePattern="dd.MM.yy"></source>
+            </sources>
+            <!-- The structure of a log statement -->
+            <jhks></jhks>
+            <!-- Filters that remove log entries -->
+            <filters>
+                <pattern-filter regexp=".*philippe.*"></pattern-filter>
+            </filters>
+        </subject>
+    </subjects>
+</census>
