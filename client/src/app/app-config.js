@@ -3,7 +3,7 @@
 
 var census = census || {};
 
-census.mock = false;
+census.mock = true;
 census.mockDelay = 1000;
 
 census.dateFormat = 'dd D.M.YY';
