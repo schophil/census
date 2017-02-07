@@ -75,10 +75,18 @@ census.DashboardService = function (census, moment) {
 			for (var i = 0; i < 24; i++) {
 				group.forEach(g => {
 					var hour = {
-						totalRequests: this._invent(100, 5000),
+						totalRequests: _.random(100, 5000),
 						hour: i
 					};
 					g.activityPerHour.push(hour);
+				});
+			}
+
+			target.popularResources = [];
+			for (var j = 0; j < 10; j++) {
+				target.popularResources.push({
+					path: '/fictive/resource/' + _.random(100, 200),
+					hits: _.random(5, 100)
 				});
 			}
 

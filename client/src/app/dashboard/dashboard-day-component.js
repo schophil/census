@@ -90,6 +90,7 @@ var census = census || {};
 
 	Vue.component('census-dashboard-subject-day', {
 		template: `
+		<div>	
 			<census-panel title="Total requests per hour">
 					<canvas v-bind:id="uid" width="400" height="100"></canvas>
 					<div>
@@ -117,6 +118,23 @@ var census = census || {};
 						</table>
 					</div>
 			</census-panel>
+			<census-panel title="Popular resources">
+				<table class="table table-striped" v-if="targetData">
+					<thead>
+						<tr>
+							<th>Resource</th>
+							<th>Hits</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="r in targetData.popularResources">
+							<td>{{r.path}}</td>
+							<td>{{r.hits}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</census-panel>
+		</div>
 		`,
 		props: ['subject', 'date'],
 		data: function () {
@@ -148,6 +166,9 @@ var census = census || {};
 			},
 			tomorrow: function () {
 				return moment(this.date).add(1, 'days');
+			},
+			targetData: function () {
+				return this.data ? this.data[1] : null;
 			}
 		},
 		methods: {
