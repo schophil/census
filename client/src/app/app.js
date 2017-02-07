@@ -28,6 +28,10 @@ var census = census || {};
 			}).catch(function (error) {
 				console.log(error);
 				census.SpinService.down();
+				this.alerts.push({
+					title: "Communication error ocurred",
+					message: error
+				});
 			});
 	}
 
@@ -36,7 +40,8 @@ var census = census || {};
 		data: {
 			subjects: [],
 			inDashboard: true,
-			inAbout: false
+			inAbout: false,
+			alerts: []
 		},
 		methods: {
 			goToDashboard: goToDashboard,

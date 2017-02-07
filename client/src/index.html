@@ -28,7 +28,8 @@
 				</div>
 			</nav>
 			<div class="container-fluid">
-				<census-dashboard v-if="inDashboard" v-bind:subjects="subjects"></census-dashboard>
+				<census-alert v-for="a in alerts" v-bind:title="a.title" v-bind:message="a.message"></census-alert>
+				<census-dashboard v-if="inDashboard" v-bind:subjects="subjects" v-on:error="onError"></census-dashboard>
 				<census-about v-if="inAbout"></census-about>
 				
 				<!--
@@ -54,6 +55,7 @@
 		<script src="vendor/vue-router/dist/vue-router.min.js" charset="utf-8"></script>
 		<!-- app code -->
 		<script src="app/app-config.js" charset="utf-8"></script>
+		<script src="app/alert/alert-component.js" charset="utf-8"></script>
 		<script src="app/panel/panel-component.js" charset="utf-8"></script>
 		<script src="app/about/about-component.js" charset="utf-8"></script>
 		<script src="app/spinner/spinner-service.js" charset="utf-8"></script>
