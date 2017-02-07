@@ -32,7 +32,7 @@ var census = census || {};
 		// prepare data for yesterday
 		var yesterday = { };
 		yesterday.label = this.yesterday.format(census.dateFormat);
-		if (this.showAdjacentDays) {
+		if (this.showAdjacentDays && this.data[0].activityPerHour) {
 			yesterday.data = this.data[0].activityPerHour.map(function (el) {
 				return el.totalRequests;
 			});
@@ -52,7 +52,7 @@ var census = census || {};
 
 		var tomorrow = { };
 		tomorrow.label = this.tomorrow.format(census.dateFormat);
-		if (this.showAdjacentDays) {
+		if (this.showAdjacentDays && this.data[2].activityPerHour) {
 			tomorrow.data = this.data[2].activityPerHour.map(function (el) {
 				return el.totalRequests;
 			});
