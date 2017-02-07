@@ -8,6 +8,10 @@ census.DashboardService = function (census, moment) {
 	 * Concrete implementation of the service using AXIOS.js to make the HTTP calls.
 	 */
 	function DashboardService() {
+
+		/**
+		 * Lists the statistics for the last X days for a specific subject.
+		 */
 		this.list = function (subject, days) {
 			return axios.get('/api/' + subject.id + '/stats/list/' + days, {
 				transformResponse: [
@@ -23,6 +27,10 @@ census.DashboardService = function (census, moment) {
 			});
 		};
 
+		/**
+		 * Retrieves the detailed statistics for a specific subject on a specific date. This will 
+		 * actually retrieve 3 days: the target, the date before and the date after.
+		 */
 		this.dayDetails = function (subject, date) {
 			var yesterday = moment(date).subtract(1, 'days');
 			var tomorrow = moment(date).add(1, 'days');
