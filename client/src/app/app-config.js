@@ -7,4 +7,5 @@ census.mock = true;
 census.mockDelay = 1000;
 
 census.dateFormat = 'dd D.M.YY';
+census.dateApiFormat = 'YYYY-MM-DD';
 

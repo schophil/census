@@ -15,7 +15,7 @@ census.DashboardService = function (census, moment) {
 						console.log('DashboardService.list transform > ', data);
 						data = JSON.parse(data);
 						data.forEach(g => {
-							g.date = moment(g.date, 'YYYY-MM-DD');
+							g.date = moment(g.date, census.dateApiFormat);
 						});
 						return data;
 					}
@@ -45,7 +45,7 @@ census.DashboardService = function (census, moment) {
 		};
 
 		this._getOneDay = function (subject, date) {
-			var dateAsString = date.format('YYYY-MM-DD');
+			var dateAsString = date.format(census.dateApiFormat);
 			var url = '/api/' + subject.id + '/stats/details/' + dateAsString;
 
 			return axios.get(url);
@@ -108,9 +108,9 @@ census.DashboardService = function (census, moment) {
 					date: moment().subtract(i, 'days')
 				};
 				// invent data
-				day.totalRequests = this._invent(30000, 50000);
-				day.totalRequestsInError = this._invent(500, 1000);
-				day.averageResponseTime = this._invent(0, 10);
+				day.totalRequests = _.random(30000, 50000);
+				day.totalRequestsInError = _.random(500, 1000);
+				day.averageResponseTime = _.random(0, 10, true);
 				day.maxResponseTime = 5;
 				day.minResponseTime = 0.01;
 				day.totalUserIds = 45;
@@ -131,10 +131,6 @@ census.DashboardService = function (census, moment) {
 				}, census.mockDelay);
 			});
 			return p;
-		};
-
-		this._invent = function (min, max) {
-			return Math.floor(Math.random() * (max - min)) + min;
 		};
 	}
 
