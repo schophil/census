@@ -15,7 +15,10 @@ var census = census || {};
 				vm.data = response.data;
 				census.SpinService.down();
 			}).catch(function (error) {
-				console.log(error);
+				this.$emit('error', {
+					title: 'Error retrieving data',
+					message: error
+				});
 				census.SpinService.down();
 			});
 	}

@@ -15,6 +15,17 @@ var census = census || {};
 		this.inAbout = true;
 	}
 
+	function clearAlerts() {
+		this.alerts.splice(0, this.alerts.length);
+	}
+
+	function onError(e) {
+		vm.alerts.push({
+			title: e.title,
+			message: e.message
+		});
+	}
+
 	function _created() {
 		console.log('Fetching the list of apps with', census.AppService);
 		var vm = this;
@@ -28,7 +39,7 @@ var census = census || {};
 			}).catch(function (error) {
 				console.log(error);
 				census.SpinService.down();
-				this.alerts.push({
+				vm.alerts.push({
 					title: "Communication error ocurred",
 					message: error
 				});
@@ -43,9 +54,16 @@ var census = census || {};
 			inAbout: false,
 			alerts: []
 		},
+		computed: {
+			hasAlerts: function () {
+				return this.alerts.length > 0;
+			}
+		},
 		methods: {
 			goToDashboard: goToDashboard,
-			goToAbout: goToAbout
+			goToAbout: goToAbout,
+			clearAlerts: clearAlerts,
+			onError: onError
 		},
 		created: _created
 	});

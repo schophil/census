@@ -28,7 +28,12 @@
 				</div>
 			</nav>
 			<div class="container-fluid">
-				<census-alert v-for="a in alerts" v-bind:title="a.title" v-bind:message="a.message"></census-alert>
+				<div class="alert alert-danger" role="alert" v-if="hasAlerts">
+					<button v-on:click="clearAlerts" type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<div v-for="a in alerts">
+						<strong>{{a.title}}</strong> {{a.message}}
+					</div>
+				</div>
 				<census-dashboard v-if="inDashboard" v-bind:subjects="subjects" v-on:error="onError"></census-dashboard>
 				<census-about v-if="inAbout"></census-about>
 				
