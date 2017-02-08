@@ -16,5 +16,7 @@ public interface SourceIpDao {
 
     List<SourceIp> getSourceIPsFor(int lastDays, String subject);
 
+    List<SourceIp> searchSourceIPs(String query, int lastDays);
+
     int deleteSourceIPsOf(int lastDays);
 }
