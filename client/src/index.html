@@ -20,11 +20,6 @@
 						<li v-bind:class="{ active: inDashboard }"><a href="#" v-on:click.stop="goToDashboard">Dashboard</a></li>
 						<li v-bind:class="{ active: inSourceip }"><a href="#" v-on:click.stop="goToSourceip">Source ips</a></li>
 						<li v-bind:class="{ active: inAbout }"><a href="#" v-on:click.stop="goToAbout">About</a></li>
-						<!--
-						<li><a href="#">Report</a></li>
-						<li><a href="#">Sources</a></li>
-						<li><a href="#">Admin</a></li>
-						-->
 					</ul>
 				</div>
 			</nav>
@@ -38,16 +33,6 @@
 				<census-dashboard v-if="inDashboard" v-bind:subjects="subjects" v-on:error="onError"></census-dashboard>
 				<census-sourceip v-if="inSourceip" v-bind:subjects="subjects" v-on:error="onError"></census-sourceip>
 				<census-about v-if="inAbout"></census-about>
-				
-				<!--
-
-				<census-dashboard v-if="inDashboard"></census-dashboard>
-				<census-report></census-report>
-				<census-sources></census-sources>
-
-				-->
-
-				
 			</div>
 		</div>
 		<!-- vendors -->
@@ -71,6 +56,7 @@
 		<script src="app/dashboard/dashboard-day-component.js" charset="utf-8"></script>
 		<script src="app/dashboard/dashboard-subject-component.js" charset="utf-8"></script>
 		<script src="app/dashboard/dashboard-component.js" charset="utf-8"></script>
+		<script src="app/sourceip/sourceip-service.js" charset="utf-8"></script>
 		<script src="app/sourceip/sourceip-component.js" charset="utf-8"></script>
 		<script src="app/app.js" charset="utf-8"></script>
 	</body>
