@@ -2,12 +2,11 @@ package lb.census.api.sources;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
+import lb.census.model.SourceIp;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lb.census.dao.SourceIpDao;
 
@@ -16,16 +15,25 @@ import lb.census.dao.SourceIpDao;
  */
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/{subject}/sources")
+@RequestMapping("/api/sources")
 public class SourcesController {
 
     @Autowired
     private SourceIpDao sourceIpDao;
 
-    @RequestMapping("/last/{days}")
+    @RequestMapping("/{subject}/last/{days}")
     public Collection<OneSource> getAllSources(@PathVariable("subject") String subject, @PathVariable("days") int days) {
+        return pack(sourceIpDao.getSourceIPsFor(days, subject));
+    }
+
+    @RequestMapping()
+    public Collection<OneSource> searchSources(@RequestParam("days") int days, @RequestParam("query") String query) {
+        return pack(sourceIpDao.searchSourceIPs(query, days));
+    }
+
+    private Collection<OneSource> pack(List<SourceIp> ips) {
         HashMap<String, OneSource> sources = new HashMap<>();
-        sourceIpDao.getSourceIPsFor(days, subject).stream().forEach(sourceIp -> {
+        ips.stream().forEach(sourceIp -> {
             OneSource source = sources.get(sourceIp.getUserId());
             if (source == null) {
                 source = new OneSource();

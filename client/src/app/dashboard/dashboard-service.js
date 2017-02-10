@@ -13,7 +13,7 @@ census.DashboardService = function (census, moment) {
 		 * Lists the statistics for the last X days for a specific subject.
 		 */
 		this.list = function (subject, days) {
-			return axios.get('/api/' + subject.id + '/stats/list/' + days, {
+			return axios.get('/api/stats/' + subject.id + '/list/' + days, {
 				transformResponse: [
 					function (data) {
 						console.log('DashboardService.list transform > ', data);
@@ -54,7 +54,7 @@ census.DashboardService = function (census, moment) {
 
 		this._getOneDay = function (subject, date) {
 			var dateAsString = date.format(census.dateApiFormat);
-			var url = '/api/' + subject.id + '/stats/details/' + dateAsString;
+			var url = '/api/stats/' + subject.id + '/details/' + dateAsString;
 
 			return axios.get(url);
 		}

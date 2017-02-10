@@ -30,7 +30,7 @@ import lb.census.utils.UserBaseReducer;
  */
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/{subject}/stats")
+@RequestMapping("/api/stats/{subject}")
 public class DayController extends CensusController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DayController.class);

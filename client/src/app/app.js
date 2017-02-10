@@ -8,11 +8,19 @@ var census = census || {};
 	function goToDashboard() {
 		this.inDashboard = true;
 		this.inAbout = false;
+		this.inSourceip = false;
 	}
 
 	function goToAbout() {
 		this.inDashboard = false;
 		this.inAbout = true;
+		this.inSourceip = false;
+	}
+
+	function goToSourceip() {
+		this.inDashboard = false;
+		this.inAbout = false;
+		this.inSourceip = true;
 	}
 
 	function clearAlerts() {
@@ -20,7 +28,7 @@ var census = census || {};
 	}
 
 	function onError(e) {
-		vm.alerts.push({
+		this.alerts.push({
 			title: e.title,
 			message: e.message
 		});
@@ -51,6 +59,7 @@ var census = census || {};
 		data: {
 			subjects: [],
 			inDashboard: true,
+			inSourceip: false,
 			inAbout: false,
 			alerts: []
 		},
@@ -62,6 +71,7 @@ var census = census || {};
 		methods: {
 			goToDashboard: goToDashboard,
 			goToAbout: goToAbout,
+			goToSourceip: goToSourceip,
 			clearAlerts: clearAlerts,
 			onError: onError
 		},
