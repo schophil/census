@@ -8,6 +8,7 @@ var census = census || {};
 		console.log("Searching ", this.search);	
 		var vm = this;
 		census.SpinService.up();
+		this.data.splice(0, this.data.length);
 		census.SourceipService.search(this.search.filter, this.search.days)
 			.then(function (response) {
 				response.data.forEach(function (item) {
