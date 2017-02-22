@@ -106,6 +106,10 @@ public class AccessLogRetriever implements Runnable {
 
     @PostConstruct
     public void startup() {
+        if (!censusConfig.isStartRetrieve()) {
+            LOGGER.warn("Retrieval is deactivated!");
+            return;
+        }
         if (!censusConfig.isAutoRetrieve()) {
             LOGGER.warn("Auto retrieval is deactivated!");
         }

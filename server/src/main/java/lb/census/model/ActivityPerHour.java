@@ -32,9 +32,19 @@ public abstract class ActivityPerHour {
     private Integer hour;
     @Column(name = "hits")
     private Integer hits;
+    @Column(name = "raverage")
+    private Double averageResponseTime;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "daystat")
     private DayStats dayStats;
+
+    public Double getAverageResponseTime() {
+        return averageResponseTime;
+    }
+
+    public void setAverageResponseTime(Double averageResponseTime) {
+        this.averageResponseTime = averageResponseTime;
+    }
 
     public String getId() {
         return id;

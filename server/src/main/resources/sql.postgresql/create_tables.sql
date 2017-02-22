@@ -71,7 +71,7 @@ create table census_sourceip (
 );
 
 --
--- create table for day activities
+-- create table for day activities (activity = stats per hour)
 --
 create table census_dayactivity (
 	id varchar(25),
@@ -83,7 +83,7 @@ create table census_dayactivity (
 );
 
 --
--- create table for activity per user
+-- create table for activity per user (activity = stats per hour)
 --
 create table census_useractivity (
 	id varchar(25),

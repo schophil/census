@@ -17,6 +17,14 @@ public class Resources {
     @Value("${census.config}")
     private String config;
 
+    public Resources() {
+    }
+
+    public Resources(String data, String config) {
+        this.data = data;
+        this.config = config;
+    }
+
     public String getConfig() {
         return config;
     }

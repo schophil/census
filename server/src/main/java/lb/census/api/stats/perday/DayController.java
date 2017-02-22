@@ -85,13 +85,6 @@ public class DayController extends CensusController {
 		List<OneDay> result = new ArrayList<>();
 		list.stream().forEach(d -> result.add(map(d, new OneDay())));
 
-		if (!result.isEmpty()) {
-			OneDay max = result.stream().max((d1, d2) -> d1.totalRequests.compareTo(d2.totalRequests)).get();
-			result.stream().forEach(d -> {
-				d.share = d.totalRequests * 100 / max.totalRequests;
-			});
-		}
-
 		return result;
 	}
 

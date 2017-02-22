@@ -22,6 +22,14 @@ public class Subject implements Serializable {
     @Column
     private String name;
 
+    public Subject() {
+    }
+
+    public Subject(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public String getId() {
         return id;
     }

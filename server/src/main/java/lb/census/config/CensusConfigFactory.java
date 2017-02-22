@@ -47,7 +47,9 @@ public class CensusConfigFactory {
                     CsvLog.class, JhksStandardLog.class, ApacheLogFormat.class, PatternFilter.class);
             return (CensusConfig) context.createUnmarshaller().unmarshal(url);
         } catch (JAXBException e) {
-            throw new RuntimeException(e);
+            LOGGER.error("Error reading config from " + url + ", returning empty config!");
+            LOGGER.error("Reading error: " + e.getMessage());
+            return new CensusConfig();
         }
     }
 }
