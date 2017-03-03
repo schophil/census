@@ -14,4 +14,6 @@ public interface SubjectDao {
     List<Subject> getSubjects();
 
     void save(Subject subject);
+
+    Subject get(String id);
 }

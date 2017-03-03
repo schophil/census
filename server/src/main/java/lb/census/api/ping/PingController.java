@@ -13,15 +13,12 @@ import lb.census.record.RecordService;
  * @author phili
  * @since 21-Nov-2015
  */
-@RestController("/api")
 public class PingController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PingController.class);
     
-    @Autowired
     private RecordService recordService;
 
-    @RequestMapping("/ping")
     public String ping() {
         LOGGER.info("Using record service {}", recordService);
         return "pong";

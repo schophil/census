@@ -1,4 +1,3 @@
-// vim: set ts=2 sw=2:
 var gulp  = require('gulp');
 var server = require('gulp-server-livereload');
 var minify = require('gulp-jsmin');

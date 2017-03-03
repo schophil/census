@@ -1,4 +1,9 @@
-package lb.census.api.stats.perday;
+package lb.census.rest.subjects.stats;
+
+import lb.census.api.stats.perday.OneHour;
+import lb.census.api.stats.perday.OneResource;
+import lb.census.api.stats.perday.OneUser;
+import lb.census.rest.subjects.stats.OneDay;
 
 import java.util.List;
 

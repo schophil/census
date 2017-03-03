@@ -1,6 +1,5 @@
 package lb.census.record;
 
-import com.sun.jmx.snmp.UserAcl;
 import lb.census.TestScope;
 import lb.census.dao.DayStatsDao;
 import lb.census.dao.TotalActivityPerHourDao;
@@ -12,7 +11,6 @@ import lb.census.record.log.LogRecord;
 import lb.census.record.recorders.ActivityPerHourRecorder;
 import lb.census.record.recorders.RecorderContext;
 import org.apache.commons.lang3.time.DateUtils;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,11 +20,11 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 /**

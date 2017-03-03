@@ -1,4 +1,4 @@
-package lb.census.api.userbase;
+package lb.census.rest.subjects.users;
 
 import java.util.Date;
 

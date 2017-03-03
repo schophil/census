@@ -1,8 +1,9 @@
-package lb.census.api.config;
+package lb.census.rest.config;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import lb.census.rest.subjects.OneSubject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,9 +16,8 @@ import lb.census.dao.SubjectDao;
  * @author phili
  * @since 23-Nov-2015
  */
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/rest")
 public class ConfigController {
 
     @Autowired
@@ -25,17 +25,8 @@ public class ConfigController {
     @Autowired
     private SubjectDao subjectDao;
 
-    @RequestMapping(value = "/config", produces = "application/json")
+    @RequestMapping(value = "/config")
     public CensusConfig getConfig() {
         return censusConfig;
-    }
-
-    @RequestMapping(value = "/subjects", produces = "application/json")
-    public List<OneSubject> getSubjects() {
-        List<OneSubject> oneSubjects = new ArrayList<>();
-        subjectDao.getSubjects().stream().forEach(s -> {
-            oneSubjects.add(new OneSubject(s.getId(), s.getName()));
-        });
-        return oneSubjects;
     }
 }

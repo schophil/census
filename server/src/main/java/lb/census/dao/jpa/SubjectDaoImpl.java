@@ -31,4 +31,9 @@ public class SubjectDaoImpl extends BaseDaoImpl implements SubjectDao {
             getEntityManager().merge(subject);
         }
     }
+
+    @Override
+    public Subject get(String id) {
+        return getEntityManager().find(Subject.class, id);
+    }
 }

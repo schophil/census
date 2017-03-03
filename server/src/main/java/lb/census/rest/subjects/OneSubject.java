@@ -1,4 +1,4 @@
-package lb.census.api.config;
+package lb.census.rest.subjects;
 
 /**
  * Created by philippe on 31/12/15.
