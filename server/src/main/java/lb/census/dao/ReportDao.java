@@ -1,5 +1,6 @@
 package lb.census.dao;
 
+import lb.census.model.CategoryFilter;
 import lb.census.model.DayStatsReport;
 
 import java.util.Date;
@@ -13,10 +14,10 @@ public interface ReportDao {
     /**
      * Calculates daily stats only taking into account users that match the filter.
      *
-     * @param from               The beginning of the period to analyse
-     * @param until              The end of the period to analyse
-     * @param subject            The subject to apply on (extra filter on users)
-     * @param userCategoryFilter A filter expression on the users
+     * @param from            The beginning of the period to analyse
+     * @param until           The end of the period to analyse
+     * @param subject         The subject to apply on (extra filter on users)
+     * @param categoryFilters A filter expression on the users
      */
-    List<DayStatsReport> listDailyStats(Date from, Date until, String subject, String userCategoryFilter);
+    List<DayStatsReport> listDailyStats(Date from, Date until, String subject, List<CategoryFilter> categoryFilters);
 }

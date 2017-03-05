@@ -57,6 +57,9 @@ public class Transformer implements Recorder {
 
     @Override
     public void record(LogRecord logRecord, RecorderContext recorderContext) {
+        if (scriptEngine == null) {
+            return;
+        }
         scriptEngine.put("logRecord", logRecord);
         try {
             scriptEngine.eval(script);

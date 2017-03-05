@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import lb.census.record.FilesLogSet;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.commons.vfs2.FileSystemOptions;
@@ -27,7 +28,6 @@ import lb.census.config.CensusConfig;
 import lb.census.config.LogSource;
 import lb.census.config.LogSubject;
 import lb.census.model.Subject;
-import lb.census.record.LogSet;
 import lb.census.record.RecordService;
 import lb.census.record.anomalies.AnomalyDetectorService;
 import lb.census.record.log.LogRecordFactory;
@@ -241,13 +241,13 @@ public class AccessLogRetriever implements Runnable {
 
             // record
             if (!retrievedFiles.isEmpty()) {
-                LogSet logSet = new LogSet();
+                FilesLogSet logSet = new FilesLogSet();
                 logSet.setDate(calendar.getTime());
                 logSet.setLogFiles(retrievedFiles);
                 logSet.setLogRecordFactory(getLogRecordFactory(logSubject));
                 logSet.setFilters(logSubject.getFilters());
 
-                getRecordService().recordFiles(logSet, asModel(logSubject));
+                getRecordService().record(logSet, asModel(logSubject));
             }
 
             return true;

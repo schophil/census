@@ -3,14 +3,14 @@ package lb.census.record;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 import lb.census.record.filters.Filter;
 import lb.census.record.log.LogRecordFactory;
 
-public class LogSet {
+public abstract class LogSet {
 
     private Date date;
-    private List<File> logFiles;
     private LogRecordFactory logRecordFactory;
     private List<Filter> filters;
 
@@ -20,14 +20,6 @@ public class LogSet {
 
     public void setFilters(List<Filter> filters) {
         this.filters = filters;
-    }
-
-    public List<File> getLogFiles() {
-        return logFiles;
-    }
-
-    public void setLogFiles(List<File> logFiles) {
-        this.logFiles = logFiles;
     }
 
     public Date getDate() {
@@ -45,4 +37,6 @@ public class LogSet {
     public void setLogRecordFactory(LogRecordFactory logRecordFactory) {
         this.logRecordFactory = logRecordFactory;
     }
+
+    public abstract List<Stream<String>> getLogData();
 }

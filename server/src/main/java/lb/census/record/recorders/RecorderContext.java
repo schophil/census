@@ -7,6 +7,8 @@ public class RecorderContext {
 
     private Subject subject;
     private DayStats currentDayStats;
+    private int imported;
+    private int filtered;
 
     public RecorderContext(Subject subject) {
         this.subject = subject;
@@ -22,5 +24,21 @@ public class RecorderContext {
 
     public void setCurrentDayStats(DayStats currentDayStats) {
         this.currentDayStats = currentDayStats;
+    }
+
+    public void addImported(int total) {
+        this.imported += total;
+    }
+
+    public void addFiltered(int total) {
+        this.filtered += total;
+    }
+
+    public int getImported() {
+        return imported;
+    }
+
+    public int getFiltered() {
+        return filtered;
     }
 }

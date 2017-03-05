@@ -4,6 +4,8 @@ import lb.census.api.stats.perday.OneHour;
 import lb.census.api.stats.perday.OneResource;
 import lb.census.api.stats.perday.OneUser;
 import lb.census.rest.subjects.stats.OneDay;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 

@@ -46,7 +46,7 @@ public class PatternFilter extends Filter {
 
     @Override
     public boolean passes(LogRecord logRecord) {
-        return !pattern.matcher(logRecord.getOriginalLine()).matches();
+        return passes(logRecord.getOriginalLine());
     }
 
     @Override

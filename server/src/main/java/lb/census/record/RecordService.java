@@ -1,6 +1,7 @@
 package lb.census.record;
 
 import lb.census.model.Subject;
+import lb.census.record.recorders.RecorderContext;
 
 /**
  * @author phili
@@ -13,5 +14,5 @@ public interface RecordService {
      * @param logSet
      * @param subject
      */
-    void recordFiles(LogSet logSet, Subject subject);
+    RecorderContext record(LogSet logSet, Subject subject);
 }

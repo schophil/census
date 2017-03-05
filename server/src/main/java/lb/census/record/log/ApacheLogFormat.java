@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * Example record
  * <pre>
- * 127.0.0.1 - tomcat [02/Apr/2014:22:45:40 +0200] "GET /manager/text/undeploy?path=/alor HTTP/1.1" 200 61
+ * 127.0.0.1 - tomcat [02/Apr/2014:22:45:40 +0200] "GET /manager/text/undeploy?path=/alor HTTP/1.1" 200 61 0.2
  * </pre>
  *
  * @author psc

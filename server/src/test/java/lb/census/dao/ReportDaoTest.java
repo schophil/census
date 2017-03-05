@@ -1,10 +1,7 @@
 package lb.census.dao;
 
 import lb.census.TestScope;
-import lb.census.model.DayStats;
-import lb.census.model.DayStatsReport;
-import lb.census.model.User;
-import lb.census.model.UserActivityPerHour;
+import lb.census.model.*;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,6 +12,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -97,7 +95,10 @@ public class ReportDaoTest {
 
     @Test
     public void listTest() {
-        List<DayStatsReport> reports = reportDao.listDailyStats(DateUtils.addDays(new Date(), -5), new Date(), "test", "VIP");
+        List<CategoryFilter> categoryFilters = new ArrayList<>();
+        categoryFilters.add(new CategoryFilter("VIP"));
+
+        List<DayStatsReport> reports = reportDao.listDailyStats(DateUtils.addDays(new Date(), -5), new Date(), "test", categoryFilters);
         assertThat(reports.size(), is(1));
 
         assertThat(reports.get(0).getTotalRequests(), is(250));

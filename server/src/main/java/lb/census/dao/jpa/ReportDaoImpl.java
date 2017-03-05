@@ -7,10 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,25 +23,23 @@ public class ReportDaoImpl extends BaseDaoImpl implements ReportDao {
 
     @Transactional(readOnly = true)
     @Override
-    public List<DayStatsReport> listDailyStats(Date from, Date until, String subject, String userCategoryFilter) {
-        LOGGER.trace("list daily stats with {}, {}, {}, {}", from, until, subject, userCategoryFilter);
+    public List<DayStatsReport> listDailyStats(Date from, Date until, String subject, List<CategoryFilter> categoryFilters) {
+        LOGGER.trace("list daily stats with {}, {}, {}, {}", from, until, subject, categoryFilters);
 
-        List<CategoryFilter> filters = CategoryFilter.parse(userCategoryFilter);
-
-        // Deivide the category expressions in 2 lists:
+        // Divide the category expressions in 2 lists:
         // in: The categories to include
         // out: The categories to exclude
-        List<String> in = new ArrayList<>(filters.size());
-        List<String> out = new ArrayList<>(filters.size());
-        for (CategoryFilter filter : filters) {
-            if (filter.isExclude()) {
-                out.add(filter.getCategory());
-            } else {
-                in.add(filter.getCategory());
-            }
-        }
+        List<String> in = categoryFilters.stream()
+                .filter(f -> !f.isExclude())
+                .map(f -> f.getCategory())
+                .collect(Collectors.toList());
 
-        // We actually build:
+        List<String> out = categoryFilters.stream()
+                .filter(f -> f.isExclude())
+                .map(f -> f.getCategory())
+                .collect(Collectors.toList());
+
+        // We actually build something like:
         // SELECT date, sum(totalRequests), avg(averageResponseTime)
         // FROM UserActivityPerHour a, User u
         // WHERE
@@ -55,32 +50,40 @@ public class ReportDaoImpl extends BaseDaoImpl implements ReportDao {
         // GROUP BY date
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 
-        CriteriaQuery q = cb.createQuery();
+        CriteriaQuery<Object[]> q = cb.createQuery(Object[].class);
 
         Root<UserActivityPerHour> hourRoot = q.from(UserActivityPerHour.class);
-        Join<UserActivityPerHour, DayStats> join = hourRoot.join(hourRoot.getModel().getSingularAttribute("dayStats", DayStats.class));
+        Join<UserActivityPerHour, DayStats> join = hourRoot.join(
+                hourRoot.getModel().getSingularAttribute("dayStats", DayStats.class));
         Root<User> userRoot = q.from(User.class);
 
-        q = q.multiselect(join.get("date"), cb.sum(hourRoot.get("hits"))).where(
-                cb.equal(hourRoot.get("userId"), userRoot.get("userId"))
-                , cb.greaterThanOrEqualTo(join.get("date"), from)
-                , cb.lessThanOrEqualTo(join.get("date"), until)
-                , userRoot.get("category").in(in)
-                , cb.not(userRoot.get("category").in(out))
-        ).groupBy(join.get("date"));
+        q = q.multiselect(join.get("date"), cb.sum(hourRoot.get("hits")));
 
-        LOGGER.trace("Executing query");
-        List qResult = getEntityManager().createQuery(q).getResultList();
+        List<Predicate> conditions = new ArrayList<>();
+        conditions.add(cb.equal(hourRoot.get("userId"), userRoot.get("userId")));
+        conditions.add(cb.greaterThanOrEqualTo(join.get("date"), from));
+        conditions.add(cb.lessThanOrEqualTo(join.get("date"), until));
+        if (!in.isEmpty()) {
+            conditions.add(userRoot.get("category").in(in));
+        }
+        if (!out.isEmpty()) {
+            conditions.add(cb.not(userRoot.get("category").in(out)));
+        }
+        q.where(cb.and(conditions.toArray(new Predicate[conditions.size()])));
 
-        LOGGER.trace("Collecting results");
-        List<DayStatsReport> result = new ArrayList<>(qResult.size());
-        qResult.stream().forEach(o -> {
-            Object[] row = (Object[]) o;
-            DayStatsReport r = new DayStatsReport();
-            r.setDate((Date) row[0]);
-            r.setTotalRequests(((Long) row[1]).intValue());
-            result.add(r);
-        });
-        return result;
+        q.groupBy(join.get("date"));
+
+        LOGGER.trace("Executing query and collecting results");
+        return getEntityManager().createQuery(q).getResultList()
+                .stream()
+                .map(this::read)
+                .collect(Collectors.toList());
+    }
+
+    private DayStatsReport read(Object[] row) {
+        DayStatsReport r = new DayStatsReport();
+        r.setDate((Date) row[0]);
+        r.setTotalRequests(((Long) row[1]).intValue());
+        return r;
     }
 }

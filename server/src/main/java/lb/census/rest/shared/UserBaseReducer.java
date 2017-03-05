@@ -1,4 +1,4 @@
-package lb.census.utils;
+package lb.census.rest.shared;
 
 import java.util.Collection;
 import java.util.HashMap;

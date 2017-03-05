@@ -25,7 +25,7 @@ import lb.census.dao.UserActivityPerHourDao;
 import lb.census.dao.UserDao;
 import lb.census.model.DayStats;
 import lb.census.model.User;
-import lb.census.utils.UserBaseReducer;
+import lb.census.rest.shared.UserBaseReducer;
 
 /**
  * Created by phili on 21/12/2015.
