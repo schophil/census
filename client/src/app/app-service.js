@@ -8,7 +8,7 @@ census.AppService = function (census) {
 	function AppService() {
 
 		this.getApps = function () {
-			return axios.get('/api/subjects');
+			return axios.get('/rest/subjects');
 		};
 	}
 

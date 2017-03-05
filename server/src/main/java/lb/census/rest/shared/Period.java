@@ -30,7 +30,7 @@ public interface Period {
         LOGGER.trace("Trying to parse {}", value);
         value = value.trim().toLowerCase();
         if (value.equals("default")) {
-            return new From(DateUtils.addDays(new Date(), -1), 30);
+            return fromYesterday(30);
         }
         if (value.contains("+")) {
             String[] dates = value.split("\\+");
@@ -42,10 +42,15 @@ public interface Period {
             return new Range(from, to);
         }
         if (value.startsWith("-")) {
-
+            String daysText = value.substring(1);
+            return fromYesterday(Integer.parseInt(daysText));
         }
 
         throw new ParseException("Unable to parse period", 0);
+    }
+
+    static Period fromYesterday(int days) {
+        return new From(DateUtils.addDays(new Date(), -1), days);
     }
 
     Date getFrom();
