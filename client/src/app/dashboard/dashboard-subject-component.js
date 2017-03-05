@@ -9,7 +9,7 @@ var census = census || {};
 		var vm = this;
 		census.SpinService.up();
 		// fetch the data
-		census.DashboardService.list(this.subject, this.days)
+		census.DashboardService.list(this.subject, this.days, this.filter)
 			.then(function (response) {
 				console.log(response);
 				vm.data = response.data;
@@ -24,6 +24,10 @@ var census = census || {};
 	}
 
 	function drawGraphs() {
+    while (this.charts.length > 0) {
+      this.charts.pop().destroy();
+    }
+
 		// prepare graph data
 		var labels = this.data.map(function (el) {
 			return el.date.format('dd D.M.YY');
@@ -121,6 +125,7 @@ var census = census || {};
 				}
 			}
 		});	
+    vm.charts.push(myChart);
 	}
 
 	Vue.component('census-dashboard-subject', {
@@ -159,11 +164,12 @@ var census = census || {};
 					</div>
 			</census-panel>
 		`,
-		props: ['subject', 'days', 'id'],
+		props: ['subject', 'days', 'id', 'filter'],
 		data: function () {
 			return {
 				data: null,
-				showDetails: false
+				showDetails: false,
+        charts: []
 			};
 		},
 		computed: {
@@ -187,7 +193,8 @@ var census = census || {};
 			}
 		},
 		watch: {
-			data: drawGraphs
+			data: drawGraphs,
+      filter: fetchData
 		},
 		created: fetchData
 	});

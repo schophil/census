@@ -60,6 +60,7 @@ public class ReportDaoImpl extends BaseDaoImpl implements ReportDao {
         q = q.multiselect(join.get("date"), cb.sum(hourRoot.get("hits")));
 
         List<Predicate> conditions = new ArrayList<>();
+        conditions.add(cb.equal(join.get("subject"), subject));
         conditions.add(cb.equal(hourRoot.get("userId"), userRoot.get("userId")));
         conditions.add(cb.greaterThanOrEqualTo(join.get("date"), from));
         conditions.add(cb.lessThanOrEqualTo(join.get("date"), until));

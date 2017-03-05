@@ -1,5 +1,3 @@
-// vim: set sw=2 ts=2:
-
 var census = census || {};
 
 census.DashboardService = function (census, moment) {
@@ -12,11 +10,17 @@ census.DashboardService = function (census, moment) {
 		/**
 		 * Lists the statistics for the last X days for a specific subject.
 		 */
-		this.list = function (subject, days) {
-			return axios.get('/rest/subjects/' + subject.id + '/stats/days', {
-        params: {
+		this.list = function (subject, days, filter) {
+      var params = {
           period: "-" + days
-        },
+      };
+
+      if (filter) {
+        params.category = filter;
+      }
+
+			return axios.get('/rest/subjects/' + subject.id + '/stats/days', {
+        params: params,
 				transformResponse: [
 					function (data) {
 						console.log('DashboardService.list transform > ', data);
