@@ -52,4 +52,9 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
             return user;
         }
     }
+
+    @Override
+    public List<String> getCategories() {
+        return getEntityManager().createQuery("SELECT distinct u.category FROM User u WHERE u.category is not null", String.class).getResultList();
+    }
 }
