@@ -67,12 +67,14 @@ public class ReportDaoImpl extends BaseDaoImpl implements ReportDao {
         if (!in.isEmpty()) {
             conditions.add(userRoot.get("category").in(in));
         }
+
         if (!out.isEmpty()) {
             conditions.add(cb.not(userRoot.get("category").in(out)));
         }
         q.where(cb.and(conditions.toArray(new Predicate[conditions.size()])));
 
         q.groupBy(join.get("date"));
+        q.orderBy(cb.asc(join.get("date")));
 
         LOGGER.trace("Executing query and collecting results");
         return getEntityManager().createQuery(q).getResultList()

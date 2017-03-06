@@ -26,4 +26,12 @@ public class From implements Period {
     public Date getTo() {
         return date;
     }
+
+    @Override
+    public String toString() {
+        return "From{" +
+                "date=" + date +
+                ", days=" + days +
+                '}';
+    }
 }

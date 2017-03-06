@@ -24,4 +24,12 @@ public class Range implements Period {
     public Date getTo() {
         return to;
     }
+
+    @Override
+    public String toString() {
+        return "Range{" +
+                "from=" + from +
+                ", to=" + to +
+                '}';
+    }
 }
