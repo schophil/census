@@ -161,10 +161,10 @@ public class ActivityPerHourRecorder implements Recorder {
     }
 
     private void recordResponseTime(AverageCalculator[] recorded, int position, double newValue) {
-        if (globalResponseTime[position] == null) {
-            globalResponseTime[position] = new AverageCalculator(1000, 2);
+        if (recorded[position] == null) {
+            recorded[position] = new AverageCalculator(1000, 2);
         }
-        globalResponseTime[position].add(newValue);
+        recorded[position].add(newValue);
     }
 
     private void recordHitForUser(int hourOfTheDay, String userId) {
