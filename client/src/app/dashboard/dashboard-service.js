@@ -64,7 +64,12 @@ census.DashboardService = function (census, moment) {
 			var url = '/rest/subjects/' + subject.id + '/stats/days/' + dateAsString;
 
 			return axios.get(url);
-		}
+		};
+
+    this.getCategories = function () {
+      var url = '/rest/categories';
+      return axios.get(url);
+    };
 	}
 
 	/**

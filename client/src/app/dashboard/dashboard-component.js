@@ -18,7 +18,77 @@ var census = census || {};
 	}
 
   function applyFilter() {
-    this.filter = this.filterField;
+    var unchecked = 0;
+    var checked = 0;
+    this.categories.forEach(function (c) {
+      if (c.checked) {
+        checked++;
+      } else {
+        unchecked++;
+      }
+    });
+
+    var filterValue = null;
+    if (checked == 0 || checked > unchecked) {
+      // build an exclude query
+      this.categories.forEach(function (c) {
+        if (!c.checked) {
+          if (filterValue != null) {
+            filterValue += ",!" + c.value;
+          } else {
+            filterValue = "!" + c.value;
+          }
+        }
+      });
+    } else if (unchecked != 0) {
+      // build an include query
+      this.categories.forEach(function (c) {
+        if (c.checked) {
+          if (filterValue != null) {
+            filterValue += "," + c.value;
+          } else {
+            filterValue = c.value;
+          }
+        }
+      });
+    }
+
+    if (this.filter == null || this.filter != filterValue) {
+      this.filter = filterValue;
+    }
+  }
+
+  function created() {
+		var vm = this;
+		census.SpinService.up();
+    census.DashboardService.getCategories()
+      .then(function (response) {
+        response.data.forEach(function (value) {
+          vm.categories.push({
+            checked: true,
+            value: value
+          });
+        });
+				census.SpinService.down();
+      }).catch(function (error) {
+				this.$emit('error', {
+					title: 'Error retrieving data',
+					message: error
+				});
+				census.SpinService.down();
+      });
+  }
+
+  function checkAll() {
+    this.categories.forEach(function (c) {
+      c.checked = true;
+    });
+  }
+
+  function uncheckAll() {
+    this.categories.forEach(function (c) {
+      c.checked = false;
+    });
   }
 
 	Vue.component('census-dashboard', {
@@ -32,12 +102,15 @@ var census = census || {};
 				</ol>
 			</div>
       <census-panel>
-        <form class="form-inline" v-on:submit.prevent="applyFilter">
-				<div class="form-group">
-					<label for="filter">User category filter</label>
-					<input type="text" class="form-control" id="filter" v-model="filterField" placeholder="Exclude or include categories">
-				</div>
-			  <button type="submit" v-bind:disabled="!canApplyFilter" class="btn btn-primary">Apply</button>
+        <form class="form" v-on:submit.prevent="applyFilter">
+          <div class="checkbox">
+            <label class="checkbox-inline" v-for="c in categories">
+              <input type="checkbox" v-bind:id="c" v-model="c.checked"> {{c.value}}
+            </label>
+          </div>
+			    <button type="submit" class="btn btn-primary">Apply</button>
+			    <button type="button" class="btn btn-default" v-on:click="checkAll" >Check all</button>
+			    <button type="button" class="btn btn-default" v-on:click="uncheckAll">Uncheck all</button>
 			</form>
       </census-panel>
 			<div id="censusDashboardLevel1" v-show="isLevel1">	
@@ -55,6 +128,7 @@ var census = census || {};
 				crumbs: [],
         filter: null,
         filterField: null,
+        categories: [],
 				target: {
 					subject: null,
 					date: null
@@ -64,7 +138,9 @@ var census = census || {};
 		methods: {
 			drill: drill,
 			goToStart: goToStart,
-      applyFilter: applyFilter
+      applyFilter: applyFilter,
+      checkAll: checkAll,
+      uncheckAll: uncheckAll
 		},
 		computed: {
 			isLevel1: function () {
@@ -72,11 +148,9 @@ var census = census || {};
 			},
 			isLevel2: function () {
 				return this.level === 2;
-			},
-      canApplyFilter: function () {
-        return this.filterField != null;
-      }
-		}
+			}
+		},
+    created: created
 	});
 
 })(census);

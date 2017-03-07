@@ -13,5 +13,7 @@ public interface UserDao {
 
     List<User> getUsersFor(Date date, String subject);
 
+    List<String> getCategories();
+
     User save(User user);
 }
