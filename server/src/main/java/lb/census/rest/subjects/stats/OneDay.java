@@ -42,6 +42,7 @@ public class OneDay {
         oneDay.date = dayStatsReport.getDate();
         oneDay.averageResponseTime = dayStatsReport.getAverageResponseTime();
         oneDay.totalRequests = dayStatsReport.getTotalRequests();
+        oneDay.totalUserIds = dayStatsReport.getTotalUserIds();
         return oneDay;
     }
 }

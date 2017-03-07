@@ -57,7 +57,12 @@ public class ReportDaoImpl extends BaseDaoImpl implements ReportDao {
                 hourRoot.getModel().getSingularAttribute("dayStats", DayStats.class));
         Root<User> userRoot = q.from(User.class);
 
-        q = q.multiselect(join.get("date"), cb.sum(hourRoot.get("hits")));
+        q = q.multiselect(
+                join.get("date"),
+                cb.sum(hourRoot.get("hits")),
+                cb.avg(hourRoot.get("averageResponseTime")),
+                cb.countDistinct(hourRoot.get("userId"))
+        );
 
         List<Predicate> conditions = new ArrayList<>();
         conditions.add(cb.equal(join.get("subject"), subject));
@@ -87,6 +92,8 @@ public class ReportDaoImpl extends BaseDaoImpl implements ReportDao {
         DayStatsReport r = new DayStatsReport();
         r.setDate((Date) row[0]);
         r.setTotalRequests(((Long) row[1]).intValue());
+        r.setAverageResponseTime((Double) row[2]);
+        r.setTotalUserIds(((Long) row[3]).intValue());
         return r;
     }
 }
