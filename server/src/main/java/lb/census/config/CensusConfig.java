@@ -27,6 +27,7 @@ public class CensusConfig {
     @XmlElementWrapper(name = "subjects")
     @XmlElement(name = "subject")
     private List<LogSubject> subjects;
+    @XmlAttribute(name = "startRetrieve")
     private boolean startRetrieve = false;
 
     public boolean isStartRetrieve() {

@@ -46,7 +46,7 @@ import lb.census.record.log.LogRecordFactory;
 @Component
 public class AccessLogRetriever implements Runnable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AccessLogRetriever.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("CENSUS_RETRIEVER");
     private static final int RETRIEVED = 1;
     private static final int WAITING_FOR_RETRIEVAL = 2;
     private boolean keepRunning;
@@ -252,10 +252,12 @@ public class AccessLogRetriever implements Runnable {
 
             return true;
         } catch (FileSystemException e) {
-            LOGGER.error("Retrieval and recording of access logs failed", e);
+            LOGGER.error("Retrieve failed for {}", logSubject);
+            LOGGER.error("Retrieve failed", e);
             return false;
         } catch (Throwable t) {
-            LOGGER.error("Retrieval and recording of access logs failed", t);
+            LOGGER.error("Retrieve failed for {}", logSubject);
+            LOGGER.error("Retrieve failed", t);
             return false;
         } finally {
             // clean up retrieved files
@@ -311,12 +313,12 @@ public class AccessLogRetriever implements Runnable {
                 fileIndex++;
 
             } catch (FileSystemException e) {
-                LOGGER.error("Failed to retrieve log file: {}", e.getMessage());
+                LOGGER.error("Failed to retrieve log file {}: {}", url, e.getMessage());
                 if (censusConfig.isAcid()) {
                     throw e;
                 }
             } catch (IOException e) {
-                LOGGER.error("Failed to retrieve log file: {}", e.getMessage());
+                LOGGER.error("Failed to retrieve log file {}: {}", url, e.getMessage());
                 if (censusConfig.isAcid()) {
                     throw e;
                 }
