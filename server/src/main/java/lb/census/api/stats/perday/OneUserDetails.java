@@ -10,12 +10,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  */
 public class OneUserDetails {
 
-	public String userId;
-	public String userName;
-	
+    public String userId;
+    public String userName;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "CET")
-    public Date date;	
-	
+    public Date date;
+
     public List<OneHour> activityPerHour;
     public List<OneResource> popularResources;
 }

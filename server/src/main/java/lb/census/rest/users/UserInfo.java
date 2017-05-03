@@ -1,4 +1,4 @@
-package lb.census.rest.subjects.users;
+package lb.census.rest.users;
 
 import java.util.Date;
 
@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lb.census.model.User;
 
 /**
- * 
  * @author phili
  */
 public class UserInfo {
@@ -19,10 +18,10 @@ public class UserInfo {
     public Date beginDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "CET")
     public Date endDate;
-    
+
     public UserInfo() {
     }
-    
+
     public UserInfo(User user) {
         userId = user.getUserId();
         name = user.getName();

@@ -9,7 +9,6 @@ import lb.census.dao.SubjectDao;
 import lb.census.model.Subject;
 
 /**
- *
  * @author phili
  * @since 23-Nov-2015
  */

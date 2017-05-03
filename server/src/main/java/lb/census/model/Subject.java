@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- *
  * @author phili
  * @since 23-Nov-2015
  */
@@ -16,8 +15,8 @@ import javax.persistence.Table;
 @Table(name = "census_subjects")
 public class Subject implements Serializable {
 
-	private static final long serialVersionUID = -5684973466898290223L;
-	@Id
+    private static final long serialVersionUID = -5684973466898290223L;
+    @Id
     private String id;
     @Column
     private String name;

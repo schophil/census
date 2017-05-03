@@ -9,14 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 import lb.census.record.RecordService;
 
 /**
- *
  * @author phili
  * @since 21-Nov-2015
  */
 public class PingController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PingController.class);
-    
+
     private RecordService recordService;
 
     public String ping() {

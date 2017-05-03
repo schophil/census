@@ -1,7 +1,6 @@
 package lb.census.record.log;
 
 /**
- *
  * @author psc
  */
 public abstract class LogRecordFactory {

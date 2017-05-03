@@ -7,7 +7,6 @@ import lb.census.model.DayStats;
 import lb.census.model.TotalActivityPerHour;
 
 /**
- *
  * @author psc
  */
 public interface TotalActivityPerHourDao {

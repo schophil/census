@@ -19,7 +19,6 @@ public class UserReportController extends CensusController {
     public ReportData queryRequests(@PathVariable String subject, @PathVariable String from, @PathVariable String to,
                                     @PathVariable String user) {
 
-        
 
         return new ReportData();
     }

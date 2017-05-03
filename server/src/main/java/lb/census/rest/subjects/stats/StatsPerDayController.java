@@ -27,7 +27,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 @RequestMapping("/rest/subjects/{subject}/stats")
 public class StatsPerDayController {
 
-    private static Logger LOGGER = LoggerFactory.getLogger("CENSUS_CONTROLLERS");
+    private static Logger LOGGER = LoggerFactory.getLogger(StatsPerDayController.class);
 
     @Autowired
     private StatsPerDayService statsPerDayService;

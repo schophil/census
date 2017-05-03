@@ -8,7 +8,6 @@ import lb.census.model.Anomaly;
 public interface AnomalyDetector {
 
     /**
-     *
      * @param date The date to analyze
      * @return
      */

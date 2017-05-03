@@ -13,7 +13,6 @@ import lb.census.model.User;
 import lb.census.record.log.LogRecord;
 
 /**
- *
  * @author psc
  */
 @Component

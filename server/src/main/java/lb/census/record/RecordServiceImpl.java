@@ -57,7 +57,6 @@ public class RecordServiceImpl implements RecordService {
         assertSubject(subject);
 
 
-
         RecorderContext context = new RecorderContext(subject);
         initializeRecorders();
         try {

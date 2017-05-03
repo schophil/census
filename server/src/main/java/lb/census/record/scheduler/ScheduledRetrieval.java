@@ -10,7 +10,6 @@ import lb.census.config.LogSubject;
  * Represents a scheduled retrieval;
  *
  * @author Philippe
- *
  */
 public class ScheduledRetrieval implements java.io.Serializable {
 

@@ -13,7 +13,6 @@ import lb.census.model.DayStats;
 import lb.census.model.TotalActivityPerHour;
 
 /**
- *
  * @author psc
  */
 @Repository

@@ -16,7 +16,6 @@ import lb.census.model.UserStats;
 import lb.census.record.log.LogRecord;
 
 /**
- * 
  * @author phili
  */
 @Component
@@ -89,7 +88,7 @@ public class UserStatsRecorder implements Recorder {
             userStats.setUserId(userId);
             userStats.setTotalRequests(totalRequests);
             userStats.setTotalRequestsInError(totalRequestsInError);
-            userStatsDao.save(userStats);            
+            userStatsDao.save(userStats);
         });
     }
 

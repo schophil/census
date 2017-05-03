@@ -14,10 +14,8 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
  * @author Philippe
  * @since 4-sep.-2014
- *
  */
 @Entity
 @Table(name = "census_anomaly")

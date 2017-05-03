@@ -3,7 +3,7 @@ package lb.census.api.userbase;
 import java.util.ArrayList;
 import java.util.List;
 
-import lb.census.rest.subjects.users.UserInfo;
+import lb.census.rest.users.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +16,6 @@ import lb.census.dao.UserDao;
 import lb.census.model.User;
 
 /**
- *
  * @author phili
  * @since 21-Nov-2015
  */

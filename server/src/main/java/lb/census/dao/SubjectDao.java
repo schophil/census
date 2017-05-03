@@ -5,7 +5,6 @@ import java.util.List;
 import lb.census.model.Subject;
 
 /**
- *
  * @author phili
  * @since 23-Nov-2015
  */

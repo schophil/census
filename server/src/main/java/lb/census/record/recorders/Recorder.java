@@ -19,7 +19,7 @@ public interface Recorder {
     /**
      * Indicates all the lines were recorder and the data can be stored.
      *
-     * @param date The date for which the stats are recorded
+     * @param date            The date for which the stats are recorded
      * @param recorderContext
      */
     void store(Date date, RecorderContext recorderContext);

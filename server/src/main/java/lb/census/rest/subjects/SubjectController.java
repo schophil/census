@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * Created by philippeschottey on 01/03/2017.
  */
 @RestController
-@RequestMapping("/rest")
+@RequestMapping("/rest/subjects")
 public class SubjectController {
 
     @Autowired
@@ -28,7 +28,7 @@ public class SubjectController {
      *
      * @return
      */
-    @RequestMapping(value = "/subjects")
+    @RequestMapping
     public ResponseEntity<List<OneSubject>> getSubjects() {
         List<OneSubject> subjects = subjectDao.getSubjects().stream()
                 .map(s -> new OneSubject(s.getId(), s.getName()))
@@ -36,7 +36,7 @@ public class SubjectController {
         return ResponseEntity.ok(subjects);
     }
 
-    @RequestMapping(value = "/subjects/{id}")
+    @RequestMapping(value = "/{id}")
     public ResponseEntity<OneSubject> getSubject(@PathVariable String id) {
         Subject subject = subjectDao.get(id);
         if (subject == null) {

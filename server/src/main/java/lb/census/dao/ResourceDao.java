@@ -15,15 +15,17 @@ public interface ResourceDao {
     /**
      * Returns the most used resources regardless of the subject or date. This only returns the resouces
      * for which the user id is empty.
+     *
      * @param top
-     * @parma name
      * @return
+     * @parma name
      */
     List<Resource> getPopular(int top, String name);
 
     /**
      * Returns the most used resources for a given day stats (hence date + subject). This only returns the resouces
      * for which the user id is empty.
+     *
      * @param dayStats
      * @param top
      * @param name
@@ -34,6 +36,7 @@ public interface ResourceDao {
     /**
      * Returns the most used resources for a given day stats (hence date + subject). This only returns the resouces
      * for which the user id is empty.
+     *
      * @param dayStats
      * @param top
      * @param name
