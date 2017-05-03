@@ -29,8 +29,8 @@ public class UserController {
         this.userDao = userDao;
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ResponseEntity<List<UserInfo>> getAllUsers(@RequestParam String subject) {
+    @RequestMapping
+    public ResponseEntity<List<UserInfo>> getAllUsers(@RequestParam(required = false) String subject) {
         if (StringUtils.isEmpty(subject)) {
             subject = "ALL";
         }

@@ -24,7 +24,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     @Transactional(readOnly = true)
     public List<User> getUsers(String subject) {
         // select all users
-        TypedQuery<User> query = getEntityManager().createQuery("SELECT u FROM User u WHERE u.subject = :s OR u.subject = 'ALL'", User.class);
+        TypedQuery<User> query = getEntityManager().createQuery("SELECT u FROM User u WHERE u.subject = :s OR :s = 'ALL'", User.class);
         query.setParameter("s", subject);
         return query.getResultList();
     }
