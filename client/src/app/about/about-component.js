@@ -1,15 +1,10 @@
-// vim: set sw=2 ts=2:
+import Vue from 'vue';
 
-(function () {
-
-	Vue.component('census-about', {
-		template: `
-			<census-panel>
-				<p>Census version 2.1.3</p>
-				<p>Developed by Philippe Schottey</p>
-			</census-panel>
-		`,
-	});
-
-})();
-
+Vue.component('census-about', {
+	template: '\
+		<census-panel>\
+			<p>Census version 2.1.3</p>\
+			<p>Developed by Philippe Schottey</p>\
+		</census-panel>\
+	',
+});

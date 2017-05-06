@@ -1,15 +1,12 @@
 <!DOCTYPE html>
-<!-- vim: set sw=2 ts=2: -->
-<html>
+<html lang="en">
 	<head>
 		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 		<title>Census</title>
-		<link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.min.css">
-		<link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap-theme.min.css">
-		<link rel="stylesheet" href="css/census-theme.css">
 	</head>
 	<body>
-		<div id="spinner"></div>	
+		<div id="spinner"></div>
 		<div class="main-frame" id="censusApp">
 			<nav class="navbar navbar-default">
 				<div class="container-fluid">
@@ -35,29 +32,6 @@
 				<census-about v-if="inAbout"></census-about>
 			</div>
 		</div>
-		<!-- vendors -->
-		<script src="vendor/lodash/dist/lodash.min.js" charset="utf-8"></script>
-		<script src="vendor/moment/moment.js" charset="utf-8"></script>
-		<script src="vendor/chart.js/dist/Chart.min.js" charset="utf-8"></script>
-		<script src="vendor/spin.js/spin.min.js" charset="utf-8"></script>
-		<script src="vendor/axios/dist/axios.min.js" charset="utf-8"></script>
-		<script src="vendor/jquery/dist/jquery.min.js" charset="utf-8"></script>
-		<script src="vendor/bootstrap/dist/js/bootstrap.min.js" charset="utf-8"></script>
-		<script src="vendor/vue/dist/vue.min.js" charset="utf-8"></script>
-		<script src="vendor/vue-router/dist/vue-router.min.js" charset="utf-8"></script>
-		<!-- app code -->
-		<script src="app/app-config.js" charset="utf-8"></script>
-		<script src="app/alert/alert-component.js" charset="utf-8"></script>
-		<script src="app/panel/panel-component.js" charset="utf-8"></script>
-		<script src="app/about/about-component.js" charset="utf-8"></script>
-		<script src="app/spinner/spinner-service.js" charset="utf-8"></script>
-		<script src="app/app-service.js" charset="utf-8"></script>
-		<script src="app/dashboard/dashboard-service.js" charset="utf-8"></script>
-		<script src="app/dashboard/dashboard-day-component.js" charset="utf-8"></script>
-		<script src="app/dashboard/dashboard-subject-component.js" charset="utf-8"></script>
-		<script src="app/dashboard/dashboard-component.js" charset="utf-8"></script>
-		<script src="app/sourceip/sourceip-service.js" charset="utf-8"></script>
-		<script src="app/sourceip/sourceip-component.js" charset="utf-8"></script>
-		<script src="app/app.js" charset="utf-8"></script>
+		<script src="bundle.js" crossorigin="anonymous"></script>
 	</body>
 </html>

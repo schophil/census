@@ -10,9 +10,21 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-jsmin": "^0.1.5",
-    "gulp-less": "^3.3.0",
-    "gulp-server-livereload": "^1.9.2"
+    "css-loader": "^0.28.1",
+    "file-loader": "^0.11.1",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.3",
+    "style-loader": "^0.17.0",
+    "url-loader": "^0.5.8",
+    "webpack": "^2.5.0",
+    "webpack-dev-server": "^2.4.5"
+  },
+  "dependencies": {
+    "axios": "^0.16.1",
+    "chart.js": "^2.5.0",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1",
+    "spin.js": "^2.3.2",
+    "vue": "^2.3.2"
   }
 }

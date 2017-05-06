@@ -1,84 +1,89 @@
-// vim: set sw=2 ts=2:
-'use strict';
+import Vue from 'vue';
+import census from './census';
+import './census-inject';
 
-var census = census || {};
+import './alert/alert-component';
+import './panel/panel-component';
+import './about/about-component';
+import './sourceip/sourceip-component';
+import './dashboard/dashboard-component';
 
-(function (census) {
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap-theme.min.css';
 
-	function goToDashboard() {
-		this.inDashboard = true;
-		this.inAbout = false;
-		this.inSourceip = false;
-	}
+import '../css/census-theme.less';
 
-	function goToAbout() {
-		this.inDashboard = false;
-		this.inAbout = true;
-		this.inSourceip = false;
-	}
+function goToDashboard() {
+  this.inDashboard = true;
+  this.inAbout = false;
+  this.inSourceip = false;
+}
 
-	function goToSourceip() {
-		this.inDashboard = false;
-		this.inAbout = false;
-		this.inSourceip = true;
-	}
+function goToAbout() {
+  this.inDashboard = false;
+  this.inAbout = true;
+  this.inSourceip = false;
+}
 
-	function clearAlerts() {
-		this.alerts.splice(0, this.alerts.length);
-	}
+function goToSourceip() {
+  this.inDashboard = false;
+  this.inAbout = false;
+  this.inSourceip = true;
+}
 
-	function onError(e) {
-		this.alerts.push({
-			title: e.title,
-			message: e.message
-		});
-	}
+function clearAlerts() {
+  this.alerts.splice(0, this.alerts.length);
+}
 
-	function _created() {
-		console.log('Fetching the list of apps with', census.AppService);
-		var vm = this;
-		census.SpinService.up();
+function onError(e) {
+  this.alerts.push({
+    title: e.title,
+    message: e.message
+  });
+}
 
-		census.AppService.getApps()
-			.then(function (response) {
-				console.log(response);
-				vm.subjects = response.data;
-				census.SpinService.down();
-			}).catch(function (error) {
-				console.log(error);
-				census.SpinService.down();
-				vm.alerts.push({
-					title: "Communication error ocurred",
-					message: error
-				});
-			});
-	}
+function _created() {
+  console.log('Fetching the list of apps with', census.AppService);
+  var vm = this;
+  census.SpinService.up();
 
-	var vm = new Vue({
-		el: '#censusApp',
-		data: {
-			subjects: [],
-			inDashboard: true,
-			inSourceip: false,
-			inAbout: false,
-			alerts: []
-		},
-		computed: {
-			hasAlerts: function () {
-				return this.alerts.length > 0;
-			}
-		},
-		methods: {
-			goToDashboard: goToDashboard,
-			goToAbout: goToAbout,
-			goToSourceip: goToSourceip,
-			clearAlerts: clearAlerts,
-			onError: onError
-		},
-		created: _created
-	});
+  census.AppService.getApps()
+  .then(function (response) {
+    console.log(response);
+    vm.subjects = response.data;
+    census.SpinService.down();
+  }).catch(function (error) {
+    console.log(error);
+    census.SpinService.down();
+    vm.alerts.push({
+      title: "Communication error ocurred",
+      message: error
+    });
+  });
+}
 
-	census.vm = vm;
+var vm = new Vue({
+  el: '#censusApp',
+  data: {
+    subjects: [],
+    inDashboard: true,
+    inSourceip: false,
+    inAbout: false,
+    alerts: []
+  },
+  computed: {
+    hasAlerts: function () {
+      return this.alerts.length > 0;
+    }
+  },
+  methods: {
+    goToDashboard: goToDashboard,
+    goToAbout: goToAbout,
+    goToSourceip: goToSourceip,
+    clearAlerts: clearAlerts,
+    onError: onError
+  },
+  created: _created
+});
 
-})(census);
-
+census.vm = vm;

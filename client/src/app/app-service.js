@@ -1,36 +1,31 @@
-'use strict';
+import axios from 'axios';
+import census from './census';
 
-var census = census || {};
+export function AppService() {
 
-census.AppService = function (census) {
+  this.getApps = function () {
+    return axios.get('/rest/subjects');
+  };
+}
 
-	function AppService() {
+export function MockAppService() {
 
-		this.getApps = function () {
-			return axios.get('/rest/subjects');
-		};
-	}
+  this.getApps = function () {
+    var data = [
+      { id: 'egames', name: 'eGames' },
+      { id: 'epis', name: 'EPIS' },
+      { id: 'protocol', name: 'ProtocolAPI' }
+    ];
+    var p = new Promise(
+      function (resolve, reject) {
+        window.setTimeout(
+          function () {
+            resolve({ data: data} );
+          }, census.mockDelay);
+        }
+      );
+      return p;
+    };
+  }
 
-	function MockAppService() {
-
-		this.getApps = function () {
-			var data = [
-				{ id: 'egames', name: 'eGames' },
-				{ id: 'epis', name: 'EPIS' },
-				{ id: 'protocol', name: 'ProtocolAPI' }
-			];
-			var p = new Promise(
-				function (resolve, reject) {
-					window.setTimeout(
-						function () {
-							resolve({ data: data} );
-						}, census.mockDelay);
-				}
-			);
-			return p;
-		};
-	}
-
-	return census.mock ? new MockAppService() : new AppService();
-
-}(census);
+export default AppService;
