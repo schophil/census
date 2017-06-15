@@ -1,93 +1,25 @@
 package lb.census.math;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.List;
 
-public class AverageCalculator {
+/**
+ * Created by philippe on 14/06/2017.
+ */
+public interface AverageCalculator {
 
-    private final List<BigDecimal> averages = new ArrayList<>();
-    private BigDecimal currentSum = BigDecimal.ZERO;
-    private int currentTotal = 0;
-    private int groupSize = 1000;
-    private int scale = 2;
-
-    public AverageCalculator() {
+    static AverageCalculator create(int scale) {
+        return new GradualAverageCalculator(scale);
     }
 
-    public AverageCalculator(int groupSize, int scale) {
-        this.groupSize = groupSize;
-        this.scale = scale;
-    }
+    int getScale();
 
-    public int getGroupSize() {
-        return groupSize;
-    }
+    void add(int value);
 
-    public int getScale() {
-        return scale;
-    }
+    void add(double value);
 
-    public void add(int value) {
-        update(new BigDecimal(value));
-    }
+    void add(long value);
 
-    public void add(double value) {
-        update(new BigDecimal(value));
-    }
+    void clear();
 
-    public void add(long value) {
-        update(new BigDecimal(value));
-    }
-
-    public void clear() {
-        averages.clear();
-        currentTotal = 0;
-        currentSum = BigDecimal.ZERO;
-    }
-
-    public BigDecimal getCurrentAverage() {
-        if (averages.isEmpty() && currentTotal == 0) {
-            return BigDecimal.ZERO;
-        }
-
-        if (averages.isEmpty() && currentTotal != 0) {
-            return calculateCurrentAverage();
-        }
-
-        BigDecimal sumOfAverages = BigDecimal.ZERO;
-        for (BigDecimal average : averages) {
-            sumOfAverages = sumOfAverages.add(average);
-        }
-
-        if (currentTotal != 0) {
-            BigDecimal currentAverage = calculateCurrentAverage();
-            sumOfAverages = sumOfAverages.add(currentAverage);
-            BigDecimal total = new BigDecimal(averages.size() + 1);
-            return sumOfAverages.divide(total, 2, RoundingMode.HALF_DOWN);
-        } else {
-            return sumOfAverages.divide(new BigDecimal(averages.size()), 2, RoundingMode.HALF_DOWN);
-        }
-    }
-
-    private void update(BigDecimal value) {
-        currentTotal++;
-        currentSum = currentSum.add(value);
-        if (currentTotal == groupSize) {
-            BigDecimal average = calculateCurrentAverage();
-            averages.add(average);
-            currentTotal = 0;
-            currentSum = BigDecimal.ZERO;
-        }
-    }
-
-    private BigDecimal calculateCurrentAverage() {
-        if (currentTotal == 0) {
-            return BigDecimal.ZERO;
-        }
-        BigDecimal average = currentSum.divide(new BigDecimal(currentTotal), 2,
-                RoundingMode.HALF_DOWN);
-        return average;
-    }
+    BigDecimal getCurrentAverage();
 }

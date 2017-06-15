@@ -82,9 +82,12 @@ public class ActivityPerHourRecorder implements Recorder {
         calendar.setTime(logRecord.getTimestamp());
         int hourOfTheDay = calendar.get(Calendar.HOUR_OF_DAY);
         LOGGER.debug("Recording day activity on hour {} for timestamp {}", hourOfTheDay, logRecord.getTimestamp());
+
+        // Record the global activity per hour
         recordGlobalHit(hourOfTheDay);
         recordGlobalResponseTime(hourOfTheDay, logRecord.getResponseTime());
 
+        // Record the activity per hour for a specific user
         recordHitForUser(hourOfTheDay, logRecord.getUserId());
         recordResponseTimeForUser(hourOfTheDay, logRecord.getUserId(), logRecord.getResponseTime());
     }
@@ -162,7 +165,7 @@ public class ActivityPerHourRecorder implements Recorder {
 
     private void recordResponseTime(AverageCalculator[] recorded, int position, double newValue) {
         if (recorded[position] == null) {
-            recorded[position] = new AverageCalculator(1000, 2);
+            recorded[position] = AverageCalculator.create(2);
         }
         recorded[position].add(newValue);
     }

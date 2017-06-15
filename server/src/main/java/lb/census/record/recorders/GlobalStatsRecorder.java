@@ -2,6 +2,7 @@ package lb.census.record.recorders;
 
 import java.util.Date;
 
+import lb.census.math.GroupedAverageCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class GlobalStatsRecorder implements Recorder {
     private static final Logger LOGGER = LoggerFactory.getLogger(GlobalStatsRecorder.class);
     @Autowired
     private DayStatsDao dayStatsDao;
-    private AverageCalculator averageCalculator = new AverageCalculator(1000, 2);
+    private AverageCalculator averageCalculator = new GroupedAverageCalculator(1000, 2);
     private OccurrenceCounter<String, String> occurrenceCounter = new OccurrenceCounter<String, String>();
     private double maxResponseTime = 0.0;
     private double minResponseTime = 0.0;
@@ -96,7 +97,7 @@ public class GlobalStatsRecorder implements Recorder {
     }
 
     private void clean() {
-        averageCalculator = new AverageCalculator(1000, 2);
+        averageCalculator = new GroupedAverageCalculator(1000, 2);
         occurrenceCounter = new OccurrenceCounter<String, String>();
         maxResponseTime = 0.0;
         minResponseTime = 0.0;

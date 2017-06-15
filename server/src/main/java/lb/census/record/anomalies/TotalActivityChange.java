@@ -87,7 +87,7 @@ public class TotalActivityChange implements AnomalyDetector {
     }
 
     private BigDecimal getAverage(Date from, int days) {
-        AverageCalculator averageCalculator = new AverageCalculator();
+        AverageCalculator averageCalculator = AverageCalculator.create(2);
 
         Calendar calendar = Calendar.getInstance();
         calendar.clear();
