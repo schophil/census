@@ -1,6 +1,7 @@
 package lb.census.record;
 
 import lb.census.TestScope;
+import lb.census.dao.DayStatsDao;
 import lb.census.dao.SubjectDao;
 import lb.census.model.Subject;
 import lb.census.record.filters.PatternFilter;
@@ -44,6 +45,8 @@ public class RecordServiceTest {
     private RecordService recordService;
     @Autowired
     private SubjectDao subjectDao;
+    @Autowired
+    private DayStatsDao dayStatsDao;
 
     private LogSet createLogData() {
         DefaultLogSet defaultLogSet = new DefaultLogSet();
@@ -86,5 +89,19 @@ public class RecordServiceTest {
         RecorderContext recorderContext = recordService.record(createLogData(), subject);
         assertThat(recorderContext.getImported(), is(10));
         assertThat(recorderContext.getFiltered(), is(4));
+    }
+
+    @Test
+    public void recordAndOverwrite() {
+        Subject subject = subjectDao.get("starwars");
+        RecorderContext recorderContext = recordService.record(createLogData(), subject);
+        assertThat(recorderContext.getImported(), is(10));
+        assertThat(recorderContext.getFiltered(), is(4));
+
+        recorderContext = recordService.record(createLogData(), subject);
+        assertThat(recorderContext.getImported(), is(10));
+        assertThat(recorderContext.getFiltered(), is(4));
+
+        dayStatsDao.getDayStats(DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH), subject.getId());
     }
 }

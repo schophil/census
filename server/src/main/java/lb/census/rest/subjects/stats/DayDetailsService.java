@@ -1,8 +1,5 @@
 package lb.census.rest.subjects.stats;
 
-import lb.census.api.stats.perday.OneHour;
-import lb.census.api.stats.perday.OneResource;
-import lb.census.api.stats.perday.OneUser;
 import lb.census.dao.*;
 import lb.census.model.DayStats;
 import lb.census.model.User;

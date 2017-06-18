@@ -1,4 +1,4 @@
-package lb.census.api.stats.perday;
+package lb.census.rest.subjects.stats;
 
 /**
  * Created by philippe on 26/04/16.
