@@ -5,7 +5,7 @@ import { SourceipService, MockSourceipService } from './sourceip/sourceip-servic
 import { DashboardService, MockDashboardService } from './dashboard/dashboard-service';
 
 // settings
-census.mock = true;
+census.mock = false;
 census.mockDelay = 1000;
 census.dateFormat = 'dd D.M.YY';
 census.dateApiFormat = 'YYYY-MM-DD';
@@ -20,5 +20,5 @@ if (census.mock) {
 } else {
   census.AppService = new AppService();
   census.SourceipService = new SourceipService();
-  census.DashboardService = new MockDashboardService();
+  census.DashboardService = new DashboardService();
 }

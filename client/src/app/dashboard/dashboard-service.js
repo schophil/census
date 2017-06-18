@@ -26,7 +26,7 @@ export function DashboardService() {
 				function (data) {
 					console.log('DashboardService.list transform > ', data);
 					data = JSON.parse(data);
-					data.forEach(g => {
+					data.forEach(function (g) {
 						g.date = moment(g.date, census.dateApiFormat);
 					});
 					return data;
@@ -94,7 +94,7 @@ export function MockDashboardService() {
 		var group = [yesterday, target, tomorrow];
 		// create fictional data
 		for (var i = 0; i < 24; i++) {
-			group.forEach(g => {
+			group.forEach(function (g) {
 				var hour = {
 					totalRequests: _.random(100, 5000),
 					hour: i

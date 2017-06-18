@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Chart from 'chart.js';
 import census from '../census';
+import moment from 'moment';
 
 function fetchData() {
 	var vm = this;
@@ -90,53 +91,53 @@ function drawGraph() {
 }
 
 Vue.component('census-dashboard-subject-day', {
-	template: `
-	<div>
-		<census-panel title="Total requests per hour">
-				<canvas v-bind:id="uid" width="400" height="100"></canvas>
-				<div>
-					<p>
-						<button class="btn btn-default" v-on:click="toggleDetails">Toggle details</button>
-						<button class="btn btn-default" v-on:click="toggleAdjacentDays">Toggle adjacent days in graph</button>
-					</p>
-					<table v-if="showDetails" class="table table-striped">
-						<thead>
-							<tr>
-								<th>hour</th>
-								<th>{{this.yesterday.format(census.dateFormat)}}</th>
-								<th>{{this.date.format(census.dateFormat)}}</th>
-								<th>{{this.tomorrow.format(census.dateFormat)}}</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr v-for="d in dataPivot">
-								<td>{{d.hour}}</td>
-								<td>{{d.yesterday}}</td>
-								<td>{{d.target}}</td>
-								<td>{{d.tomorrow}}</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-		</census-panel>
-		<census-panel title="Popular resources">
-			<table class="table table-striped" v-if="targetData">
-				<thead>
-					<tr>
-						<th>Resource</th>
-						<th>Hits</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr v-for="r in targetData.popularResources">
-						<td>{{r.path}}</td>
-						<td>{{r.hits}}</td>
-					</tr>
-				</tbody>
-			</table>
-		</census-panel>
-	</div>
-	`,
+	template: '\
+	<div>\
+		<census-panel title="Total requests per hour">\
+				<canvas v-bind:id="uid" width="400" height="100"></canvas>\
+				<div>\
+					<p>\
+						<button class="btn btn-default" v-on:click="toggleDetails">Toggle details</button>\
+						<button class="btn btn-default" v-on:click="toggleAdjacentDays">Toggle adjacent days in graph</button>\
+					</p>\
+					<table v-if="showDetails" class="table table-striped">\
+						<thead>\
+							<tr>\
+								<th>hour</th>\
+								<th>{{this.yesterday.format(census.dateFormat)}}</th>\
+								<th>{{this.date.format(census.dateFormat)}}</th>\
+								<th>{{this.tomorrow.format(census.dateFormat)}}</th>\
+							</tr>\
+						</thead>\
+						<tbody>\
+							<tr v-for="d in dataPivot">\
+								<td>{{d.hour}}</td>\
+								<td>{{d.yesterday}}</td>\
+								<td>{{d.target}}</td>\
+								<td>{{d.tomorrow}}</td>\
+							</tr>\
+						</tbody>\
+					</table>\
+				</div>\
+		</census-panel>\
+		<census-panel title="Popular resources">\
+			<table class="table table-striped" v-if="targetData">\
+				<thead>\
+					<tr>\
+						<th>Resource</th>\
+						<th>Hits</th>\
+					</tr>\
+				</thead>\
+				<tbody>\
+					<tr v-for="r in targetData.popularResources">\
+						<td>{{r.path}}</td>\
+						<td>{{r.hits}}</td>\
+					</tr>\
+				</tbody>\
+			</table>\
+		</census-panel>\
+	</div>\
+	',
 	props: ['subject', 'date'],
 	data: function () {
 		return {

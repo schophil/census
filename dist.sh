@@ -2,6 +2,7 @@
 
 # Step 1: build client
 cd ./client
+npm run clean
 npm run dist
 cd ..
 
@@ -11,4 +12,5 @@ cp -R ./client/dist/* ./server/src/main/resources/static
 
 # Step 3: package server
 cd server
+./mvnw clean
 ./mvnw package

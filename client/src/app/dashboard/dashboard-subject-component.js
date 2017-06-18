@@ -126,41 +126,41 @@ function _drawGraph(el, title, label, data, background, border) {
 }
 
 Vue.component('census-dashboard-subject', {
-	template: `
-		<census-panel v-bind:title="subject.name">
-				<div class="row">
-					<div class="col-md-6"><canvas v-bind:id="uida" width="400" height="200"></canvas></div>
-					<div class="col-md-6"><canvas v-bind:id="uidb" width="400" height="200"></canvas></div>
-				</div>
-				<div>
-					<p><button class="btn btn-default" v-on:click="toggleDetails">Toggle details</button></p>
-					<table v-if="showDetails" class="table table-striped">
-						<thead>
-							<tr>
-								<th>date</th>
-								<th># requests</th>
-								<th># errors</th>
-								<th>avg response time (s)</th>
-								<th>min response time (s)</th>
-								<th>max response time (s)</th>
-								<th># users</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr v-for="d in data">
-								<td>{{d.date.format('dd D.MM.YY')}}</td>
-								<td>{{d.totalRequests}}</td>
-								<td>{{d.totalRequestsInError}}</td>
-								<td>{{d.averageResponseTime}}</td>
-								<td>{{d.minResponseTime}}</td>
-								<td>{{d.maxResponseTime}}</td>
-								<td>{{d.totalUserIds}}</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-		</census-panel>
-	`,
+	template: '\
+		<census-panel v-bind:title="subject.name">\
+				<div class="row">\
+					<div class="col-md-6"><canvas v-bind:id="uida" width="400" height="200"></canvas></div>\
+					<div class="col-md-6"><canvas v-bind:id="uidb" width="400" height="200"></canvas></div>\
+				</div>\
+				<div>\
+					<p><button class="btn btn-default" v-on:click="toggleDetails">Toggle details</button></p>\
+					<table v-if="showDetails" class="table table-striped">\
+						<thead>\
+							<tr>\
+								<th>date</th>\
+								<th># requests</th>\
+								<th># errors</th>\
+								<th>avg response time (s)</th>\
+								<th>min response time (s)</th>\
+								<th>max response time (s)</th>\
+								<th># users</th>\
+							</tr>\
+						</thead>\
+						<tbody>\
+							<tr v-for="d in data">\
+								<td>{{d.date.format("dd D.MM.YY")}}</td>\
+								<td>{{d.totalRequests}}</td>\
+								<td>{{d.totalRequestsInError}}</td>\
+								<td>{{d.averageResponseTime}}</td>\
+								<td>{{d.minResponseTime}}</td>\
+								<td>{{d.maxResponseTime}}</td>\
+								<td>{{d.totalUserIds}}</td>\
+							</tr>\
+						</tbody>\
+					</table>\
+				</div>\
+		</census-panel>\
+	',
 	props: ['subject', 'days', 'id', 'filter'],
 	data: function () {
 		return {

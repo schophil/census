@@ -18,8 +18,8 @@ export function SourceipService() {
         function (data) {
           console.log('DashboardService.list transform > ', data);
           data = JSON.parse(data);
-          data.forEach(g => {
-            g.ips.forEach(ip => {
+          data.forEach(function (g) {
+            g.ips.forEach(function (ip) {
               ip.lastUsed = moment(ip.lastUsed, census.dateApiFormat);
             });
           });
@@ -38,14 +38,14 @@ export function MockSourceipService() {
 
   this.search = function (filter, days) {
     var data = [];
-    for (let i = 0; i < 4; i++) {
+    for (var i = 0; i < 4; i++) {
       console.log("Create user ", i);
       var el = {
         userid: "PU" + _.random(111111, 888888),
         ips: []
       };
       var max = _.random(1, 3);
-      for (let j = 0; j < max; j++) {
+      for (var j = 0; j < max; j++) {
         console.log("Create ip ", i, j);
         el.ips.push({
           ip: "IP" + _.random(111111, 888888),

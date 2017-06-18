@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dist": "./node_modules/.bin/webpack && cp src/index.html dist/"
+    "dist": "export NODE_ENV=production && ./node_modules/.bin/webpack -p && cp src/index.html dist/",
+    "clean": "rm -r dist"
   },
   "keywords": [],
   "author": "",
