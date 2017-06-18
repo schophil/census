@@ -1,7 +1,9 @@
 var path = require('path');
 var webpack = require('webpack');
 
-module.exports = {
+var env = process.env.NODE_ENV;
+
+var config = {
   entry: './src/app/app.js',
   output: {
     filename: 'bundle.js',
@@ -9,7 +11,6 @@ module.exports = {
   },
   resolve: {
     alias: {
-      vue: 'vue/dist/vue.js'
     }
   },
   module: {
@@ -39,7 +40,9 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production'),
+      'process.env': {
+        NODE_ENV: JSON.stringify("production")
+      },
        PRODUCTION: JSON.stringify(true)
     })
   ],
@@ -49,3 +52,13 @@ module.exports = {
     port: 9000
   }
 };
+
+if (env === 'production') {
+  config.resolve.alias.vue = 'vue/dist/vue.min.js'
+  config.resolve.alias.moment = 'moment/min/moment.min.js'
+  config.resolve.alias["chart.js"] = 'chart.js/dist/Chart.bundle.min.js'
+} else {
+  config.resolve.alias.vue = 'vue/dist/vue.js'
+}
+
+module.exports = config;
