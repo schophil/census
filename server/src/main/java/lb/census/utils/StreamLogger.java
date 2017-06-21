@@ -16,6 +16,8 @@ public class StreamLogger<T> extends StreamMonitor<T> {
     }
 
     protected void doSomething(T element) {
-        logger.trace("{}: {}", name, element);
+        if (logger.isTraceEnabled()) {
+            logger.trace("{}: {}", name, element);
+        }
     }
 }

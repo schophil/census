@@ -10,6 +10,7 @@ import lb.census.record.recorders.RecorderContext;
 import lb.census.utils.StreamCounter;
 import lb.census.utils.StreamLogger;
 import org.apache.commons.lang3.time.DateUtils;
+import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,10 +92,14 @@ public class RecordServiceImpl implements RecordService {
 
     // Records the data
     private void record(LogSet logSet, RecorderContext recorderContext) {
+        StopWatch stopWatch = new StopWatch();
         LogRecordFactory logRecordFactory = logSet.getLogRecordFactory();
         for (Stream<String> stream : logSet.getLogData()) {
             LOGGER.info("Process stream {} ...", stream);
+            stopWatch.start();
             recordOneStream(stream, logRecordFactory, logSet.getFilters(), recorderContext);
+            stopWatch.stop();
+            LOGGER.info("Processed stream in {} ms", stopWatch.getTime());
         }
     }
 
@@ -107,6 +112,7 @@ public class RecordServiceImpl implements RecordService {
 
     // Records 1 log record.
     private void recordOneLine(LogRecord logRecord, RecorderContext recorderContext) {
+        LOGGER.trace("Record line {}", logRecord);
         recorders.stream().forEach((recorder) -> {
             recorder.record(logRecord, recorderContext);
         });
