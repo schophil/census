@@ -32,29 +32,29 @@ import java.util.stream.Stream;
 /**
  * Created by philippe on 25/06/2017.
  */
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = TestScope.class)
-@TestPropertySource(properties = {
-        "census.data=file:///tmp",
-        "census.config=file:///config",
-        "logging.level.root=ERROR",
-        "logging.level.lb.census=TRACE",
-        "spring.jpa.show-sql=true",
-        "spring.jpa.properties.hibernate.format_sql=true"
-})
-@Transactional
+//@RunWith(SpringRunner.class)
+//@ContextConfiguration(classes = TestScope.class)
+//@TestPropertySource(properties = {
+//        "census.data=file:///tmp",
+//        "census.config=file:///config",
+//        "logging.level.root=ERROR",
+//        "logging.level.lb.census=TRACE",
+//        "spring.jpa.show-sql=true",
+//        "spring.jpa.properties.hibernate.format_sql=true"
+//})
+//@Transactional
 public class RecordPerformanceTest {
 
-    @Autowired
+    //@Autowired
     private SubjectDao subjectDao;
-    @Autowired
+    //@Autowired
     private DayStatsDao dayStatsDao;
-    @Autowired
+    //@Autowired
     private TotalActivityPerHourDao totalActivityPerHourDao;
-    @Autowired
+    //@Autowired
     private UserActivityPerHourDao userActivityPerHourDao;
 
-    @Before
+    //@Before
     public void createSubject() {
         subjectDao.save(new Subject("starwars", "Star Wars"));
     }
@@ -72,7 +72,7 @@ public class RecordPerformanceTest {
         return defaultLogSet;
     }
 
-    @Test
+    //@Test
     public void record() throws IOException {
         RecordServiceImpl recordService = new RecordServiceImpl();
         recordService.setSubjectDao(subjectDao);
