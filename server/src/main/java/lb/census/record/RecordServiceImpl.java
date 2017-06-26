@@ -99,8 +99,8 @@ public class RecordServiceImpl implements RecordService {
             stopWatch.start();
             recordOneStream(stream, logRecordFactory, logSet.getFilters(), recorderContext);
             stopWatch.stop();
-            stopWatch.reset();
             LOGGER.info("Processed stream in {} ms", stopWatch.getTime());
+            stopWatch.reset();
         }
     }
 
@@ -119,8 +119,8 @@ public class RecordServiceImpl implements RecordService {
             stopWatch.start();
             recorder.record(logRecord, recorderContext);
             stopWatch.stop();
-            stopWatch.reset();
             LOGGER.trace("Recorder {} took {}", recorder, stopWatch.getTime());
+            stopWatch.reset();
         });
     }
 
