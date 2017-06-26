@@ -1,11 +1,10 @@
 package lb.census.record.recorders;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import lb.census.math.AverageCalculator;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +39,13 @@ public class ActivityPerHourRecorder implements Recorder {
     private final AverageCalculator[] globalResponseTime = new AverageCalculator[24];
 
     // user statistics per hour
-    private final Map<String, int[]> hitsPerUser = new HashMap<>();
-    private final Map<String, AverageCalculator[]> responseTimePerUser = new HashMap<>();
+    private class User {
+        String id = null;
+        int[] hitsPerHour = new int[24];
+        AverageCalculator[] responseTime = new AverageCalculator[24];
+    }
+    private final Map<String, User> userStats = new HashMap<>(100);
+    //private final Map<String, User> userStats = new TreeMap<>();
 
     public DayStatsDao getDayStatsDao() {
         return dayStatsDao;
@@ -70,7 +74,7 @@ public class ActivityPerHourRecorder implements Recorder {
     public ActivityPerHourRecorder() {
         resetHours(globalHits);
         calendar.clear();
-        hitsPerUser.clear();
+        userStats.clear();
     }
 
     @Override
@@ -81,15 +85,22 @@ public class ActivityPerHourRecorder implements Recorder {
     public void record(LogRecord logRecord, RecorderContext recorderContext) {
         calendar.setTime(logRecord.getTimestamp());
         int hourOfTheDay = calendar.get(Calendar.HOUR_OF_DAY);
-        LOGGER.debug("Recording day activity on hour {} for timestamp {}", hourOfTheDay, logRecord.getTimestamp());
+        LOGGER.debug("Recording day activity on hour {} for timestamp {} and user {}", hourOfTheDay, logRecord.getTimestamp(), logRecord.getUserId());
 
         // Record the global activity per hour
-        recordGlobalHit(hourOfTheDay);
-        recordGlobalResponseTime(hourOfTheDay, logRecord.getResponseTime());
+        globalHits[hourOfTheDay]++;
+        recordResponseTime(globalResponseTime, hourOfTheDay, logRecord.getResponseTime());
 
         // Record the activity per hour for a specific user
-        recordHitForUser(hourOfTheDay, logRecord.getUserId());
-        recordResponseTimeForUser(hourOfTheDay, logRecord.getUserId(), logRecord.getResponseTime());
+        String key = StringUtils.reverse(logRecord.getUserId());
+        User user = userStats.get(key);
+        if (user == null) {
+            user = new User();
+            user.id = logRecord.getUserId();
+            userStats.put(key, user);
+        }
+        user.hitsPerHour[hourOfTheDay]++;
+        recordResponseTime(user.responseTime, hourOfTheDay, logRecord.getResponseTime());
     }
 
     @Override
@@ -105,7 +116,7 @@ public class ActivityPerHourRecorder implements Recorder {
     @Override
     public void forget(RecorderContext recorderContext) {
         resetHours(globalHits);
-        hitsPerUser.clear();
+        userStats.clear();
     }
 
     private void storeGlobalStats(DayStats dayStats) {
@@ -130,23 +141,21 @@ public class ActivityPerHourRecorder implements Recorder {
     }
 
     private void storeUserStats(DayStats dayStats) {
-        hitsPerUser.keySet().stream().forEach((userId) -> {
-            AverageCalculator[] responseTimePerHour = responseTimePerUser.get(userId);
-            int[] hitsPerHour = hitsPerUser.get(userId);
+        userStats.values().stream().forEach(user -> {
             // If there are hits, there also need to be response time. So we can only iterate over the hits
             // and safely take the response time as well.
-            for (int i = 0; i < hitsPerHour.length; i++) {
-                if (hitsPerHour[i] != 0) {
+            for (int i = 0; i < user.hitsPerHour.length; i++) {
+                if (user.hitsPerHour[i] != 0) {
                     UserActivityPerHour userActivity = new UserActivityPerHour();
                     userActivity.setDayStats(dayStats);
                     userActivity.setHour(i);
-                    userActivity.setHits(hitsPerHour[i]);
-                    userActivity.setUserId(userId);
+                    userActivity.setHits(user.hitsPerHour[i]);
+                    userActivity.setUserId(user.id);
 
-                    if (responseTimePerHour[i] != null) {
-                        userActivity.setAverageResponseTime(responseTimePerHour[i].getCurrentAverage().doubleValue());
+                    if (user.responseTime[i] != null) {
+                        userActivity.setAverageResponseTime(user.responseTime[i].getCurrentAverage().doubleValue());
                     } else {
-                        LOGGER.error("In the user stats there are hits without response time for user {} and hour {}", userId, i);
+                        LOGGER.error("In the user stats there are hits without response time for user {} and hour {}", user.id, i);
                     }
 
                     userActivityPerHourDao.save(userActivity);
@@ -155,38 +164,11 @@ public class ActivityPerHourRecorder implements Recorder {
         });
     }
 
-    private void recordGlobalHit(int hourOfTheDay) {
-        globalHits[hourOfTheDay]++;
-    }
-
-    private void recordGlobalResponseTime(int hourOfTheDay, double responseTime) {
-        recordResponseTime(globalResponseTime, hourOfTheDay, responseTime);
-    }
-
     private void recordResponseTime(AverageCalculator[] recorded, int position, double newValue) {
         if (recorded[position] == null) {
             recorded[position] = AverageCalculator.create(2);
         }
         recorded[position].add(newValue);
-    }
-
-    private void recordHitForUser(int hourOfTheDay, String userId) {
-        int[] hitsPerHour = hitsPerUser.get(userId);
-        if (hitsPerHour == null) {
-            hitsPerHour = new int[24];
-            resetHours(hitsPerHour);
-            hitsPerUser.put(userId, hitsPerHour);
-        }
-        hitsPerHour[hourOfTheDay]++;
-    }
-
-    private void recordResponseTimeForUser(int hourOfTheDay, String userId, double responseTime) {
-        AverageCalculator[] userData = responseTimePerUser.get(userId);
-        if (userData == null) {
-            userData = new AverageCalculator[24];
-            responseTimePerUser.put(userId, userData);
-        }
-        recordResponseTime(userData, hourOfTheDay, responseTime);
     }
 
     private void resetHours(int[] hours) {

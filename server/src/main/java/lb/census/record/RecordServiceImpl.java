@@ -100,6 +100,7 @@ public class RecordServiceImpl implements RecordService {
             recordOneStream(stream, logRecordFactory, logSet.getFilters(), recorderContext);
             stopWatch.stop();
             LOGGER.info("Processed stream in {} ms", stopWatch.getTime());
+            stopWatch.reset();
         }
     }
 
@@ -113,8 +114,12 @@ public class RecordServiceImpl implements RecordService {
     // Records 1 log record.
     private void recordOneLine(LogRecord logRecord, RecorderContext recorderContext) {
         LOGGER.trace("Record line {}", logRecord);
+        StopWatch stopWatch = new StopWatch();
         recorders.stream().forEach((recorder) -> {
+            stopWatch.start();
             recorder.record(logRecord, recorderContext);
+            stopWatch.stop();
+            LOGGER.trace("Recorder {} took {}", recorder, stopWatch.getTime());
         });
     }
 
@@ -138,23 +143,36 @@ public class RecordServiceImpl implements RecordService {
         StreamCounter<String> totalLines = new StreamCounter();   // counts the total number of log lines
         StreamCounter<LogRecord> processed = new StreamCounter(); // counts the number of actually processed lines
 
-        StreamLogger<String> preFilterLogger = new StreamLogger(LOGGER, "Pre filter");
-        StreamLogger<String> preCreateLogger = new StreamLogger(LOGGER, "Pre create");
-        StreamLogger<LogRecord> preProcessLogger = new StreamLogger(LOGGER, "Pre process");
+        if (LOGGER.isTraceEnabled()) {
+            StreamLogger<String> preFilterLogger = new StreamLogger(LOGGER, "Pre filter");
+            StreamLogger<String> preCreateLogger = new StreamLogger(LOGGER, "Pre create");
+            StreamLogger<LogRecord> preProcessLogger = new StreamLogger(LOGGER, "Pre process");
 
-        stream.map(totalLines::inspect)
-                // first filtering
-                .map(preFilterLogger::inspect)
-                .filter(l -> passesFilters(l, filters))
-                // create log records and remove null values and re-apply filters
-                .map(preCreateLogger::inspect)
-                .map(logRecordFactory::create)
-                .filter(l -> l != null)
-                .filter(l -> passesFilters(l, filters))
-                // process the records
-                .map(processed::inspect)
-                .map(preProcessLogger::inspect)
-                .forEach(l -> recordOneLine(l, recorderContext));
+            stream.map(totalLines::inspect)
+                    // first filtering
+                    .map(preFilterLogger::inspect)
+                    .filter(l -> passesFilters(l, filters))
+                    // create log records and remove null values and re-apply filters
+                    .map(preCreateLogger::inspect)
+                    .map(logRecordFactory::create)
+                    .filter(l -> l != null)
+                    .filter(l -> passesFilters(l, filters))
+                    // process the records
+                    .map(processed::inspect)
+                    .map(preProcessLogger::inspect)
+                    .forEach(l -> recordOneLine(l, recorderContext));
+        } else {
+            stream.map(totalLines::inspect)
+                    // first filtering
+                    .filter(l -> passesFilters(l, filters))
+                    // create log records and remove null values and re-apply filters
+                    .map(logRecordFactory::create)
+                    .filter(l -> l != null)
+                    .filter(l -> passesFilters(l, filters))
+                    // process the records
+                    .map(processed::inspect)
+                    .forEach(l -> recordOneLine(l, recorderContext));
+        }
 
         LOGGER.info("Result for {}: recorded {}, filtered {}", stream, processed.getCount(),
                 totalLines.getCount() - processed.getCount());

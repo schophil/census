@@ -9,8 +9,8 @@ import java.math.RoundingMode;
  */
 public class GradualAverageCalculator implements AverageCalculator {
 
-    private BigDecimal currentAvg = BigDecimal.ZERO;
-    private BigDecimal currentTotal = BigDecimal.ZERO;
+    private double currentAvg = 0;
+    private double currentTotal = 0;
     private int scale;
 
     public GradualAverageCalculator(int scale) {
@@ -24,35 +24,33 @@ public class GradualAverageCalculator implements AverageCalculator {
 
     @Override
     public void add(int value) {
-        add(new BigDecimal(value));
+        addDouble(value);
     }
 
     @Override
     public void add(double value) {
-        add(new BigDecimal(value));
+        addDouble(value);
     }
 
     @Override
     public void add(long value) {
-        add(new BigDecimal(value));
+        addDouble(value);
     }
 
-    private void add(BigDecimal newValue) {
-        BigDecimal newTotal = currentTotal.add(BigDecimal.ONE);
-        currentAvg = currentAvg.
-                multiply(currentTotal.divide(newTotal, 10, RoundingMode.CEILING)).
-                add(newValue.divide(newTotal, 10, RoundingMode.CEILING));
+    private void addDouble(double newValue) {
+        double newTotal = currentTotal + 1;
+        currentAvg = (currentAvg * (currentTotal / newTotal)) + (newValue / newTotal);
         currentTotal = newTotal;
     }
 
     @Override
     public void clear() {
-        currentAvg = BigDecimal.ZERO;
-        currentTotal = BigDecimal.ZERO;
+        currentAvg = 0;
+        currentTotal = 0;
     }
 
     @Override
     public BigDecimal getCurrentAverage() {
-        return currentAvg.setScale(scale, RoundingMode.HALF_UP);
+        return new BigDecimal(currentAvg).setScale(scale, RoundingMode.HALF_UP);
     }
 }

@@ -16,7 +16,7 @@ import static org.junit.Assert.assertThat;
 public class AverageCalculatorTest {
 
     @Test
-    public void average1() {
+    public void averageGradual1() {
         AverageCalculator averageCalculator = new GradualAverageCalculator(2);
 
         averageCalculator.add(3);
@@ -31,8 +31,50 @@ public class AverageCalculatorTest {
     }
 
     @Test
-    public void average2() {
+    public void averageGradual2() {
         AverageCalculator averageCalculator = new GradualAverageCalculator(2);
+
+        averageCalculator.add(3);
+        averageCalculator.add(5);
+        averageCalculator.add(2);
+        averageCalculator.add(7);
+        averageCalculator.add(4);
+        averageCalculator.add(9);
+        averageCalculator.add(11);
+        averageCalculator.add(15);
+        averageCalculator.add(1);
+        averageCalculator.add(3);
+        averageCalculator.add(8);
+
+        BigDecimal avg = averageCalculator.getCurrentAverage();
+
+        assertThat(avg.doubleValue(), is(6.18));
+    }
+
+    @Test
+    public void averageSimple1() {
+        AverageCalculator averageCalculator = new SimpleAverageCalculator(2);
+
+        averageCalculator.add(3);
+        averageCalculator.add(5);
+        averageCalculator.add(2);
+        averageCalculator.add(7);
+        averageCalculator.add(4);
+        averageCalculator.add(9);
+        averageCalculator.add(11);
+        averageCalculator.add(15);
+        averageCalculator.add(1);
+        averageCalculator.add(3);
+        averageCalculator.add(8);
+
+        BigDecimal avg = averageCalculator.getCurrentAverage();
+
+        assertThat(avg.doubleValue(), is(6.18));
+    }
+
+    @Test
+    public void averageSimple2() {
+        AverageCalculator averageCalculator = new SimpleAverageCalculator(2);
 
         averageCalculator.add(3);
         averageCalculator.add(5);
