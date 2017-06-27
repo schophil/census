@@ -29,4 +29,8 @@ public abstract class Filter {
      * recorded
      */
     public abstract boolean passes(LogRecord logRecord);
+
+    public Filter invert() {
+        return new Invert(this);
+    }
 }

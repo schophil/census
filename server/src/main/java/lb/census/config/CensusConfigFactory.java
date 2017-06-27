@@ -5,6 +5,7 @@ import java.net.URL;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
+import lb.census.record.filters.Invert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,11 +45,11 @@ public class CensusConfigFactory {
     public CensusConfig loadFrom(URL url) {
         try {
             JAXBContext context = JAXBContext.newInstance(CensusConfig.class, LogSource.class, LogSubject.class,
-                    CsvLog.class, JhksStandardLog.class, ApacheLogFormat.class, PatternFilter.class);
+                    CsvLog.class, JhksStandardLog.class, ApacheLogFormat.class, PatternFilter.class, Invert.class);
             return (CensusConfig) context.createUnmarshaller().unmarshal(url);
         } catch (JAXBException e) {
             LOGGER.error("Error reading config from " + url + ", returning empty config!");
-            LOGGER.error("Reading error: " + e.getMessage());
+            LOGGER.error("Reading error: " + e.getMessage(), e);
             return new CensusConfig();
         }
     }

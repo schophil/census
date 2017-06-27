@@ -41,7 +41,7 @@ public class PatternFilter extends Filter {
         if (pattern == null) {
             return true;
         }
-        return !pattern.matcher(line).matches();
+        return pattern.matcher(line).matches();
     }
 
     @Override

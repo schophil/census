@@ -54,8 +54,8 @@ public class RecordServiceTest {
         defaultLogSet.setLogRecordFactory(new ApacheLogFormat());
 
         PatternFilter patternFilter = new PatternFilter();
-        patternFilter.setRegexp(".*darthvader.*");
-        defaultLogSet.setFilters(Arrays.asList(patternFilter));
+        patternFilter.setRegexp(".*(darthvader)+.*");
+        defaultLogSet.setFilters(Arrays.asList(patternFilter.invert()));
 
         Stream<String> stream = Stream.of(
                 "127.0.0.1 - darthvader [02/Apr/2014:00:10:40 +0200] \"GET /manager/text/undeploy?path=/alor HTTP/1.1\" 200 61 0.2",

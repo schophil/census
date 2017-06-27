@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<census retrievalHour="2">
+    <subjects>
+        <subject id="1" name="a">
+            <sources>
+                <source url="sdfsfd" datePattern="fff" />
+            </sources>
+            <filters>
+                <invert-filter>
+                    <pattern-filter regexp="a+" />
+                </invert-filter>
+            </filters>
+        </subject>
+    </subjects>
+</census>
