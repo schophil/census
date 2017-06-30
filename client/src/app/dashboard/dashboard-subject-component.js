@@ -148,13 +148,13 @@ Vue.component('census-dashboard-subject', {
 						</thead>\
 						<tbody>\
 							<tr v-for="d in data">\
-								<td>{{d.date.format("dd D.MM.YY")}}</td>\
-								<td>{{d.totalRequests}}</td>\
-								<td>{{d.totalRequestsInError}}</td>\
-								<td>{{d.averageResponseTime}}</td>\
-								<td>{{d.minResponseTime}}</td>\
-								<td>{{d.maxResponseTime}}</td>\
-								<td>{{d.totalUserIds}}</td>\
+								<td>{{ d.date | formatDate }}</td>\
+								<td>{{ d.totalRequests | formatNumber }}</td>\
+								<td>{{ d.totalRequestsInError | formatNumber }}</td>\
+								<td>{{ d.averageResponseTime | formatNumber }}</td>\
+								<td>{{ d.minResponseTime | formatNumber }}</td>\
+								<td>{{ d.maxResponseTime | formatNumber }}</td>\
+								<td>{{ d.totalUserIds | formatNumber }}</td>\
 							</tr>\
 						</tbody>\
 					</table>\
@@ -188,6 +188,10 @@ Vue.component('census-dashboard-subject', {
 				date: this.data[idx].date
 			});
 		}
+	},
+	filters: {
+		formatDate: census.formatDate,
+		formatNumber: census.formatNumber
 	},
 	watch: {
 		data: drawGraphs,

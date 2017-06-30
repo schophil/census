@@ -104,17 +104,17 @@ Vue.component('census-dashboard-subject-day', {
 						<thead>\
 							<tr>\
 								<th>hour</th>\
-								<th>{{this.yesterday.format(census.dateFormat)}}</th>\
-								<th>{{this.date.format(census.dateFormat)}}</th>\
-								<th>{{this.tomorrow.format(census.dateFormat)}}</th>\
+								<th>{{ this.yesterday | formatDate }}</th>\
+								<th>{{ this.date | formatDate }}</th>\
+								<th>{{ this.tomorrow | formatDate }}</th>\
 							</tr>\
 						</thead>\
 						<tbody>\
 							<tr v-for="d in dataPivot">\
-								<td>{{d.hour}}</td>\
-								<td>{{d.yesterday}}</td>\
-								<td>{{d.target}}</td>\
-								<td>{{d.tomorrow}}</td>\
+								<td>{{ d.hour | formatNumber }}</td>\
+								<td>{{ d.yesterday | formatNumber }}</td>\
+								<td>{{ d.target | formatNumber }}</td>\
+								<td>{{ d.tomorrow | formatNumber }}</td>\
 							</tr>\
 						</tbody>\
 					</table>\
@@ -130,8 +130,8 @@ Vue.component('census-dashboard-subject-day', {
 				</thead>\
 				<tbody>\
 					<tr v-for="r in targetData.popularResources">\
-						<td>{{r.path}}</td>\
-						<td>{{r.hits}}</td>\
+						<td>{{ r.path }}</td>\
+						<td>{{ r.hits | formatNumber }}</td>\
 					</tr>\
 				</tbody>\
 			</table>\
@@ -180,6 +180,10 @@ Vue.component('census-dashboard-subject-day', {
 		toggleAdjacentDays: function () {
 			this.showAdjacentDays = !this.showAdjacentDays;
 		}
+	},
+	filters: {
+		formatDate: census.formatDate,
+		formatNumber: census.formatNumber
 	},
 	watch: {
 		data: drawGraph,
