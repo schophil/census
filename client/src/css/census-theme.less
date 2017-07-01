@@ -1,4 +1,4 @@
-/* vim: set sw=2 ts=2: */ 
+/* vim: set sw=2 ts=2: */
 
 @base: #868990;
 @highlight: #FFFAF6;
@@ -11,6 +11,10 @@ html, body {
 
 /* Customize the menu */
 /* ================== */
+.navbar {
+	border-radius: 0px;
+}
+/*
 .navbar {
 	background-color: @base;
 	background-image: none;
@@ -28,6 +32,11 @@ html, body {
 .navbar-default .navbar-brand:hover {
 	color: @menu-text-hover;
 	border-bottom: 1px solid @highlight;
+}
+
+.navbar-default .navbar-nav li.active {
+	background-color: @base;
+	background-image: none;
 }
 
 .navbar-default .navbar-nav li.active > a {
@@ -49,12 +58,13 @@ html, body {
 
 .navbar-default .navbar-nav li a {
 	color: @menu-text;
-} 
+}
 
 .navbar-default .navbar-nav li a:hover {
 	color: @menu-text-hover;
 	border-bottom: 1px solid @highlight;
 }
+*/
 
 /* Blocs */
 /* ===== */
@@ -65,4 +75,3 @@ html, body {
 .panel .panel-heading a {
 	float: right;
 }
-

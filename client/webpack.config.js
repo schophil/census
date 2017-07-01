@@ -48,7 +48,7 @@ var config = {
   ],
   target: 'web',
   devServer: {
-    contentBase: [path.join(__dirname, "dist"), path.join(__dirname, "src")],
+    contentBase: [ path.join(__dirname, "src"), path.join(__dirname, "dist") ],
     port: 9000
   }
 };

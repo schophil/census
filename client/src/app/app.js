@@ -7,6 +7,7 @@ import './panel/panel-component';
 import './about/about-component';
 import './sourceip/sourceip-component';
 import './dashboard/dashboard-component';
+import './schedule/schedule-component';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/css/bootstrap-theme.min.css';
@@ -17,18 +18,28 @@ function goToDashboard() {
   this.inDashboard = true;
   this.inAbout = false;
   this.inSourceip = false;
+  this.inSchedule = false;
 }
 
 function goToAbout() {
   this.inDashboard = false;
   this.inAbout = true;
   this.inSourceip = false;
+  this.inSchedule = false;
 }
 
 function goToSourceip() {
   this.inDashboard = false;
   this.inAbout = false;
   this.inSourceip = true;
+  this.inSchedule = false;
+}
+
+function goToSchedule() {
+  this.inDashboard = false;
+  this.inAbout = false;
+  this.inSourceip = false;
+  this.inSchedule = true;
 }
 
 function clearAlerts() {
@@ -69,6 +80,7 @@ var vm = new Vue({
     inDashboard: true,
     inSourceip: false,
     inAbout: false,
+    inSchedule: false,
     alerts: []
   },
   computed: {
@@ -80,6 +92,7 @@ var vm = new Vue({
     goToDashboard: goToDashboard,
     goToAbout: goToAbout,
     goToSourceip: goToSourceip,
+    goToSchedule: goToSchedule,
     clearAlerts: clearAlerts,
     onError: onError
   },
