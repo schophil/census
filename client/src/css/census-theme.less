@@ -1,75 +1,120 @@
-/* vim: set sw=2 ts=2: */
+@base: #C76F16;
+@base-lighter: #E4903A;
+@base-lightest: #FCB267;
+@base-darker: #A35505;
+@base-darkest: #7A3E00;
 
-@base: #282C34;
-@highlight: #FFFAF6;
-@menu-text: #2C2F35;
-@menu-text-hover: #131825;
+@accent: #11647C;
+@accent-darker: #065065;
+@accent-darkest: #023C4C;
+@accent-lighter: #28788E;
+@accent-lightest: #43899D;
+
+@white: #FFFFFF;
+
+@panel-bg: @white;
+@panel-title-sep: @accent;
+
+@menu-bg: @base-darker;
+
+@btn-primary: @accent;
+@btn-primary-hover: @accent-darker;
+@btn-default: @white;
 
 html, body {
 	background-color: @base;
+}
+
+.glyphicon {
+	color: @accent;
+}
+
+/* Customize the breadcrumb */
+/* ======================== */
+.breadcrumb {
+	background-color: @base-lightest;
+	color: @base-darkest;
+}
+
+.breadcrumb li {
+	color: @base-darkest;
+}
+
+.breadcrumb a {
+	color: @base-darkest;
+}
+
+/* Customize the buttons */
+/* ===================== */
+.btn {
+	border-radius: 1px;
+	box-shadow: 0 0 0;
+}
+
+.btn-primary {
+	background-color: @accent-lightest;
+	background-image: none;
+}
+
+.btn-primary:hover {
+	background-color: @accent-lighter;
+}
+
+.btn-default {
+	background-color: @white;
+	background-image: none;
 }
 
 /* Customize the menu */
 /* ================== */
 .navbar {
 	border-radius: 0px;
-}
-/*
-.navbar {
-	background-color: @base;
+	background-color: @base-darkest;
 	background-image: none;
-	border-color: @base;
-	box-shadow: none;
+	border-color: @accent-lighter;
+	border-width: 0px 0px 7px 0px;
 }
 
-.navbar-default .navbar-brand {
-	color: @highlight;
-	background-image: none;
-	box-shadow: none;
-	text-shadow: none;
+.navbar .navbar-brand {
+	color: @white;
 }
 
-.navbar-default .navbar-brand:hover {
-	color: @menu-text-hover;
-	border-bottom: 1px solid @highlight;
+.navbar .nav li a {
+	color: @white;
 }
 
-.navbar-default .navbar-nav li.active {
-	background-color: @base;
-	background-image: none;
+.navbar .nav li {
+	a:active, a:focus {
+		background-color: @base;
+		background-image: none;
+		color: @white;
+	}
+	a:hover {
+		background-color: @accent-lightest;
+		background-image: none;
+		color: @white;
+	}
 }
 
-.navbar-default .navbar-nav li.active > a {
-	background-color: @base;
-	background-image: none;
-	box-shadow: none;
-	color: @menu-text;
-	font-weight: bold;
-	border-bottom: 1px solid @base;
+.navbar .nav li.active {
+	a, a:active, a:hover, a:focus {
+		background-color: @accent-lighter;
+		background-image: none;
+		box-shadow: 0 0 0;
+		color: @white;
+	}
 }
-
-.navbar-default .navbar-nav li.active > a:hover {
-	background-color: @base;
-	background-image: none;
-	box-shadow: none;
-	color: @menu-text-hover;
-	border-bottom: 1px solid @highlight;
-}
-
-.navbar-default .navbar-nav li a {
-	color: @menu-text;
-}
-
-.navbar-default .navbar-nav li a:hover {
-	color: @menu-text-hover;
-	border-bottom: 1px solid @highlight;
-}
-*/
 
 /* Blocs */
 /* ===== */
 .panel {
-	box-shadow: 2px 2px 3px @menu-text;
+	background: @white;
+	border-color: @white;
+	box-shadow: 2px 2px 10px @base-darkest;
+}
+
+.panel .panel-heading {
+	border-color: @accent;
 }
 
 .panel .panel-heading a {
