@@ -1,10 +1,13 @@
 package lb.census.rest.retrieval;
 
+import lb.census.config.CensusConfig;
+import lb.census.config.LogSubject;
 import lb.census.record.scheduler.AccessLogRetriever;
 import lb.census.record.scheduler.ScheduledRetrieval;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,6 +25,8 @@ public class RetrievalController {
     private static Logger LOGGER = LoggerFactory.getLogger(RetrievalController.class);
 
     @Autowired
+    private CensusConfig censusConfig;
+    @Autowired
     private AccessLogRetriever accessLogRetriever;
 
     /**
@@ -31,8 +36,13 @@ public class RetrievalController {
      * @param schedule
      */
     @RequestMapping(method = RequestMethod.POST)
-    public void schedule(@RequestBody Schedule schedule) {
+    public ResponseEntity<String> schedule(@RequestBody Schedule schedule) {
+        LogSubject logSubject = censusConfig.getSubjectWith(schedule.subject);
+        if (logSubject == null) {
+            return ResponseEntity.badRequest().body("Unknown subject " + schedule.subject);
+        }
         accessLogRetriever.scheduleRetrieval(schedule.date, schedule.subject);
+        return ResponseEntity.ok("ok");
     }
 
     /**

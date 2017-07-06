@@ -179,6 +179,8 @@ public class AccessLogRetriever implements Runnable {
             LogSubject logSubject = censusConfig.getSubjectWith(subjectId);
             if (logSubject != null) {
                 scheduled.add(new ScheduledRetrieval(target.getTime(), logSubject));
+            } else {
+                LOGGER.error("Subject not found {}", subjectId);
             }
         }
     }
