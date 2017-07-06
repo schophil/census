@@ -5,8 +5,15 @@ import census from '../census';
 
 export function ScheduleService() {
 
+  this.schedule = function (date, subject) {
+    axios.post('/rest/retrievals', {
+      date: census.formatDateForConsumption(date),
+      subject: subject
+    });
+  };
+
   this.getScheduled = function () {
-    return axios.get('/rest/retrieval/scheduled', {
+    return axios.get('/rest/retrievals', {
 			transformResponse: [
 				function (data) {
 					data = JSON.parse(data);

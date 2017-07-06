@@ -42,17 +42,24 @@ if (census.mock) {
 }
 
 // utilities
-census.consume = function (promiseReturningFunction, responseHandlingfunction) {
+census.formatDateForConsumption = function (date) {
+  return date.format('YYYY-MM-DD');
+};
+
+census.consume = function (promiseReturningFunction, responseHandlingfunction, vm) {
   census.SpinService.up();
   promiseReturningFunction().then(function (response) {
     console.log(response);
     responseHandlingfunction(response);
     census.SpinService.down();
   }).catch(function (error) {
-    this.$emit('error', {
-      title: 'Error retrieving data',
-      message: error
-    });
     census.SpinService.down();
+    console.log("Error: " + error);
+    if (vm != null) {
+      vm.$emit('error', {
+        title: 'Error retrieving data',
+        message: error
+      });
+    }
   });
 };

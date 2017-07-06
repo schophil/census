@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import moment from 'moment';
 import census from '../census';
 
 function fetchData() {
@@ -9,19 +10,22 @@ function fetchData() {
     },
     function (response) {
       vm.data = response.data;
-    }
+    },
+    vm
   );
 }
 
 function schedule() {
+  var mDate = moment(this.date);
   var vm = this;
   census.consume(
     function () {
-      return census.ScheduleService.schedule(vm.date, vm.subject);
+      return census.ScheduleService.schedule(mDate, vm.subject);
     },
     function (response) {
       (fetchData.bind(vm))();
-    }
+    },
+    vm
   );
 }
 
@@ -40,7 +44,9 @@ Vue.component('census-schedule', {
 			</div>\
 			<div class="form-group">\
 				<label for="subject">subject</label>\
-				<input type="text" class="form-control" v-model="subject" placeholder="Subject..." id="subject">\
+        <select id="subject" v-model="subject" class="form-control">\
+          <option v-for="s in subjects" v-bind:value="s.id">{{s.name}}</option>\
+        </select>\
 			</div>\
 			<button type="submit" v-bind:disabled="!canSchedule" class="btn btn-primary">Schedule</button>\
     </form>\
@@ -68,6 +74,7 @@ Vue.component('census-schedule', {
   </div>\
   \
   ',
+  props: ['subjects'],
   data: function () {
 		return {
 			data: null,

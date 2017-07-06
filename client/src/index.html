@@ -30,7 +30,7 @@
 				</div>
 				<census-dashboard v-if="inDashboard" v-bind:subjects="subjects" v-on:error="onError"></census-dashboard>
 				<census-sourceip v-if="inSourceip" v-bind:subjects="subjects" v-on:error="onError"></census-sourceip>
-				<census-schedule v-if="inSchedule"></census-schedule>
+				<census-schedule v-if="inSchedule" v-bind:subjects="subjects"></census-schedule>
 				<census-about v-if="inAbout"></census-about>
 			</div>
 		</div>
