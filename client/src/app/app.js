@@ -47,10 +47,7 @@ function clearAlerts() {
 }
 
 function onError(e) {
-  this.alerts.push({
-    title: e.title,
-    message: e.message
-  });
+  this.alerts.push(e);
 }
 
 function _created() {

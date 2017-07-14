@@ -7,7 +7,7 @@ import { DashboardService, MockDashboardService } from './dashboard/dashboard-se
 import { ScheduleService, MockScheduleService } from './schedule/schedule-service';
 
 // settings
-census.mock = true;
+census.mock = false;
 census.mockDelay = 1000;
 census.dateFormat = 'dd D.M.YY';
 census.dateApiFormat = 'YYYY-MM-DD';
@@ -54,11 +54,15 @@ census.consume = function (promiseReturningFunction, responseHandlingfunction, v
     census.SpinService.down();
   }).catch(function (error) {
     census.SpinService.down();
-    console.log("Error: " + error);
+    console.log(error);
     if (vm != null) {
       vm.$emit('error', {
-        title: 'Error retrieving data',
-        message: error
+        title: 'Error consuming service',
+        service: true,
+        url: error.config.url,
+        method: error.config.method,
+        status: error.response.status,
+        message: error.response.data
       });
     }
   });

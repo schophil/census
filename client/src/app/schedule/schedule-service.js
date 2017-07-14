@@ -6,7 +6,7 @@ import census from '../census';
 export function ScheduleService() {
 
   this.schedule = function (date, subject) {
-    axios.post('/rest/retrievals', {
+    return axios.post('/rest/retrievals', {
       date: census.formatDateForConsumption(date),
       subject: subject
     });

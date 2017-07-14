@@ -25,12 +25,18 @@
 				<div class="alert alert-danger" role="alert" v-if="hasAlerts">
 					<button v-on:click="clearAlerts" type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<div v-for="a in alerts">
-						<strong>{{a.title}}</strong> {{a.message}}
+						<strong>{{a.title}}</strong>
+						<p v-if="a.service">
+							<span>Service: {{a.method}} {{a.url}}</span>
+							<br/>
+							<span>Status: {{a.status}}</span>
+						</p>
+						<p>{{a.message}}</p>
 					</div>
 				</div>
 				<census-dashboard v-if="inDashboard" v-bind:subjects="subjects" v-on:error="onError"></census-dashboard>
 				<census-sourceip v-if="inSourceip" v-bind:subjects="subjects" v-on:error="onError"></census-sourceip>
-				<census-schedule v-if="inSchedule" v-bind:subjects="subjects"></census-schedule>
+				<census-schedule v-if="inSchedule" v-bind:subjects="subjects" v-on:error="onError"></census-schedule>
 				<census-about v-if="inAbout"></census-about>
 			</div>
 		</div>
