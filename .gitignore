@@ -4,3 +4,6 @@
 # editors
 *.*~
 *.swp
+
+# idea
+.idea/
