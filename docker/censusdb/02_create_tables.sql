@@ -61,7 +61,7 @@ create table census_users (
 create table census_sourceip (
 	id varchar(25),
 	userid varchar(100),
-	ip varchar(40),
+	ip varchar(100),
 	lused date,
 	subject varchar(20),
 	constraint census_sourceip_pk primary key (id),

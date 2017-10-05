@@ -4,7 +4,7 @@
         <subject id="epis" name="EPIS">
             <!-- the files containing the daily logs; can be more than one -->
             <sources>
-                <source url="file:///Users/philippeschottey/Projects/census/data/access_log.txt" datePattern="dd.MM.yy"></source>
+                <source url="file:///Users/philippe/w_sandbox/census/data/access_log.txt" datePattern="dd.MM.yy"></source>
             </sources>
             <!-- The structure of a log statement -->
             <jhks></jhks>

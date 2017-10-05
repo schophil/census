@@ -10,14 +10,22 @@ import { ScheduleService, MockScheduleService } from './schedule/schedule-servic
 census.mock = false;
 census.mockDelay = 1000;
 census.dateFormat = 'dd D.M.YY';
+census.dateTimeFormat = 'dd D.M.YY';
 census.dateApiFormat = 'YYYY-MM-DD';
+census.dateTimeApiFormat = "YYYY-MM-DD'T'HH:mm:ss";
 
 // filters
 census.formatDate = function (value) {
-  if (!value) {
+  if (!value || value == null) {
     return '';
   }
   return value.format(census.dateFormat);
+};
+census.formatDateTime = function (value) {
+  if (!value || value == null) {
+    return '';
+  }
+  return value.format(census.dateTimeFormat);
 };
 census.formatNumber = formatNumber({
   integerSeparator: '.',

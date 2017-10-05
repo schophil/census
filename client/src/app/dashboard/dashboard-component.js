@@ -101,7 +101,7 @@ Vue.component('census-dashboard', {
 				<li v-if="isLevel2">{{target.date.format("dd D.M.YY")}}</li>\
 			</ol>\
 		</div>\
-    <census-panel>\
+    <census-panel v-if="isLevel1">\
       <form class="form" v-on:submit.prevent="applyFilter">\
         <div class="checkbox">\
           <label class="checkbox-inline" v-for="c in categories">\
@@ -111,7 +111,7 @@ Vue.component('census-dashboard', {
 		    <button type="submit" class="btn btn-primary">Apply</button>\
 		    <button type="button" class="btn btn-default" v-on:click="checkAll" >Check all</button>\
 		    <button type="button" class="btn btn-default" v-on:click="uncheckAll">Uncheck all</button>\
-		</form>\
+			</form>\
     </census-panel>\
 		<div id="censusDashboardLevel1" v-show="isLevel1">\
 			<census-dashboard-subject v-on:drill="drill" v-bind:id="idx" days="30" v-for="(s, idx) in subjects" v-bind:filter="filter" v-bind:subject="s"></census-dashboard-subject>\

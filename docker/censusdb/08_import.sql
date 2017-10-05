@@ -4,3 +4,4 @@ copy census_dayactivity from '/docker-entrypoint-initdb.d/data_dayactivity.csv' 
 copy census_resource from '/docker-entrypoint-initdb.d/data_resource.csv' with delimiter ',' quote '"' csv;
 copy census_userstats from '/docker-entrypoint-initdb.d/data_userstats.csv' with delimiter ',' quote '"' csv;
 copy census_useractivity from '/docker-entrypoint-initdb.d/data_useractivity.csv' with delimiter ',' quote '"' csv;
+copy census_sourceip from '/docker-entrypoint-initdb.d/data_sourceip.csv' with delimiter ',' quote '"' csv;

@@ -4,22 +4,15 @@ import census from '../census';
 function searchSources() {
 	console.log("Searching ", this.search);
 	var vm = this;
-	census.SpinService.up();
-	this.data.splice(0, this.data.length);
-	census.SourceipService.search(this.search.filter, this.search.days)
-		.then(function (response) {
-			response.data.forEach(function (item) {
-				console.log("Add ", item);
-				vm.data.push(item);
-			});
-			census.SpinService.down();
-		}).catch(function (error) {
-			this.$emit('error', {
-				title: 'Error retrieving data',
-				message: error
-			});
-			census.SpinService.down();
-		});
+	census.consume(
+    function () {
+      return census.SourceipService.search(vm.search.filter, vm.search.days);
+    },
+    function (response) {
+      vm.data = response.data;
+    },
+    vm
+  );
 }
 
 Vue.component('census-sourceip', {
@@ -48,9 +41,9 @@ Vue.component('census-sourceip', {
 			<tbody>\
 				<template v-for="d in data">\
 					<tr v-for="(ip, index) in d.ips">\
-						<td><span v-if="index == 0">{{d.userid}}</span></td>\
-						<td>{{ip.ip}}</td>\
-						<td>{{ip.lastUsed.format(census.dateFormat)}}</td>\
+						<td><span v-if="index == 0">{{ d.userid }}</span></td>\
+						<td>{{ ip.ip }}</td>\
+						<td>{{ ip.lastUsed | formatDate }}</td>\
 					</tr>\
 				</template>\
 			</tbody>\
@@ -77,5 +70,9 @@ Vue.component('census-sourceip', {
 		hasData: function () {
 			return this.data.length > 0;
 		}
-	}
+	},
+	filters: {
+    formatDate: census.formatDate,
+    formatDateTime: census.formatDateTime,
+  }
 });

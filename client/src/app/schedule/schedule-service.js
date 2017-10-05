@@ -18,8 +18,12 @@ export function ScheduleService() {
 				function (data) {
 					data = JSON.parse(data);
 					data.forEach(function (g) {
-						g.scheduledOn = moment(g.scheduledOn, census.dateApiFormat);
-            g.startedOn = moment(g.startedOn, census.dateApiFormat);
+            g.target = moment(g.target, census.dateApiFormat);
+						g.scheduledOn = moment(g.scheduledOn, census.dateTimeApiFormat);
+            // The started on date is not always filled!
+            if (g.startedOn != null) {
+              g.startedOn = moment(g.startedOn, census.dateTimeApiFormat);
+            }
 					});
 					return data;
 				}

@@ -2,8 +2,15 @@ import Vue from 'vue';
 import moment from 'moment';
 import census from '../census';
 
-function fetchData() {
-  var vm = this;
+function refresh() {
+  fetchData(this);
+}
+
+function created() {
+  fetchData(this);
+}
+
+function fetchData(vm) {
   census.consume(
     function () {
       return census.ScheduleService.getScheduled();
@@ -23,7 +30,7 @@ function schedule() {
       return census.ScheduleService.schedule(mDate, vm.subject);
     },
     function (response) {
-      (fetchData.bind(vm))();
+      fetchData(vm);
     },
     vm
   );
@@ -52,6 +59,7 @@ Vue.component('census-schedule', {
     </form>\
   </census-panel>\
   <census-panel>\
+    <p><button class="btn btn-primary" @click="refresh">Refresh</button></p>\
     <table class="table table-striped">\
       <thead>\
         <tr>\
@@ -64,9 +72,9 @@ Vue.component('census-schedule', {
       <tbody>\
         <tr v-for="d in data">\
           <td>{{ d.target | formatDate }}</td>\
-          <td>{{ d.scheduledOn | formatDate }}</td>\
-          <td>{{ d.startedOn | formatDate }}</td>\
-          <td>{{ d.status }}</td>\
+          <td>{{ d.scheduledOn | formatDateTime }}</td>\
+          <td>{{ d.startedOn | formatDateTime }}</td>\
+          <td>{{ d.state }}</td>\
         </tr>\
       </tbody>\
     </table>\
@@ -83,13 +91,15 @@ Vue.component('census-schedule', {
 		};
 	},
   methods: {
-    schedule: schedule
+    schedule: schedule,
+    refresh: refresh
   },
   computed: {
     canSchedule: canSchedule
   },
   filters: {
-    formatDate: census.formatDate
+    formatDate: census.formatDate,
+    formatDateTime: census.formatDateTime,
   },
-  created: fetchData
+  created: created
 });

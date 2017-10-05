@@ -9,7 +9,7 @@ import census from '../census';
 export function SourceipService() {
 
   this.search = function (filter, days) {
-    return axios.get('/api/sources/', {
+    return axios.get('/rest/sources', {
       params: {
         query: filter,
         days: days
