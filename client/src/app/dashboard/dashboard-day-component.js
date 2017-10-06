@@ -136,6 +136,24 @@ Vue.component('census-dashboard-subject-day', {
 				</tbody>\
 			</table>\
 		</census-panel>\
+		<census-panel title="Recorded users">\
+			<table class="table table-striped" v-if="targetData">\
+				<thead>\
+					<tr>\
+						<th>User</th>\
+						<th>Total requests</th>\
+						<th>In error</th>\
+					</tr>\
+				</thead>\
+				<tbody>\
+					<tr v-for="r in targetData.recordedUsers">\
+						<td>{{ r.userId }} {{ r.userName }}</td>\
+						<td>{{ r.totalRequests | formatNumber }}</td>\
+						<td>{{ r.totalRequestsInError | formatNumber }}</td>\
+					</tr>\
+				</tbody>\
+			</table>\
+		</census-panel>\
 	</div>\
 	',
 	props: ['subject', 'date'],
@@ -154,11 +172,18 @@ Vue.component('census-dashboard-subject-day', {
 			var dataPivot = [];
 			for (var i = 0; i < 24; i++) {
 				var pivot = {
-					hour: i
+					hour: i,
+					yesterday: null,
+					tomorrow: null,
+					target: null
 				};
-				pivot.yesterday = this.data[0].activityPerHour[i].totalRequests;
+				if (this.data[0] != null && this.data[0].activityPerHour != null) {
+					pivot.yesterday = this.data[0].activityPerHour[i].totalRequests;
+				}
 				pivot.target = this.data[1].activityPerHour[i].totalRequests;
-				pivot.tomorrow = this.data[2].activityPerHour[i].totalRequests;
+				if (this.data[2] != null && this.data[2].activityPerHour != null) {
+						pivot.tomorrow = this.data[2].activityPerHour[i].totalRequests;
+				}
 				dataPivot.push(pivot);
 			}
 			return dataPivot;
