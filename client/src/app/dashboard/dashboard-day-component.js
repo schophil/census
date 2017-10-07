@@ -137,19 +137,26 @@ Vue.component('census-dashboard-subject-day', {
 			</table>\
 		</census-panel>\
 		<census-panel title="Recorded users">\
+			<form class="form-inline" v-on:submit.prevent="">\
+				<div class="form-group">\
+					<input type="text" class="form-control" id="filter" v-model="userFilter" placeholder="Filter...">\
+				</div>\
+			</form>\
 			<table class="table table-striped" v-if="targetData">\
 				<thead>\
 					<tr>\
-						<th>User</th>\
-						<th>Total requests</th>\
-						<th>In error</th>\
+						<th>user</th>\
+						<th># requests</th>\
+						<th># errors</th>\
 					</tr>\
 				</thead>\
 				<tbody>\
 					<tr v-for="r in targetData.recordedUsers">\
-						<td>{{ r.userId }} {{ r.userName }}</td>\
-						<td>{{ r.totalRequests | formatNumber }}</td>\
-						<td>{{ r.totalRequestsInError | formatNumber }}</td>\
+						<template v-if="filterUser(r)">\
+							<td>{{ r.userId }} - {{ r.userName }}</td>\
+							<td>{{ r.totalRequests | formatNumber }}</td>\
+							<td>{{ r.totalRequestsInError | formatNumber }}</td>\
+						</template>\
 					</tr>\
 				</tbody>\
 			</table>\
@@ -161,7 +168,8 @@ Vue.component('census-dashboard-subject-day', {
 		return {
 			data: null,
 			showDetails: false,
-			showAdjacentDays: true
+			showAdjacentDays: true,
+			userFilter: null
 		};
 	},
 	computed: {
@@ -204,6 +212,13 @@ Vue.component('census-dashboard-subject-day', {
 		},
 		toggleAdjacentDays: function () {
 			this.showAdjacentDays = !this.showAdjacentDays;
+		},
+		filterUser: function (r) {
+			if (this.userFilter == null) {
+				return true;
+			}
+			var pattern = new RegExp(this.userFilter, "i");
+			return r.userId.search(pattern) >= 0 || r.userName.search(pattern) >= 0;
 		}
 	},
 	filters: {
