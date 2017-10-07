@@ -7,14 +7,14 @@ import { DashboardService, MockDashboardService } from './dashboard/dashboard-se
 import { ScheduleService, MockScheduleService } from './schedule/schedule-service';
 
 // settings
-census.mock = false;
+census.mock = true;
 census.mockDelay = 1000;
 census.dateFormat = 'dd D.M.YY';
 census.dateTimeFormat = 'dd D.M.YY';
 census.dateApiFormat = 'YYYY-MM-DD';
 census.dateTimeApiFormat = "YYYY-MM-DD'T'HH:mm:ss";
 
-// filters
+// BEGIN filters
 census.formatDate = function (value) {
   if (!value || value == null) {
     return '';
@@ -33,10 +33,14 @@ census.formatNumber = formatNumber({
   decimal: ',',
   truncate: 2
 });
+// END filters
 
 // create services
 census.SpinService = new SpinService('spinner');
-
+// For every service there is a mock variant. The mock variant generates data
+// at runtime. There is one main boolean that decides if mocks or real services
+// are created.
+// TODO: set the boolean based on the environment - now it is hard coded before the build
 if (census.mock) {
   census.AppService = new MockAppService();
   census.SourceipService = new MockSourceipService();
@@ -49,11 +53,18 @@ if (census.mock) {
   census.ScheduleService = new ScheduleService();
 }
 
-// utilities
+// utilities for consuming REST services
 census.formatDateForConsumption = function (date) {
   return date.format('YYYY-MM-DD');
 };
 
+/**
+* Generic REST consuming function. This function centralizes logging, error
+* handling and managging the spinner.
+* @param promiseReturningFunction A function that returns a promis - typically this will be a promise for the result of a REST service call.
+* @param responseHandlingfunction A function to handle the response in case of success.
+* @param vm The vue instance (optional)
+*/
 census.consume = function (promiseReturningFunction, responseHandlingfunction, vm) {
   census.SpinService.up();
   promiseReturningFunction().then(function (response) {

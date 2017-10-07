@@ -72,23 +72,20 @@ function applyFilter() {
 
 function created() {
 	var vm = this;
-	census.SpinService.up();
-  census.DashboardService.getCategories()
-    .then(function (response) {
-      response.data.forEach(function (value) {
+	census.consume(
+		function () {
+			return census.DashboardService.getCategories();
+		},
+		function (response) {
+			response.data.forEach(function (value) {
         vm.categories.push({
           checked: true,
           value: value
         });
       });
-			census.SpinService.down();
-    }).catch(function (error) {
-			this.$emit('error', {
-				title: 'Error retrieving data',
-				message: error
-			});
-			census.SpinService.down();
-    });
+		},
+		vm
+	);
 }
 
 function checkAll() {
@@ -127,7 +124,7 @@ Vue.component('census-dashboard', {
 			</form>\
     </census-panel>\
 		<div id="censusDashboardLevel1" v-show="isLevel1">\
-			<census-dashboard-subject v-on:drill="drill" v-bind:id="idx" days="30" v-for="(s, idx) in subjects" v-bind:filter="filter" v-bind:subject="s"></census-dashboard-subject>\
+			<census-dashboard-subject v-on:drill="drill" v-bind:id="idx" days="30" v-for="(s, idx) in subjects" :key="s.id" v-bind:filter="filter" v-bind:subject="s"></census-dashboard-subject>\
 		</div>\
 		<div id="censusDashboardLevel2" v-if="isLevel2">\
 			<census-dashboard-subject-day v-on:drill="drill" v-bind:subject="target.subject" v-bind:date="target.date"></census-dashboard-subject-day>\

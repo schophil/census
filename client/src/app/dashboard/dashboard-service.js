@@ -154,6 +154,7 @@ export function MockDashboardService() {
 		for (var j = 0; j < 10; j++) {
 			target.recordedUsers.push({
 				userId: 'U' + _.random(100, 200),
+				userName: 'longer_name_' + _.random(5, 10),
 				totalRequests: _.random(5, 100),
 				totalRequestsInError: _.random(5, 10)
 			});

@@ -14,6 +14,7 @@ import 'bootstrap/dist/css/bootstrap-theme.min.css';
 
 import '../css/census-theme.less';
 
+// BEGIN Menu switching methods
 function goToDashboard() {
   this.inDashboard = true;
   this.inAbout = false;
@@ -41,6 +42,7 @@ function goToSchedule() {
   this.inSourceip = false;
   this.inSchedule = true;
 }
+// END Menu switching methods
 
 function clearAlerts() {
   this.alerts.splice(0, this.alerts.length);
@@ -51,23 +53,17 @@ function onError(e) {
 }
 
 function _created() {
+  // Once created we want to load the list of applications analysed by this census instance
   console.log('Fetching the list of apps with', census.AppService);
-  var vm = this;
-  census.SpinService.up();
-
-  census.AppService.getApps()
-  .then(function (response) {
-    console.log(response);
-    vm.subjects = response.data;
-    census.SpinService.down();
-  }).catch(function (error) {
-    console.log(error);
-    census.SpinService.down();
-    vm.alerts.push({
-      title: "Communication error ocurred",
-      message: error
-    });
-  });
+  census.consume(
+    function () {
+      return census.AppService.getApps();
+    },
+    function (response) {
+      vm.subjects = response.data;
+    },
+    vm
+  );
 }
 
 var vm = new Vue({

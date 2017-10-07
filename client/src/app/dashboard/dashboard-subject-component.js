@@ -4,20 +4,15 @@ import census from '../census';
 
 function fetchData() {
 	var vm = this;
-	census.SpinService.up();
-	// fetch the data
-	census.DashboardService.list(this.subject, this.days, this.filter)
-		.then(function (response) {
-			console.log(response);
+	census.consume(
+		function () {
+			return census.DashboardService.list(vm.subject, vm.days, vm.filter);
+		},
+		function (response) {
 			vm.data = response.data;
-			census.SpinService.down();
-		}).catch(function (error) {
-			this.$emit('error', {
-				title: 'Error retrieving data',
-				message: error
-			});
-			census.SpinService.down();
-		});
+		},
+		vm
+	);
 }
 
 function drawGraphs() {

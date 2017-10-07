@@ -53,11 +53,6 @@ function drawGraph() {
 			legend: {
 				display: true
 			},
-			onClick: function (ev, el) {
-				if (el && el.length > 0) {
-					vm.drillDown(el[0]._index);
-				}
-			},
 			scales: {
 				yAxes: [{
 					ticks: {
@@ -79,11 +74,6 @@ function drawGraph() {
 			legend: {
 				display: true
 			},
-			onClick: function (ev, el) {
-				if (el && el.length > 0) {
-					vm.drillDown(el[0]._index);
-				}
-			},
 			scales: {
 				yAxes: [{
 					ticks: {
@@ -93,9 +83,6 @@ function drawGraph() {
 			}
 		}
 	});
-
-
-	//this.chart = myChart;
 }
 
 Vue.component('census-dashboard-subject-day-user', {
