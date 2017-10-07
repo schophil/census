@@ -7,7 +7,7 @@ import { DashboardService, MockDashboardService } from './dashboard/dashboard-se
 import { ScheduleService, MockScheduleService } from './schedule/schedule-service';
 
 // settings
-census.mock = true;
+census.mock = !PRODUCTION;
 census.mockDelay = 1000;
 census.dateFormat = 'dd D.M.YY';
 census.dateTimeFormat = 'dd D.M.YY';
