@@ -153,7 +153,7 @@ Vue.component('census-dashboard-subject-day', {
 				<tbody>\
 					<tr v-for="r in targetData.recordedUsers">\
 						<template v-if="filterUser(r)">\
-							<td>{{ r.userId }} - {{ r.userName }}</td>\
+							<td><a href="#" @click.prevent="drillDown(r.userId)">{{ r.userId }}</a> - {{ r.userName }}</td>\
 							<td>{{ r.totalRequests | formatNumber }}</td>\
 							<td>{{ r.totalRequestsInError | formatNumber }}</td>\
 						</template>\
@@ -219,6 +219,14 @@ Vue.component('census-dashboard-subject-day', {
 			}
 			var pattern = new RegExp(this.userFilter, "i");
 			return r.userId.search(pattern) >= 0 || r.userName.search(pattern) >= 0;
+		},
+		drillDown: function (user) {
+			console.log('Drilling down to ', user);
+			this.$emit('drill', {
+				subject: this.subject,
+				date: this.date,
+				user: user
+			});
 		}
 	},
 	filters: {

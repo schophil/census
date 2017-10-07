@@ -97,4 +97,33 @@ public class DayDetailsService {
 
         return oneDayDetails;
     }
+
+    public OneUserDetails getUserDetails(String subject, Date date, String userId) {
+        OneUserDetails oneUserDetails = new OneUserDetails();
+        oneUserDetails.date = date;
+        oneUserDetails.userId = userId;
+
+        User user = userDao.getUser(userId);
+        if (user != null) {
+            oneUserDetails.userName = user.getName();
+        }
+
+        date = DateUtils.truncate(date, Calendar.DAY_OF_MONTH);
+        // make sure to truncate the date
+        DayStats dayStats = dayStatsDao.getDayStats(date, subject);
+        if (dayStats == null) {
+            return oneUserDetails;
+        }
+
+        // Collect activity per hour
+        oneUserDetails.activityPerHour = userActivityPerHourDao.getActivities(dayStats, userId).stream().map(activity -> {
+            OneHour oneHour = new OneHour();
+            oneHour.hour = activity.getHour();
+            oneHour.totalRequests = activity.getHits();
+            oneHour.averageResponseTime = activity.getAverageResponseTime();
+            return oneHour;
+        }).collect(Collectors.toList());
+
+        return oneUserDetails;
+    }
 }

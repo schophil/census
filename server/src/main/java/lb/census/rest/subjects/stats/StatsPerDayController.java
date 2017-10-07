@@ -96,4 +96,20 @@ public class StatsPerDayController {
 
         return ResponseEntity.ok(oneDayDetails);
     }
+
+    @RequestMapping("/days/{date}/{user}")
+    public ResponseEntity<OneUserDetails> getUserDetails(@PathVariable String subject, @PathVariable String date, @PathVariable String user) {
+        LOGGER.trace("Requesting the day details for {} on {}", subject, date);
+        Date requestedDate = null;
+        try {
+            requestedDate = Dates.toDate(date);
+            LOGGER.trace("Parsed {} to {}", date, requestedDate);
+        } catch (ParseException e) {
+            LOGGER.error("Unable to parse date " + date, e);
+            return ResponseEntity.badRequest().build();
+        }
+
+        OneUserDetails oneUserDetails = dayDetailsService.getUserDetails(subject, requestedDate, user);
+        return ResponseEntity.ok(oneUserDetails);
+    }
 }

@@ -6,6 +6,7 @@ package lb.census.rest.subjects.stats;
 public class OneHour {
 
     public Integer totalRequests;
+    public Double averageResponseTime;
     public Integer hour;
     public Integer share;
 }

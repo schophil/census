@@ -3,6 +3,7 @@ package lb.census.dao;
 import java.util.Date;
 import java.util.List;
 
+import lb.census.model.DayStats;
 import lb.census.model.UserActivityPerHour;
 
 /**
@@ -15,4 +16,6 @@ public interface UserActivityPerHourDao {
     List<UserActivityPerHour> getActivities(Date dateTime);
 
     List<UserActivityPerHour> getActivities(Date from, Date to, String users);
+
+    List<UserActivityPerHour> getActivities(DayStats dayStats, String user);
 }

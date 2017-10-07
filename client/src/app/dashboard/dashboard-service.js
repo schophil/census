@@ -67,6 +67,20 @@ export function DashboardService() {
 		return axios.get(url);
 	};
 
+	this.userDetails = function (subject, date, userId) {
+		var dateAsString = date.format(census.dateApiFormat);
+		return axios.get('/rest/subjects/' + subject.id + '/stats/days/' + dateAsString + '/' + userId, {
+			transformResponse: [
+				function (data) {
+					console.log('DashboardService.list transform > ', data);
+					data = JSON.parse(data);
+					data.date = moment(data.date, census.dateApiFormat);
+					return data;
+				}
+			]
+		});
+	};
+
   this.getCategories = function () {
     var url = '/rest/categories';
     return axios.get(url);
@@ -77,6 +91,31 @@ export function DashboardService() {
  * A mocked version of the service for testing and developing.
  */
 export function MockDashboardService() {
+
+	this.userDetails = function (subject, date, userId) {
+		var data = {
+			userId: userId,
+			subject: subject,
+			date: date,
+			activityPerHour: []
+		};
+
+		for (var i = 0; i < 24; i++) {
+			var hour = {
+				totalRequests: _.random(100, 5000),
+				averageResponseTime: _.random(0, 10, true),
+				hour: i
+			};
+			data.activityPerHour.push(hour);
+		}
+
+		var p = new Promise(function (resolve, reject) {
+			window.setTimeout(function () {
+				resolve({ data: data} );
+			}, census.mockDelay);
+		});
+		return p;
+	};
 
 	this.dayDetails = function (subject, date) {
 		var yesterday = {
@@ -108,6 +147,15 @@ export function MockDashboardService() {
 			target.popularResources.push({
 				path: '/fictive/resource/' + _.random(100, 200),
 				hits: _.random(5, 100)
+			});
+		}
+
+		target.recordedUsers = [];
+		for (var j = 0; j < 10; j++) {
+			target.recordedUsers.push({
+				userId: 'U' + _.random(100, 200),
+				totalRequests: _.random(5, 100),
+				totalRequestsInError: _.random(5, 10)
 			});
 		}
 

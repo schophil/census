@@ -3,18 +3,30 @@ import census from '../census';
 
 import './dashboard-subject-component';
 import './dashboard-day-component';
+import './dashboard-user-component';
 
 function drill(target) {
 	console.log('Drill to ', target);
 	if (target) {
-		this.target.subject = target.subject;
-		this.target.date = target.date;
-		this.level = 2;
+		if (target.user) {
+			this.target.subject = target.subject;
+			this.target.date = target.date;
+			this.target.user = target.user;
+			this.level = 3;
+		} else {
+			this.target.subject = target.subject;
+			this.target.date = target.date;
+			this.level = 2;
+		}
 	}
 }
 
 function goToStart() {
 	this.level = 1;
+}
+
+function goToLevel2() {
+	this.level = 2;
 }
 
 function applyFilter() {
@@ -97,8 +109,9 @@ Vue.component('census-dashboard', {
 		<div>\
 			<ol class="breadcrumb">\
 				<li><a href="#" v-on:click.stop="goToStart">Start</a></li>\
-				<li v-if="!isLevel1">{{target.subject.name}}</li>\
-				<li v-if="isLevel2">{{target.date.format("dd D.M.YY")}}</li>\
+				<li v-if="!isLevel1">{{ target.subject.name }}</li>\
+				<li v-if="isLevel2 || isLevel3"><a href="#" v-on:click.stop="goToLevel2">{{ target.date.format("dd D.M.YY") }}</a></li>\
+				<li v-if="isLevel3">{{ target.user }}</li>\
 			</ol>\
 		</div>\
     <census-panel v-if="isLevel1">\
@@ -117,7 +130,10 @@ Vue.component('census-dashboard', {
 			<census-dashboard-subject v-on:drill="drill" v-bind:id="idx" days="30" v-for="(s, idx) in subjects" v-bind:filter="filter" v-bind:subject="s"></census-dashboard-subject>\
 		</div>\
 		<div id="censusDashboardLevel2" v-if="isLevel2">\
-			<census-dashboard-subject-day v-bind:subject="target.subject" v-bind:date="target.date"></census-dashboard-subject-day>\
+			<census-dashboard-subject-day v-on:drill="drill" v-bind:subject="target.subject" v-bind:date="target.date"></census-dashboard-subject-day>\
+		</div>\
+		<div id="censusDashboardLevel3" v-if="isLevel3">\
+			<census-dashboard-subject-day-user v-bind:subject="target.subject" v-bind:date="target.date" v-bind:user="target.user"></census-dashboard-subject-day-user>\
 		</div>\
 	</div>\
 	',
@@ -131,13 +147,15 @@ Vue.component('census-dashboard', {
       categories: [],
 			target: {
 				subject: null,
-				date: null
+				date: null,
+				user: null
 			}
 		};
 	},
 	methods: {
 		drill: drill,
 		goToStart: goToStart,
+		goToLevel2: goToLevel2,
     applyFilter: applyFilter,
     checkAll: checkAll,
     uncheckAll: uncheckAll
@@ -148,6 +166,9 @@ Vue.component('census-dashboard', {
 		},
 		isLevel2: function () {
 			return this.level === 2;
+		},
+		isLevel3: function () {
+			return this.level === 3;
 		}
 	},
   created: created
