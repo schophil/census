@@ -39,14 +39,12 @@ export function MockSourceipService() {
   this.search = function (filter, days) {
     var data = [];
     for (var i = 0; i < 4; i++) {
-      console.log("Create user ", i);
       var el = {
         userid: "PU" + _.random(111111, 888888),
         ips: []
       };
       var max = _.random(1, 3);
       for (var j = 0; j < max; j++) {
-        console.log("Create ip ", i, j);
         el.ips.push({
           ip: "IP" + _.random(111111, 888888),
           lastUsed: moment().subtract(_.random(1, 15), 'days')

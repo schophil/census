@@ -7,7 +7,9 @@ export default function SpinService(el) {
   this.spinner = null;
 
   this.up = function () {
-    console.log('Spin up', this);
+    if (!PRODUCTION) {
+      console.log('Spin up', this);
+    }
     this.count++;
     if (this.count == 1) {
       var target = document.getElementById(this.el);
@@ -26,10 +28,14 @@ export default function SpinService(el) {
   };
 
   this.down = function () {
-    console.log('Spin down', this);
+    if (!PRODUCTION) {
+      console.log('Spin down', this);
+    }
     this.count--;
     if (this.count <= 0) {
-      console.log('Stopping spinner...');
+      if (!PRODUCTION) {
+        console.log('Stopping spinner...');
+      }
       this.spinner.stop();
     }
   };

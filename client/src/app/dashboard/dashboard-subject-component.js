@@ -77,11 +77,15 @@ function drawGraphs() {
 }
 
 function _drawGraph(el, title, label, data, background, border) {
-	console.log('Drawing single graph on ', el);
+	if (!PRODUCTION) {
+			console.log('Drawing single graph on ', el);
+	}
 	var vm = this;
 	var ctx = document.getElementById(el);
-	console.log('Drawing single graph on id ', el);
-	console.log('Drawing single graph on ctx ', ctx);
+	if (!PRODUCTION) {
+		console.log('Drawing single graph on id ', el);
+		console.log('Drawing single graph on ctx ', ctx);
+	}
 	var myChart = new Chart(ctx, {
 		type: 'bar',
 		data: {
@@ -177,7 +181,9 @@ Vue.component('census-dashboard-subject', {
 			this.showDetails = !this.showDetails;
 		},
 		drillDown: function (idx) {
-			console.log('Drilling down to ', this.data[idx].date.format('DD/MM/YYYY'));
+			if (!PRODUCTION) {
+				console.log('Drilling down to ', this.data[idx].date.format('DD/MM/YYYY'));
+			}
 			this.$emit('drill', {
 				subject: this.subject,
 				date: this.data[idx].date

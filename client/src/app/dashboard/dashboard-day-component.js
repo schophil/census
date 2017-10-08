@@ -17,7 +17,9 @@ function fetchData() {
 }
 
 function drawGraph() {
-	console.log('Drawing the graph in ', this.uid);
+	if (!PRODUCTION) {
+			console.log('Drawing the graph in ', this.uid);
+	}
 	// prepare graph data
 	var labels = this.data[1].activityPerHour.map(function (el) {
 		return el.hour;
@@ -216,7 +218,9 @@ Vue.component('census-dashboard-subject-day', {
 			return r.userId.search(pattern) >= 0 || r.userName.search(pattern) >= 0;
 		},
 		drillDown: function (user) {
-			console.log('Drilling down to ', user);
+			if (!PRODUCTION) {
+				console.log('Drilling down to ', user);
+			}
 			this.$emit('drill', {
 				subject: this.subject,
 				date: this.date,

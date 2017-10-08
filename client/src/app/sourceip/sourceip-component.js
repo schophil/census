@@ -2,7 +2,9 @@ import Vue from 'vue';
 import census from '../census';
 
 function searchSources() {
-	console.log("Searching ", this.search);
+	if (!PRODUCTION) {
+			console.log("Searching ", this.search);
+	}
 	var vm = this;
 	census.consume(
     function () {

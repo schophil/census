@@ -24,7 +24,9 @@ export function DashboardService() {
       params: params,
 			transformResponse: [
 				function (data) {
-					console.log('DashboardService.list transform > ', data);
+					if (!PRODUCTION) {
+						console.log('DashboardService.list transform > ', data);
+					}
 					data = JSON.parse(data);
 					data.forEach(function (g) {
 						g.date = moment(g.date, census.dateApiFormat);
@@ -72,7 +74,9 @@ export function DashboardService() {
 		return axios.get('/rest/subjects/' + subject.id + '/stats/days/' + dateAsString + '/' + userId, {
 			transformResponse: [
 				function (data) {
-					console.log('DashboardService.list transform > ', data);
+					if (!PRODUCTION) {
+						console.log('DashboardService.list transform > ', data);
+					}
 					data = JSON.parse(data);
 					data.date = moment(data.date, census.dateApiFormat);
 					return data;

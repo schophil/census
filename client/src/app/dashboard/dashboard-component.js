@@ -6,7 +6,9 @@ import './dashboard-day-component';
 import './dashboard-user-component';
 
 function drill(target) {
-	console.log('Drill to ', target);
+	if (!PRODUCTION) {
+		console.log('Drill to ', target);
+	}
 	if (target) {
 		if (target.user) {
 			this.target.subject = target.subject;

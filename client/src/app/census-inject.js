@@ -7,6 +7,7 @@ import { DashboardService, MockDashboardService } from './dashboard/dashboard-se
 import { ScheduleService, MockScheduleService } from './schedule/schedule-service';
 
 // settings
+census.debug = !PRODUCTION; 
 census.mock = !PRODUCTION;
 census.mockDelay = 1000;
 census.dateFormat = 'dd D.M.YY';
@@ -68,7 +69,9 @@ census.formatDateForConsumption = function (date) {
 census.consume = function (promiseReturningFunction, responseHandlingfunction, vm) {
   census.SpinService.up();
   promiseReturningFunction().then(function (response) {
-    console.log(response);
+    if (!PRODUCTION) {
+      console.log(response);
+    }
     responseHandlingfunction(response);
     census.SpinService.down();
   }).catch(function (error) {

@@ -54,7 +54,9 @@ function onError(e) {
 
 function _created() {
   // Once created we want to load the list of applications analysed by this census instance
-  console.log('Fetching the list of apps with', census.AppService);
+  if (!PRODUCTION) {
+    console.log('Fetching the list of apps with', census.AppService);
+  }
   census.consume(
     function () {
       return census.AppService.getApps();
