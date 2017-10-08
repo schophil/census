@@ -69,6 +69,9 @@ export function DashboardService() {
 		return axios.get(url);
 	};
 
+	/**
+	* Gets stats for a specific user of a specific subject on a specific date.
+	*/
 	this.userDetails = function (subject, date, userId) {
 		var dateAsString = date.format(census.dateApiFormat);
 		return axios.get('/rest/subjects/' + subject.id + '/stats/days/' + dateAsString + '/' + userId, {
@@ -84,6 +87,13 @@ export function DashboardService() {
 			]
 		});
 	};
+
+	/**
+	* Gets stats for on hour on date within the context of a subject.
+	*/
+	this.hourDetails = function (subject, date, hour) {
+
+	}
 
   this.getCategories = function () {
     var url = '/rest/categories';
@@ -206,6 +216,16 @@ export function MockDashboardService() {
 		});
 		return p;
 	};
+
+	this.hourDetails = function (subject, date, hour) {
+		var data = {};
+		
+		var p = new Promise(function (resolve, reject) {
+			window.setTimeout(function () {
+				resolve({ data: data });
+			}, census.mockDelay);
+		});
+	}
 
 	this.getCategories = function () {
 		var data = ['a', 'b'];
