@@ -1,3 +1,3 @@
-Insert into CENSUS_SUBJECTS (ID,NAME) values ('epis','EPIS (landbased)');
-Insert into CENSUS_SUBJECTS (ID,NAME) values ('egames','eGames (online)');
-Insert into CENSUS_SUBJECTS (ID,NAME) values ('protocol','ProtocolAPI');
+Insert into CENSUS_SUBJECTS (ID,NAME) values ('petstore','Petstore');
+Insert into CENSUS_SUBJECTS (ID,NAME) values ('metalfriends','Metal Friends');
+Insert into CENSUS_SUBJECTS (ID,NAME) values ('blackthee','Black Thee Group');
