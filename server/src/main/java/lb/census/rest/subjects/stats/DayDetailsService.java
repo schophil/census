@@ -2,6 +2,7 @@ package lb.census.rest.subjects.stats;
 
 import lb.census.dao.*;
 import lb.census.model.DayStats;
+import lb.census.model.Resource;
 import lb.census.model.User;
 import lb.census.rest.shared.UserBaseReducer;
 import org.apache.commons.lang3.time.DateUtils;
@@ -88,12 +89,9 @@ public class DayDetailsService {
         }).collect(Collectors.toList());
 
         // collect top ten resources
-        oneDayDetails.popularResources = resourceDao.getPopular(dayStats, 15, "Path").stream().map(resource -> {
-            OneResource oneResource = new OneResource();
-            oneResource.path = resource.getTextValue();
-            oneResource.hits = resource.getHits();
-            return oneResource;
-        }).collect(Collectors.toList());
+        oneDayDetails.popularResources = resourceDao.getPopular(dayStats, 15, "Path").stream()
+                .map(DayDetailsService::mapResource)
+                .collect(Collectors.toList());
 
         return oneDayDetails;
     }
@@ -124,6 +122,19 @@ public class DayDetailsService {
             return oneHour;
         }).collect(Collectors.toList());
 
+        // Collect the recorded popular resources for the user
+        oneUserDetails.popularResources = resourceDao.getPopular(dayStats, 15, "Path", userId)
+                .stream()
+                .map(DayDetailsService::mapResource)
+                .collect(Collectors.toList());
+
         return oneUserDetails;
+    }
+
+    private static OneResource mapResource(Resource resource) {
+        OneResource oneResource = new OneResource();
+        oneResource.path = resource.getTextValue();
+        oneResource.hits = resource.getHits();
+        return oneResource;
     }
 }
