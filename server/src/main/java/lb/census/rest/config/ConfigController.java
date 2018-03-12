@@ -1,16 +1,10 @@
 package lb.census.rest.config;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import lb.census.rest.subjects.OneSubject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import lb.census.config.CensusConfig;
 import lb.census.dao.SubjectDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author phili

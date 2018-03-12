@@ -12,9 +12,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class Resources {
 
-    @Value("${census.data}")
+    public static final String NO_DATA = "NO_DATA";
+
+    @Value("${census.data:NO_DATA}")
     private String data;
-    @Value("${census.config}")
+    @Value("${census.config:NO_DATA}")
     private String config;
 
     public Resources() {
@@ -34,7 +36,6 @@ public class Resources {
     }
 
     public String getData() {
-
         return data;
     }
 
@@ -43,10 +44,16 @@ public class Resources {
     }
 
     public URL getCensusConfig() {
+        if (NO_DATA.equals(config)) {
+            return null;
+        }
         return getUrlFor(config);
     }
 
     private URL getUrlFor(String resource) {
+        if (NO_DATA.equals(resource)) {
+            return null;
+        }
         try {
             return new URL(data + resource);
         } catch (MalformedURLException e) {

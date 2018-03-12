@@ -35,7 +35,6 @@ public class StatsPerDayController {
     @Autowired
     private DayDetailsService dayDetailsService;
 
-
     /**
      * Lists statistics per day for a given period and subject. Optionally a filter on the category of the user(s)
      * can be given. The latter will cause the result to contain statistics that only take into account users

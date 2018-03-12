@@ -43,6 +43,10 @@ public class CensusConfigFactory {
     }
 
     public CensusConfig loadFrom(URL url) {
+        if (url == null) {
+            LOGGER.warn("No config to load from, returning empty one!");
+            return new CensusConfig();
+        }
         try {
             JAXBContext context = JAXBContext.newInstance(CensusConfig.class, LogSource.class, LogSubject.class,
                     CsvLog.class, JhksStandardLog.class, ApacheLogFormat.class, PatternFilter.class, Invert.class);

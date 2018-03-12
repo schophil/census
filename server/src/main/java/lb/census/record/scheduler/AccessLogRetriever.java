@@ -145,18 +145,6 @@ public class AccessLogRetriever implements Runnable {
         while (keepRunning) {
 
             if (censusConfig != null) {
-                if (censusConfig.isAutoRetrieve()) {
-                    // automatic retrieval
-                    int retrievalHour = censusConfig.getRetrievalHour();
-                    Calendar c = Calendar.getInstance();
-                    int hour = c.get(Calendar.HOUR_OF_DAY);
-                    if (hour == retrievalHour && status == WAITING_FOR_RETRIEVAL) {
-                        scheduleRetrievalForYesterday();
-                        status = RETRIEVED;
-                    } else if (hour > retrievalHour && status == RETRIEVED) {
-                        status = WAITING_FOR_RETRIEVAL;
-                    }
-                }
                 // check scheduled retrievals
                 processScheduled();
                 cleanProcessed();

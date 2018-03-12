@@ -3,13 +3,7 @@ package lb.census.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -23,9 +17,8 @@ public class Anomaly implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GenericGenerator(name = "CUSTOM", strategy = "lb.census.utils.TemporalIdGenerator")
-    @GeneratedValue(generator = "CUSTOM")
-    @Column(name = "id")
+    @GenericGenerator(name = "CUSTOM", strategy = "lb.census.utils.UUIDGenerator")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "CUSTOM")
     private String id;
     @Column(name = "userid")
     private String userId;

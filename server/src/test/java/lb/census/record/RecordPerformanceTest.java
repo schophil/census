@@ -1,27 +1,15 @@
 package lb.census.record;
 
-import lb.census.TestScope;
 import lb.census.dao.DayStatsDao;
 import lb.census.dao.SubjectDao;
 import lb.census.dao.TotalActivityPerHourDao;
 import lb.census.dao.UserActivityPerHourDao;
 import lb.census.model.Subject;
-import lb.census.model.UserActivityPerHour;
-import lb.census.record.filters.PatternFilter;
-import lb.census.record.log.ApacheLogFormat;
 import lb.census.record.log.JhksStandardLog;
 import lb.census.record.recorders.ActivityPerHourRecorder;
 import lb.census.record.recorders.GlobalStatsRecorder;
 import lb.census.record.recorders.Recorder;
 import org.apache.commons.lang3.time.DateUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.IOException;

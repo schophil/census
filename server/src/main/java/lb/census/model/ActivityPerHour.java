@@ -1,8 +1,8 @@
 package lb.census.model;
 
-import javax.persistence.*;
-
 import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 
 /**
  * Common data for activity per hour. This class contains the total number of
@@ -17,8 +17,7 @@ public abstract class ActivityPerHour {
 
     @Id
     @GenericGenerator(name = "CUSTOM", strategy = "lb.census.utils.UUIDGenerator")
-    @GeneratedValue(generator = "CUSTOM")
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "CUSTOM")
     private String id;
     @Column(name = "dhour")
     private Integer hour;
