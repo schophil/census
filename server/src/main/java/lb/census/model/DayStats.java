@@ -6,18 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -38,7 +27,7 @@ public class DayStats implements Serializable {
 
     @Id
     @GenericGenerator(name = "CUSTOM", strategy = "lb.census.utils.UUIDGenerator")
-    @GeneratedValue(generator = "CUSTOM")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "CUSTOM")
     @Column(name = "id")
     private String id;
     @Column(name = "sdate")

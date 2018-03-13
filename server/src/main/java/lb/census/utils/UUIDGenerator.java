@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
 
 /**
@@ -13,7 +14,7 @@ import org.hibernate.id.IdentifierGenerator;
 public class UUIDGenerator implements IdentifierGenerator {
 
     @Override
-    public Serializable generate(SessionImplementor sessionImplementor, Object o) throws HibernateException {
+    public Serializable generate(SharedSessionContractImplementor sharedSessionContractImplementor, Object o) throws HibernateException {
         return UUID.randomUUID().toString();
     }
 }

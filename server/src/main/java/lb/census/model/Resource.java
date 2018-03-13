@@ -13,8 +13,7 @@ public class Resource {
 
     @Id
     @GenericGenerator(name = "CUSTOM", strategy = "lb.census.utils.UUIDGenerator")
-    @GeneratedValue(generator = "CUSTOM")
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "CUSTOM")
     private String id;
     @Column(name = "hits")
     private Integer hits;

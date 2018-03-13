@@ -1,6 +1,5 @@
 package lb.census.record;
 
-import lb.census.TestScope;
 import lb.census.dao.DayStatsDao;
 import lb.census.dao.SubjectDao;
 import lb.census.model.Subject;
@@ -12,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -29,14 +29,15 @@ import static org.junit.Assert.assertThat;
  * Created by philippeschottey on 05/03/2017.
  */
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = TestScope.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @TestPropertySource(properties = {
-        "census.data=file:///tmp",
-        "census.config=file:///config",
         "logging.level.root=ERROR",
         "logging.level.lb.census=TRACE",
         "spring.jpa.show-sql=true",
-        "spring.jpa.properties.hibernate.format_sql=true"
+        "spring.jpa.properties.hibernate.format_sql=true",
+        "app.datasource.url=jdbc:h2:mem:mydb",
+        "app.datasource.username=sa",
+        "app.datasource.pool-size=30"
 })
 @Transactional
 public class RecordServiceTest {

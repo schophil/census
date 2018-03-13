@@ -16,8 +16,7 @@ public class UserStats implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GenericGenerator(name = "CUSTOM", strategy = "lb.census.utils.UUIDGenerator")
-    @GeneratedValue(generator = "CUSTOM")
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "CUSTOM")
     private String id;
     @Column(name = "userid")
     private String userId;

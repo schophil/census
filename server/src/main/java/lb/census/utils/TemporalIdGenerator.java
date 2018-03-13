@@ -7,6 +7,7 @@ import java.util.Calendar;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +37,7 @@ public class TemporalIdGenerator implements IdentifierGenerator {
     }
 
     @Override
-    public Serializable generate(SessionImplementor arg0, Object arg1) throws HibernateException {
+    public Serializable generate(SharedSessionContractImplementor sharedSessionContractImplementor, Object o) throws HibernateException {
         return generate();
     }
 }
