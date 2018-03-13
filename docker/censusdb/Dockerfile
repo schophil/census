@@ -4,7 +4,7 @@
 #
 # Running:
 # Interactive for testing
-# docker run -p 5432:5432 -e POSTGRES_PASSWORD=password --name [a nice name] [image name]
+# docker run -p 5432:5432 -e POSTGRES_PASSWORD=postgres --name [a nice name] [image name]
 #
 # As a daemon
 # docker run -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d --name [a nice name] [image name]
