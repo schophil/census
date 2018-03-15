@@ -21,9 +21,18 @@ public class CsvLog extends LogRecordFactory {
     private int resultCodeColumn;
     private int sourceIpColumn;
     private int timestampColumn;
+    private int methodColumn;
     private String timestampFormat;
     private DateFormat timestampDateFormat;
     private int pathColumn;
+
+    public int getMethodColumn() {
+        return methodColumn;
+    }
+
+    public void setMethodColumn(int methodColumn) {
+        this.methodColumn = methodColumn;
+    }
 
     public int getPathColumn() {
         return pathColumn;
@@ -105,6 +114,7 @@ public class CsvLog extends LogRecordFactory {
             logRecord.setResponseTime(Double.parseDouble(columns[getResponseTimeColumn()]));
             logRecord.setSourceIp(columns[getSourceIpColumn()]);
             logRecord.setResource(columns[getPathColumn()]);
+            logRecord.setMethod(columns[getMethodColumn()]);
 
             String timestampAsString = columns[getTimestampColumn()];
             if (timestampAsString != null) {

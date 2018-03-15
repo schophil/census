@@ -17,5 +17,6 @@ public class JhksStandardLog extends CsvLog {
         setUserIdColumn(4);
         setTimestampFormat("[dd/MMM/yyyy:HH:mm:ss Z]");
         setPathColumn(6);
+        setMethodColumn(5);
     }
 }

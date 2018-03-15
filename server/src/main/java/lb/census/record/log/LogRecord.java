@@ -11,6 +11,15 @@ public class LogRecord {
     private String sourceIp;
     private Date timestamp;
     private String resource;
+    private String method;
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
 
     public String getResource() {
         return resource;
