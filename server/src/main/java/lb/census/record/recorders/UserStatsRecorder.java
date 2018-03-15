@@ -1,8 +1,10 @@
 package lb.census.record.recorders;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.HashMap;
 
+import lb.census.record.metrics.MetricsCalculator;
+import lb.census.record.metrics.SubKeyMetricsCollector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import lb.census.dao.DayStatsDao;
 import lb.census.dao.UserStatsDao;
-import lb.census.math.OccurrenceCounter;
 import lb.census.model.DayStats;
 import lb.census.model.UserStats;
 import lb.census.record.log.LogRecord;
@@ -22,7 +23,7 @@ import lb.census.record.log.LogRecord;
 public class UserStatsRecorder implements Recorder {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserStatsRecorder.class);
-    private final OccurrenceCounter<String, String> occurrenceCounter = new OccurrenceCounter<>();
+    private SubKeyMetricsCollector<MetricsCalculator> metricsPerUser;
     @Autowired
     private DayStatsDao dayStatsDao;
     @Autowired
@@ -46,54 +47,48 @@ public class UserStatsRecorder implements Recorder {
 
     @Override
     public void initialize() {
+        metricsPerUser = new SubKeyMetricsCollector(lr -> lr.getUserId(), () -> new MetricsCalculator(2));
     }
 
     @Override
     public void record(LogRecord logRecord, RecorderContext recorderContext) {
-        String resultCode = logRecord.getResultCode();
-        if ("200".equals(resultCode)) {
-            resultCode = "ok";
-        } else {
-            resultCode = "nok";
-        }
-
-        // collect result per user id
-        occurrenceCounter.register(logRecord.getUserId(), resultCode);
-        occurrenceCounter.register(logRecord.getUserId(), "total");
+        metricsPerUser.add(logRecord);
     }
 
     @Override
     public void store(Date date, RecorderContext recorderContext) {
-        // create the user specific entries
-        occurrenceCounter.getGroups().stream().forEach(userId -> {
-            LOGGER.debug("Create user stats for user {}", userId);
-            Integer totalRequests = occurrenceCounter.getOccurrences(userId, "total");
-            Integer totalRequestsInError = occurrenceCounter.getOccurrences(userId, "nok");
+        DayStats dayStats = recorderContext.getCurrentDayStats();
+        if (dayStats == null) {
+            throw new RuntimeException("Unable to find day stats for " + date);
+        }
 
-            DayStats dayStats = recorderContext.getCurrentDayStats();
-            if (dayStats == null) {
-                throw new RuntimeException("Unable to find day stats for " + date);
-            }
+        HashMap<String, MetricsCalculator> metricsCollectors = metricsPerUser.getMetricsCollectors();
 
-            Set<String> recordedUserIds = occurrenceCounter.getGroups();
-            int totalUserIds = recordedUserIds.size();
-            if (recordedUserIds.contains("-")) {
-                totalUserIds--;
-            }
-            dayStats.setTotalUserIds(totalUserIds);
-            dayStatsDao.save(dayStats);
+        // Update the stats per day with the total number of users.
+        int totalUserIds = metricsCollectors.size();
+        if (metricsCollectors.containsKey("-")) {
+            totalUserIds--;
+        }
+        dayStats.setTotalUserIds(totalUserIds);
+        dayStatsDao.save(dayStats);
+
+        // Save the stats per user.
+        metricsPerUser.getMetricsCollectors().entrySet().stream().forEach(entry -> {
+            MetricsCalculator metricsCalculator = entry.getValue();
+            String userId = entry.getKey();
 
             UserStats userStats = new UserStats();
             userStats.setDayStats(dayStats);
             userStats.setUserId(userId);
-            userStats.setTotalRequests(totalRequests);
-            userStats.setTotalRequestsInError(totalRequestsInError);
+            userStats.setTotalRequests(metricsCalculator.getTotalRequests());
+            userStats.setTotalRequestsInError(metricsCalculator.getTotalRequestsInError());
             userStatsDao.save(userStats);
         });
+
+        metricsPerUser = null;
     }
 
     @Override
     public void forget(RecorderContext recorderContext) {
-        occurrenceCounter.clear();
     }
 }

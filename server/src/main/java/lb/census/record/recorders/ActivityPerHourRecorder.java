@@ -3,6 +3,9 @@ package lb.census.record.recorders;
 import java.util.*;
 
 import lb.census.math.AverageCalculator;
+import lb.census.record.metrics.MetricsCalculator;
+import lb.census.record.metrics.SubHourMetricsCollector;
+import lb.census.record.metrics.SubKeyMetricsCollector;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
@@ -25,6 +28,7 @@ import lb.census.record.log.LogRecord;
 public class ActivityPerHourRecorder implements Recorder {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ActivityPerHourRecorder.class);
+
     @Autowired
     private DayStatsDao dayStatsDao;
     @Autowired
@@ -32,20 +36,8 @@ public class ActivityPerHourRecorder implements Recorder {
     @Autowired
     private UserActivityPerHourDao userActivityPerHourDao;
 
-    private final Calendar calendar = Calendar.getInstance();
-
-    // global statistics per hour
-    private final int[] globalHits = new int[24];
-    private final AverageCalculator[] globalResponseTime = new AverageCalculator[24];
-
-    // user statistics per hour
-    private class User {
-        String id = null;
-        int[] hitsPerHour = new int[24];
-        AverageCalculator[] responseTime = new AverageCalculator[24];
-    }
-    private final Map<String, User> userStats = new HashMap<>(100);
-    //private final Map<String, User> userStats = new TreeMap<>();
+    private SubHourMetricsCollector<MetricsCalculator> metricsPerHour;
+    private SubKeyMetricsCollector<SubHourMetricsCollector<MetricsCalculator>> metricsPerUserAndHour;
 
     public DayStatsDao getDayStatsDao() {
         return dayStatsDao;
@@ -71,109 +63,82 @@ public class ActivityPerHourRecorder implements Recorder {
         this.userActivityPerHourDao = userActivityPerHourDao;
     }
 
-    public ActivityPerHourRecorder() {
-        resetHours(globalHits);
-        calendar.clear();
-        userStats.clear();
-    }
-
     @Override
     public void initialize() {
+        metricsPerHour = makeMetricsPerHour();
+        metricsPerUserAndHour = new SubKeyMetricsCollector<>(lr -> lr.getUserId(),
+                ActivityPerHourRecorder::makeMetricsPerHour);
     }
 
     @Override
     public void record(LogRecord logRecord, RecorderContext recorderContext) {
-        calendar.setTime(logRecord.getTimestamp());
-        int hourOfTheDay = calendar.get(Calendar.HOUR_OF_DAY);
-        LOGGER.debug("Recording day activity on hour {} for timestamp {} and user {}", hourOfTheDay, logRecord.getTimestamp(), logRecord.getUserId());
-
-        // Record the global activity per hour
-        globalHits[hourOfTheDay]++;
-        recordResponseTime(globalResponseTime, hourOfTheDay, logRecord.getResponseTime());
-
-        // Record the activity per hour for a specific user
-        String key = StringUtils.reverse(logRecord.getUserId());
-        User user = userStats.get(key);
-        if (user == null) {
-            user = new User();
-            user.id = logRecord.getUserId();
-            userStats.put(key, user);
-        }
-        user.hitsPerHour[hourOfTheDay]++;
-        recordResponseTime(user.responseTime, hourOfTheDay, logRecord.getResponseTime());
+        metricsPerHour.add(logRecord);
+        metricsPerUserAndHour.add(logRecord);
     }
 
     @Override
     public void store(Date date, RecorderContext recorderContext) {
         DayStats dayStats = recorderContext.getCurrentDayStats();
-        if (dayStats == null) {
-            throw new RuntimeException("Unable to find day stats for " + date);
-        }
+
         storeGlobalStats(dayStats);
+        metricsPerHour = null; // clear memory immediately
+
         storeUserStats(dayStats);
+        metricsPerUserAndHour = null; // clear memory immediately
     }
 
     @Override
     public void forget(RecorderContext recorderContext) {
-        resetHours(globalHits);
-        userStats.clear();
     }
 
     private void storeGlobalStats(DayStats dayStats) {
-        // If there are hits, there also need to be response time. So we can only iterate over the hits
-        // and safely take the response time as well.
-        for (int i = 0; i < globalHits.length; i++) {
-            if (globalHits[i] != 0) {
-                TotalActivityPerHour dayActivity = new TotalActivityPerHour();
-                dayActivity.setDayStats(dayStats);
-                dayActivity.setHour(i);
-                dayActivity.setHits(globalHits[i]);
+        MetricsCalculator[] metricsCollectors = metricsPerHour.getMetricsCollectors();
+        for (int i = 0; i < 24; i++) {
+            MetricsCalculator metricsCalculator = metricsCollectors[i];
 
-                if (globalResponseTime[i] != null) {
-                    dayActivity.setAverageResponseTime(globalResponseTime[i].getCurrentAverage().doubleValue());
-                } else {
-                    LOGGER.error("In the global stats there are hits without response time for hour {}", i);
-                }
+            TotalActivityPerHour dayActivity = new TotalActivityPerHour();
+            dayActivity.setDayStats(dayStats);
+            dayActivity.setHour(i);
 
-                totalActivityPerHourDao.save(dayActivity);
+            if (metricsCalculator != null) {
+                dayActivity.setHits(metricsCalculator.getTotalRequests());
+            } else {
+                dayActivity.setHits(0);
             }
+
+            totalActivityPerHourDao.save(dayActivity);
         }
     }
 
     private void storeUserStats(DayStats dayStats) {
-        userStats.values().stream().forEach(user -> {
-            // If there are hits, there also need to be response time. So we can only iterate over the hits
-            // and safely take the response time as well.
-            for (int i = 0; i < user.hitsPerHour.length; i++) {
-                if (user.hitsPerHour[i] != 0) {
-                    UserActivityPerHour userActivity = new UserActivityPerHour();
-                    userActivity.setDayStats(dayStats);
-                    userActivity.setHour(i);
-                    userActivity.setHits(user.hitsPerHour[i]);
-                    userActivity.setUserId(user.id);
+        metricsPerUserAndHour.getMetricsCollectors().entrySet().stream().forEach(entry -> {
+            String userId = entry.getKey();
+            SubHourMetricsCollector<MetricsCalculator> metricsCollector = entry.getValue();
 
-                    if (user.responseTime[i] != null) {
-                        userActivity.setAverageResponseTime(user.responseTime[i].getCurrentAverage().doubleValue());
-                    } else {
-                        LOGGER.error("In the user stats there are hits without response time for user {} and hour {}", user.id, i);
-                    }
+            MetricsCalculator[] metricsCollectors = metricsCollector.getMetricsCollectors();
+            for (int i = 0; i < 24; i++) {
+                MetricsCalculator metricsCalculator = metricsCollectors[i];
 
-                    userActivityPerHourDao.save(userActivity);
+                UserActivityPerHour userActivity = new UserActivityPerHour();
+                userActivity.setDayStats(dayStats);
+                userActivity.setHour(i);
+                userActivity.setUserId(userId);
+
+                if (metricsCalculator != null) {
+                    userActivity.setHits(metricsCalculator.getTotalRequests());
+                    userActivity.setAverageResponseTime(metricsCalculator.getAverageResponseTime());
+                } else {
+                    userActivity.setHits(0);
+                    userActivity.setAverageResponseTime(0.0);
                 }
+
+                userActivityPerHourDao.save(userActivity);
             }
+
         });
     }
 
-    private void recordResponseTime(AverageCalculator[] recorded, int position, double newValue) {
-        if (recorded[position] == null) {
-            recorded[position] = AverageCalculator.create(2);
-        }
-        recorded[position].add(newValue);
-    }
-
-    private void resetHours(int[] hours) {
-        for (int i = 0; i < hours.length; i++) {
-            hours[i] = 0;
-        }
+    private static SubHourMetricsCollector<MetricsCalculator> makeMetricsPerHour() {
+        return new SubHourMetricsCollector<>(() -> new MetricsCalculator(2));
     }
 }
