@@ -25,8 +25,8 @@ public class MetricsCalculator implements MetricsCollector {
 
     private final AverageCalculator averageCalculator;
     private final OccurrenceCounter<String, String> occurrenceCounter;
-    private double maxResponseTime = 0.0;
-    private double minResponseTime = 0.0;
+    private double maxResponseTime = -1.0;
+    private double minResponseTime = -1.0;
 
     public MetricsCalculator(int averageScale) {
         averageCalculator = AverageCalculator.create(averageScale);
@@ -35,10 +35,12 @@ public class MetricsCalculator implements MetricsCollector {
 
     public void add(LogRecord logRecord) {
         averageCalculator.add(logRecord.getResponseTime());
-        if (maxResponseTime < logRecord.getResponseTime()) {
+
+        if (maxResponseTime < 0) {
+            maxResponseTime = minResponseTime = logRecord.getResponseTime();
+        } else if (maxResponseTime < logRecord.getResponseTime()) {
             maxResponseTime = logRecord.getResponseTime();
-        } else if (minResponseTime == 0.0
-                || minResponseTime > logRecord.getResponseTime()) {
+        } else if (minResponseTime > logRecord.getResponseTime()) {
             minResponseTime = logRecord.getResponseTime();
         }
 
