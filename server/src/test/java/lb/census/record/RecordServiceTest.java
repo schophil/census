@@ -22,8 +22,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.stream.Stream;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Created by philippeschottey on 05/03/2017.
@@ -80,20 +79,20 @@ public class RecordServiceTest {
     public void recordAndRead() {
         Subject subject = subjectDao.get("starwars");
         RecorderContext recorderContext = recordService.record(createLogData(), subject);
-        assertThat(recorderContext.getImported(), is(10));
-        assertThat(recorderContext.getFiltered(), is(4));
+        assertThat(recorderContext.getImported()).isEqualTo(10);
+        assertThat(recorderContext.getFiltered()).isEqualTo(4);
     }
 
     @Test
     public void recordAndOverwrite() {
         Subject subject = subjectDao.get("starwars");
         RecorderContext recorderContext = recordService.record(createLogData(), subject);
-        assertThat(recorderContext.getImported(), is(10));
-        assertThat(recorderContext.getFiltered(), is(4));
+        assertThat(recorderContext.getImported()).isEqualTo(10);
+        assertThat(recorderContext.getFiltered()).isEqualTo(4);
 
         recorderContext = recordService.record(createLogData(), subject);
-        assertThat(recorderContext.getImported(), is(10));
-        assertThat(recorderContext.getFiltered(), is(4));
+        assertThat(recorderContext.getImported()).isEqualTo(10);
+        assertThat(recorderContext.getFiltered()).isEqualTo(4);
 
         dayStatsDao.getDayStats(DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH), subject.getId());
     }
