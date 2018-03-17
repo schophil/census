@@ -59,7 +59,7 @@ public class ReportDaoImpl extends BaseDaoImpl implements ReportDao {
 
         q = q.multiselect(
                 join.get("date"),
-                cb.sum(hourRoot.get("hits")),
+                cb.sum(hourRoot.get("totalRequests")),
                 cb.avg(hourRoot.get("averageResponseTime")),
                 cb.countDistinct(hourRoot.get("userId"))
         );

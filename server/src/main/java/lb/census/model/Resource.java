@@ -1,22 +1,21 @@
 package lb.census.model;
 
-import javax.persistence.*;
-
 import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by philippe on 13/05/15.
  */
 @Entity
 @Table(name = "census_resource")
-public class Resource {
+public class Resource extends DefaultMetrics implements Serializable {
 
     @Id
     @GenericGenerator(name = "CUSTOM", strategy = "lb.census.utils.UUIDGenerator")
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "CUSTOM")
     private String id;
-    @Column(name = "hits")
-    private Integer hits;
     @Column(name = "name")
     private String name;
     @Column(name = "value_nbr")
@@ -37,14 +36,6 @@ public class Resource {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public Integer getHits() {
-        return hits;
-    }
-
-    public void setHits(Integer hits) {
-        this.hits = hits;
     }
 
     public String getName() {

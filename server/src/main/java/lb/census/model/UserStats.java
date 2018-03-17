@@ -11,7 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name = "census_userstats")
-public class UserStats implements Serializable {
+public class UserStats extends DefaultMetrics implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -20,10 +20,6 @@ public class UserStats implements Serializable {
     private String id;
     @Column(name = "userid")
     private String userId;
-    @Column(name = "rtotal")
-    private Integer totalRequests;
-    @Column(name = "rerror")
-    private Integer totalRequestsInError;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "daystat")
     private DayStats dayStats;
@@ -34,22 +30,6 @@ public class UserStats implements Serializable {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public int getTotalRequests() {
-        return totalRequests;
-    }
-
-    public Integer getTotalRequestsInError() {
-        return totalRequestsInError;
-    }
-
-    public void setTotalRequestsInError(Integer totalRequestsInError) {
-        this.totalRequestsInError = totalRequestsInError;
-    }
-
-    public void setTotalRequests(Integer totalRequests) {
-        this.totalRequests = totalRequests;
     }
 
     public String getId() {

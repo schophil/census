@@ -10,7 +10,9 @@ import java.util.HashMap;
  * As more log records are collected; more sub-metrics are created. To create sub-metrics this class needs
  * a {@link MetricsCollectorCreator}.
  *
- * The code exammle below cretaes an instances that keeps metrics per user.
+ * The keys are constructed using a {@link KeyCreator}.
+ *
+ * The code example below creates an instances that keeps metrics per user.
  * <pre>
  *     new SubKeyMetricsCollector<MetricsCalculator>(
  *      logRecord -> logRecord.getUserId(),

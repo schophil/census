@@ -1,5 +1,6 @@
 package lb.census.record;
 
+import lb.census.CommonTestsConfiguration;
 import lb.census.dao.DayStatsDao;
 import lb.census.dao.SubjectDao;
 import lb.census.model.Subject;
@@ -12,8 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,23 +22,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.stream.Stream;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
 
 /**
  * Created by philippeschottey on 05/03/2017.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-@TestPropertySource(properties = {
-        "logging.level.root=ERROR",
-        "logging.level.lb.census=TRACE",
-        "spring.jpa.show-sql=true",
-        "spring.jpa.properties.hibernate.format_sql=true",
-        "app.datasource.url=jdbc:h2:mem:mydb",
-        "app.datasource.username=sa",
-        "app.datasource.pool-size=30"
-})
+@Import(CommonTestsConfiguration.class)
 @Transactional
 public class RecordServiceTest {
 

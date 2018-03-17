@@ -2,8 +2,18 @@ package lb.census.record.metrics;
 
 import lb.census.record.log.LogRecord;
 
+import java.util.Arrays;
 import java.util.Calendar;
 
+/**
+ * Subdivices metrics per hour of the day. The hour of the day is deduced from the {@link LogRecord} instances that
+ * are being processed.
+ *
+ * As more log records are collected; more sub-metrics are created. To create sub-metrics this class needs
+ * a {@link MetricsCollectorCreator}.
+ *
+ * @param <T> The metrics collector type to keep per key
+ */
 public class SubHourMetricsCollector<T extends MetricsCollector> implements MetricsCollector {
 
     private final MetricsCollectorCreator<T> metricsCollectorCreator;
@@ -27,8 +37,9 @@ public class SubHourMetricsCollector<T extends MetricsCollector> implements Metr
         metricsCollector.add(logRecord);
     }
 
-    public T[] getMetricsCollectors() {
-        return (T[]) metricsCollectors;
+    public T[] getMetricsCollectors(T[] array) {
+        System.arraycopy(metricsCollectors, 0, array, 0, metricsCollectors.length);
+        return array;
     }
 
     private int getHourOfTheDay(LogRecord lr) {

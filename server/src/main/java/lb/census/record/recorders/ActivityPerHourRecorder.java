@@ -92,7 +92,7 @@ public class ActivityPerHourRecorder implements Recorder {
     }
 
     private void storeGlobalStats(DayStats dayStats) {
-        MetricsCalculator[] metricsCollectors = metricsPerHour.getMetricsCollectors();
+        MetricsCalculator[] metricsCollectors = metricsPerHour.getMetricsCollectors(new MetricsCalculator[24]);
         for (int i = 0; i < 24; i++) {
             MetricsCalculator metricsCalculator = metricsCollectors[i];
 
@@ -101,9 +101,7 @@ public class ActivityPerHourRecorder implements Recorder {
             dayActivity.setHour(i);
 
             if (metricsCalculator != null) {
-                dayActivity.setHits(metricsCalculator.getTotalRequests());
-            } else {
-                dayActivity.setHits(0);
+                metricsCalculator.update(dayActivity);
             }
 
             totalActivityPerHourDao.save(dayActivity);
@@ -115,7 +113,7 @@ public class ActivityPerHourRecorder implements Recorder {
             String userId = entry.getKey();
             SubHourMetricsCollector<MetricsCalculator> metricsCollector = entry.getValue();
 
-            MetricsCalculator[] metricsCollectors = metricsCollector.getMetricsCollectors();
+            MetricsCalculator[] metricsCollectors = metricsCollector.getMetricsCollectors(new MetricsCalculator[24]);
             for (int i = 0; i < 24; i++) {
                 MetricsCalculator metricsCalculator = metricsCollectors[i];
 
@@ -125,11 +123,7 @@ public class ActivityPerHourRecorder implements Recorder {
                 userActivity.setUserId(userId);
 
                 if (metricsCalculator != null) {
-                    userActivity.setHits(metricsCalculator.getTotalRequests());
-                    userActivity.setAverageResponseTime(metricsCalculator.getAverageResponseTime());
-                } else {
-                    userActivity.setHits(0);
-                    userActivity.setAverageResponseTime(0.0);
+                    metricsCalculator.update(userActivity);
                 }
 
                 userActivityPerHourDao.save(userActivity);

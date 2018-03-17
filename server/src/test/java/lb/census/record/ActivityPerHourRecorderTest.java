@@ -1,5 +1,6 @@
 package lb.census.record;
 
+import lb.census.CommonTestsConfiguration;
 import lb.census.dao.DayStatsDao;
 import lb.census.dao.TotalActivityPerHourDao;
 import lb.census.dao.UserActivityPerHourDao;
@@ -15,7 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,23 +24,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.*;
 
 /**
  * Created by philippeschottey on 16/02/2017.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-@TestPropertySource(properties = {
-        "census.data=file:///tmp",
-        "census.config=file:///config",
-        "logging.level.root=ERROR",
-        "logging.level.lb.census=TRACE",
-        "spring.jpa.show-sql=true",
-        "spring.jpa.properties.hibernate.format_sql=true"
-})
-@Transactional
+@Import(CommonTestsConfiguration.class)
 public class ActivityPerHourRecorderTest {
 
     @Autowired
@@ -79,6 +72,7 @@ public class ActivityPerHourRecorderTest {
         records.add(logRecord);
     }
 
+    @Transactional
     @Test
     public void recordAndRetrieve() {
         DayStats dayStats = new DayStats();
@@ -97,6 +91,6 @@ public class ActivityPerHourRecorderTest {
         recorderContext.getCurrentDayStats();
 
         List<TotalActivityPerHour> activityPerHours = totalActivityPerHourDao.getDayActivity(dayStats);
-        assertThat(activityPerHours.size(), is(2));
+        assertThat(activityPerHours.size(), is(24));
     }
 }

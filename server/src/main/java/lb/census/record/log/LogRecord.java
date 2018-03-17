@@ -81,6 +81,24 @@ public class LogRecord {
         this.timestamp = timestamp;
     }
 
+    public LogRecord() {
+    }
+
+    public LogRecord(String userId) {
+        this.userId = userId;
+    }
+
+    public LogRecord(String originalLine, double responseTime, String resultCode, String userId, String sourceIp, Date timestamp, String resource, String method) {
+        this.originalLine = originalLine;
+        this.responseTime = responseTime;
+        this.resultCode = resultCode;
+        this.userId = userId;
+        this.sourceIp = sourceIp;
+        this.timestamp = timestamp;
+        this.resource = resource;
+        this.method = method;
+    }
+
     @Override
     public String toString() {
         return "LogRecord{" + "responseTime=" + responseTime + ", resultCode=" + resultCode + ", userId=" + userId + ", sourceIp=" + sourceIp + ", timestamp=" + timestamp + '}';

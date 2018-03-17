@@ -61,11 +61,9 @@ public class GlobalStatsRecorder implements Recorder {
         dayStats = new DayStats();
         dayStats.setSubject(subjectId);
         dayStats.setDate(date);
-        dayStats.setAverageResponseTime(metricsCalculator.getAverageResponseTime());
-        dayStats.setMaxResponseTime(metricsCalculator.getMaxResponseTime());
-        dayStats.setMinResponseTime(metricsCalculator.getMinResponseTime());
-        dayStats.setTotalRequests(metricsCalculator.getTotalRequests());
-        dayStats.setTotalRequestsInError(metricsCalculator.getTotalRequestsInError());
+
+        // set the collected metrics
+        metricsCalculator.update(dayStats);
 
         dayStatsDao.save(dayStats);
         recorderContext.setCurrentDayStats(dayStats);

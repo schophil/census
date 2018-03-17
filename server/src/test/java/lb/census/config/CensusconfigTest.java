@@ -10,7 +10,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 /**
  * Created by philippe on 27/06/2017.
  */
-@RunWith(SpringRunner.class)
 public class CensusconfigTest {
 
     @Test

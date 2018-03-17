@@ -50,9 +50,12 @@ public class ResourceRecorder implements Recorder {
                 Resource resource = new Resource();
                 resource.setName("Path");
                 resource.setDayStats(dayStats);
-                resource.setHits(entry2.getValue().getTotalRequests());
                 resource.setTextValue(entry.getKey());
                 resource.setUserId(userId);
+
+                // set the collected metrics
+                entry2.getValue().update(resource);
+
                 resourceDao.save(resource);
             });
         });
@@ -61,8 +64,11 @@ public class ResourceRecorder implements Recorder {
             Resource resource = new Resource();
             resource.setName("Path");
             resource.setDayStats(dayStats);
-            resource.setHits(entry.getValue().getTotalRequests());
             resource.setTextValue(entry.getKey());
+
+            // set the collected metrics
+            entry.getValue().update(resource);
+
             resourceDao.save(resource);
         });
 

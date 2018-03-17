@@ -13,7 +13,7 @@ import javax.persistence.*;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class ActivityPerHour {
+public abstract class ActivityPerHour extends DefaultMetrics {
 
     @Id
     @GenericGenerator(name = "CUSTOM", strategy = "lb.census.utils.UUIDGenerator")
@@ -21,21 +21,9 @@ public abstract class ActivityPerHour {
     private String id;
     @Column(name = "dhour")
     private Integer hour;
-    @Column(name = "hits")
-    private Integer hits;
-    @Column(name = "raverage")
-    private Double averageResponseTime;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "daystat")
     private DayStats dayStats;
-
-    public Double getAverageResponseTime() {
-        return averageResponseTime;
-    }
-
-    public void setAverageResponseTime(Double averageResponseTime) {
-        this.averageResponseTime = averageResponseTime;
-    }
 
     public String getId() {
         return id;
@@ -51,14 +39,6 @@ public abstract class ActivityPerHour {
 
     public void setHour(Integer hour) {
         this.hour = hour;
-    }
-
-    public Integer getHits() {
-        return hits;
-    }
-
-    public void setHits(Integer hits) {
-        this.hits = hits;
     }
 
     public DayStats getDayStats() {

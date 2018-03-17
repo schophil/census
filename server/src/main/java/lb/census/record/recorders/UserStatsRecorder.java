@@ -47,6 +47,7 @@ public class UserStatsRecorder implements Recorder {
 
     @Override
     public void initialize() {
+        // Keep metrics per user id.
         metricsPerUser = new SubKeyMetricsCollector(lr -> lr.getUserId(), () -> new MetricsCalculator(2));
     }
 
@@ -80,8 +81,9 @@ public class UserStatsRecorder implements Recorder {
             UserStats userStats = new UserStats();
             userStats.setDayStats(dayStats);
             userStats.setUserId(userId);
-            userStats.setTotalRequests(metricsCalculator.getTotalRequests());
-            userStats.setTotalRequestsInError(metricsCalculator.getTotalRequestsInError());
+
+            metricsCalculator.update(userStats);
+
             userStatsDao.save(userStats);
         });
 

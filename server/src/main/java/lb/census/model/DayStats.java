@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  */
 @Entity
 @Table(name = "census_daystats")
-public class DayStats implements Serializable {
+public class DayStats extends DefaultMetrics implements Serializable {
 
     /**
      *
@@ -36,16 +36,6 @@ public class DayStats implements Serializable {
     private Date date;
     @Column(name = "subject")
     private String subject;
-    @Column(name = "rtotal")
-    private Integer totalRequests;
-    @Column(name = "rerror")
-    private Integer totalRequestsInError;
-    @Column(name = "raverage")
-    private Double averageResponseTime;
-    @Column(name = "rmax")
-    private Double maxResponseTime;
-    @Column(name = "rmin")
-    private Double minResponseTime;
     @Column(name = "utotal")
     private Integer totalUserIds;
     @OneToMany(mappedBy = "dayStats", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -94,46 +84,6 @@ public class DayStats implements Serializable {
 
     public void setUserStats(Set<UserStats> userStats) {
         this.userStats = userStats;
-    }
-
-    public Integer getTotalRequests() {
-        return totalRequests;
-    }
-
-    public void setTotalRequests(Integer totalRequests) {
-        this.totalRequests = totalRequests;
-    }
-
-    public Integer getTotalRequestsInError() {
-        return totalRequestsInError;
-    }
-
-    public void setTotalRequestsInError(Integer totalRequestsInError) {
-        this.totalRequestsInError = totalRequestsInError;
-    }
-
-    public Double getAverageResponseTime() {
-        return averageResponseTime;
-    }
-
-    public void setAverageResponseTime(Double averageResponseTime) {
-        this.averageResponseTime = averageResponseTime;
-    }
-
-    public Double getMaxResponseTime() {
-        return maxResponseTime;
-    }
-
-    public void setMaxResponseTime(Double maxResponseTime) {
-        this.maxResponseTime = maxResponseTime;
-    }
-
-    public Double getMinResponseTime() {
-        return minResponseTime;
-    }
-
-    public void setMinResponseTime(Double minResponseTime) {
-        this.minResponseTime = minResponseTime;
     }
 
     @Transient

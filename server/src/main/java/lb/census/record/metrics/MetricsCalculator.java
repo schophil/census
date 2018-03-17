@@ -2,6 +2,7 @@ package lb.census.record.metrics;
 
 import lb.census.math.AverageCalculator;
 import lb.census.math.OccurrenceCounter;
+import lb.census.model.DefaultMetrics;
 import lb.census.record.log.LogRecord;
 
 /**
@@ -13,11 +14,14 @@ import lb.census.record.log.LogRecord;
  *     <li>min response time</li>
  *     <li>average response time</li>
  * </ul>
+ *
+ * These metrics are taken from {@link LogRecord} instances.
  */
 public class MetricsCalculator implements MetricsCollector {
 
     private static final String OK = "ok";
     private static final String NOK = "nok";
+    private static final String CODE_200 = "200";
 
     private final AverageCalculator averageCalculator;
     private final OccurrenceCounter<String, String> occurrenceCounter;
@@ -38,7 +42,7 @@ public class MetricsCalculator implements MetricsCollector {
             minResponseTime = logRecord.getResponseTime();
         }
 
-        occurrenceCounter.register("200".equals(logRecord.getResultCode()) ? OK : NOK);
+        occurrenceCounter.register(CODE_200.equals(logRecord.getResultCode()) ? OK : NOK);
     }
 
     public double getAverageResponseTime() {
@@ -59,5 +63,13 @@ public class MetricsCalculator implements MetricsCollector {
 
     public int getTotalRequestsInError() {
         return occurrenceCounter.getOccurrences(NOK);
+    }
+
+    public void update(DefaultMetrics defaultMetrics) {
+        defaultMetrics.setTotalRequests(getTotalRequests());
+        defaultMetrics.setTotalRequestsInError(getTotalRequestsInError());
+        defaultMetrics.setAverageResponseTime(getAverageResponseTime());
+        defaultMetrics.setMaxResponseTime(getMaxResponseTime());
+        defaultMetrics.setMinResponseTime(getMinResponseTime());
     }
 }

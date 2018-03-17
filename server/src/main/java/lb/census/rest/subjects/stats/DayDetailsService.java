@@ -83,7 +83,7 @@ public class DayDetailsService {
         oneDayDetails.activityPerHour = totalActivityPerHourDao.getDayActivity(dayStats).stream().map(activity -> {
             OneHour oneHour = new OneHour();
             oneHour.hour = activity.getHour();
-            oneHour.totalRequests = activity.getHits();
+            oneHour.totalRequests = activity.getTotalRequests();
             return oneHour;
         }).collect(Collectors.toList());
 
@@ -91,7 +91,7 @@ public class DayDetailsService {
         oneDayDetails.popularResources = resourceDao.getPopular(dayStats, 15, "Path").stream().map(resource -> {
             OneResource oneResource = new OneResource();
             oneResource.path = resource.getTextValue();
-            oneResource.hits = resource.getHits();
+            oneResource.hits = resource.getTotalRequests();
             return oneResource;
         }).collect(Collectors.toList());
 
@@ -119,7 +119,7 @@ public class DayDetailsService {
         oneUserDetails.activityPerHour = userActivityPerHourDao.getActivities(dayStats, userId).stream().map(activity -> {
             OneHour oneHour = new OneHour();
             oneHour.hour = activity.getHour();
-            oneHour.totalRequests = activity.getHits();
+            oneHour.totalRequests = activity.getTotalRequests();
             oneHour.averageResponseTime = activity.getAverageResponseTime();
             return oneHour;
         }).collect(Collectors.toList());
