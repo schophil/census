@@ -1,11 +1,10 @@
 package lb.census.config;
 
-import lb.census.record.filters.Filter;
 import lb.census.record.filters.Invert;
-import org.junit.Assert;
+import lb.census.record.filters.PatternFilter;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Created by philippe on 27/06/2017.
@@ -17,16 +16,23 @@ public class CensusconfigTest {
         CensusConfigFactory factory = new CensusConfigFactory();
         CensusConfig censusConfig = factory.loadFrom(getClass().getResource("/config.xml"));
 
-        Assert.assertNotNull(censusConfig);
-        Assert.assertNotNull(censusConfig.getSubjects());
+        assertThat(censusConfig).isNotNull();
+        assertThat(censusConfig.getSubjects()).isNotNull();
+        assertThat(censusConfig.getSubjects()).isNotEmpty();
+        assertThat(censusConfig.getSubjects().size()).isOne();
 
-        Assert.assertFalse(censusConfig.getSubjects().isEmpty());
-        Assert.assertFalse(censusConfig.getSubjects().get(0).getFilters().isEmpty());
+        assertThat(censusConfig.getSubjects().get(0)).isNotNull();
+        assertThat(censusConfig.getSubjects().get(0).getId()).isEqualTo("1");
+        assertThat(censusConfig.getSubjects().get(0).getName()).isEqualTo("a");
 
-        Filter filter = censusConfig.getSubjects().get(0).getFilters().get(0);
-        Assert.assertTrue(filter instanceof Invert);
+        assertThat(censusConfig.getSubjects().get(0).getFilters()).isNotNull();
+        assertThat(censusConfig.getSubjects().get(0).getFilters()).isNotEmpty();
+        assertThat(censusConfig.getSubjects().get(0).getFilters().size()).isOne();
 
-        Invert invert = (Invert) filter;
-        Assert.assertNotNull(invert.getWrapped());
+        assertThat(censusConfig.getSubjects().get(0).getFilters().get(0)).isInstanceOf(Invert.class);
+
+        Invert invert = (Invert) censusConfig.getSubjects().get(0).getFilters().get(0);
+        assertThat(invert.getWrapped()).isNotNull();
+        assertThat(invert.getWrapped()).isInstanceOf(PatternFilter.class);
     }
 }
