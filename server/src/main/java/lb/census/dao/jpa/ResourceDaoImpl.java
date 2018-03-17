@@ -37,7 +37,7 @@ public class ResourceDaoImpl extends BaseDaoImpl implements ResourceDao {
     @Override
     public List<Resource> getPopular(int top, String name) {
         TypedQuery<Resource> query = getEntityManager().createQuery(
-                "SELECT r FROM Resource r WHERE r.name = :n and r.userId = :u order by r.totalRequests desc", Resource.class);
+                "SELECT r FROM Resource r WHERE r.name = :n and r.userId = :u order by r.totalRequests desc, r.textValue", Resource.class);
         return query.setParameter("n", name).setParameter("u", NULL_USER).setFirstResult(top).getResultList();
     }
 
@@ -45,7 +45,7 @@ public class ResourceDaoImpl extends BaseDaoImpl implements ResourceDao {
     @Override
     public List<Resource> getPopular(DayStats dayStats, int top, String name) {
         TypedQuery<Resource> query = getEntityManager().createQuery(
-                "select r from Resource r where r.name = :n and r.userId = :u and r.dayStats = :d order by r.totalRequests desc", Resource.class);
+                "select r from Resource r where r.name = :n and r.userId = :u and r.dayStats = :d order by r.totalRequests desc, r.textValue", Resource.class);
         query.setParameter("n", name);
         query.setParameter("d", dayStats);
         query.setParameter("u", NULL_USER);
@@ -55,7 +55,7 @@ public class ResourceDaoImpl extends BaseDaoImpl implements ResourceDao {
     @Override
     public List<Resource> getPopular(DayStats dayStats, int top, String name, String userId) {
         TypedQuery<Resource> query = getEntityManager().createQuery(
-                "select r from Resource r where r.name = :n and r.userId = :u and r.dayStats = :d order by r.totalRequests desc", Resource.class);
+                "select r from Resource r where r.name = :n and r.userId = :u and r.dayStats = :d order by r.totalRequests desc, r.textValue", Resource.class);
         query.setParameter("n", name);
         query.setParameter("d", dayStats);
         query.setParameter("u", userId);

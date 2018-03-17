@@ -10,6 +10,7 @@ import lb.census.record.log.LogRecord;
 import lb.census.record.recorders.RecorderContext;
 import lb.census.record.recorders.ResourceRecorder;
 import org.apache.commons.lang3.time.DateUtils;
+import org.assertj.core.api.Assertions;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
@@ -17,7 +18,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.assertj.core.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -90,20 +92,22 @@ public class ResourceRecorderTest {
         {
             List<Resource> resources = resourceDao.getPopular(dayStats, 5, "Path");
 
-            MatcherAssert.assertThat(resources, CoreMatchers.notNullValue());
-            MatcherAssert.assertThat(resources.size(), CoreMatchers.is(2));
+            assertThat(resources).isNotNull();
+            assertThat(resources).isNotEmpty();
+            assertThat(resources.size()).isEqualTo(2);
 
-            MatcherAssert.assertThat(resources.stream().map(r -> r.getTextValue()).collect(Collectors.toList()),
-                    CoreMatchers.hasItems("GET:/rest/scores", "POST:/rest/compose"));
-            MatcherAssert.assertThat(resources.stream().map(r -> r.getAverageResponseTime()).collect(Collectors.toList()),
-                    CoreMatchers.hasItems(0.03, 0.02));
+            assertThat(resources.stream().map(r -> r.getTextValue()).collect(Collectors.toList()))
+                    .containsExactly("GET:/rest/scores", "POST:/rest/compose");
+            assertThat(resources.stream().map(r -> r.getAverageResponseTime()).collect(Collectors.toList()))
+                    .containsExactly(0.02, 0.03);
         }
 
         {
             List<Resource> resources = resourceDao.getPopular(dayStats, 5, "Path", "user2");
 
-            MatcherAssert.assertThat(resources, CoreMatchers.notNullValue());
-            MatcherAssert.assertThat(resources.size(), CoreMatchers.is(1));
+            assertThat(resources).isNotNull();
+            assertThat(resources).isNotEmpty();
+            assertThat(resources.size()).isOne();
         }
     }
 }
