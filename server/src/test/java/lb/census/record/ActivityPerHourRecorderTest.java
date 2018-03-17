@@ -87,8 +87,6 @@ public class ActivityPerHourRecorderTest {
         }
         recorder.store(new Date(), recorderContext);
 
-        recorderContext.getCurrentDayStats();
-
         List<TotalActivityPerHour> activityPerHours = totalActivityPerHourDao.getDayActivity(dayStats);
         assertThat(activityPerHours).isNotNull();
         assertThat(activityPerHours).isNotEmpty();
