@@ -12,7 +12,6 @@ import lb.census.record.log.LogRecord;
 import lb.census.record.recorders.ActivityPerHourRecorder;
 import lb.census.record.recorders.RecorderContext;
 import org.apache.commons.lang3.time.DateUtils;
-import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

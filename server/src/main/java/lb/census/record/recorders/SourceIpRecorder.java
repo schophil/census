@@ -1,29 +1,32 @@
 package lb.census.record.recorders;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-
+import lb.census.dao.SourceIpDao;
+import lb.census.model.SourceIp;
+import lb.census.record.log.LogRecord;
+import lb.census.record.metrics.SourceIpCollector;
+import lb.census.record.metrics.SubKeyMetricsCollector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import lb.census.dao.SourceIpDao;
-import lb.census.model.SourceIp;
-import lb.census.record.log.LogRecord;
+import java.util.Date;
 
 @Component
 public class SourceIpRecorder implements Recorder {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SourceIpRecorder.class);
-    private final HashMap<String, HashSet<String>> collected = new HashMap<>();
     @Autowired
     private SourceIpDao sourceIpDao;
     private int daysToKeep = -1; // by default we keep the ip addresses
+    private SubKeyMetricsCollector<SourceIpCollector> collector;
 
     @Override
     public void initialize() {
+        collector = new SubKeyMetricsCollector<>(
+                lr -> lr.getUserId(),
+                () -> new SourceIpCollector()
+        );
     }
 
     @Override
@@ -34,22 +37,17 @@ public class SourceIpRecorder implements Recorder {
             return;
         }
         LOGGER.debug("Recording source ip {} for {}", logRecord.getSourceIp(), logRecord.getUserId());
-        String userId = logRecord.getUserId();
-        HashSet<String> sourceIps = collected.get(userId);
-        if (sourceIps == null) {
-            sourceIps = new HashSet<>();
-            collected.put(userId, sourceIps);
-        }
-        sourceIps.add(logRecord.getSourceIp());
+        collector.add(logRecord);
     }
 
     @Override
     public void store(Date date, RecorderContext recorderContext) {
-        LOGGER.debug("Storing recorded source ips for {} users", collected.size());
         String subject = recorderContext.getSubject().getId();
-        for (String userId : collected.keySet()) {
-            HashSet<String> recordedIPs = collected.get(userId);
-            for (String ip : recordedIPs) {
+
+        collector.getMetricsCollectors().entrySet().stream().forEach( entry -> {
+            String userId = entry.getKey();
+
+            entry.getValue().getIps().stream().forEach(ip -> {
                 SourceIp sourceIP = sourceIpDao.getSourceIP(userId, ip, subject);
                 if (sourceIP == null) {
                     // create new one
@@ -63,8 +61,11 @@ public class SourceIpRecorder implements Recorder {
                     sourceIP.setLastUsed(date);
                     sourceIpDao.save(sourceIP);
                 }
-            }
-        }
+            });
+
+        });
+
+        collector = null;
 
         if (daysToKeep > -1) {
             int deleted = sourceIpDao.deleteSourceIPsOf(daysToKeep);
@@ -74,7 +75,6 @@ public class SourceIpRecorder implements Recorder {
 
     @Override
     public void forget(RecorderContext recorderContext) {
-        collected.clear();
     }
 
     public SourceIpDao getSourceIpDao() {

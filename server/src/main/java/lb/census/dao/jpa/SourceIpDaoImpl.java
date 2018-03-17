@@ -16,36 +16,18 @@ import java.util.List;
 @Repository
 public class SourceIpDaoImpl extends BaseDaoImpl implements SourceIpDao {
 
-    @Transactional(readOnly = true)
     @Override
-    public List<SourceIp> getSourceIPsFor(String userId, int lastDays, String subject) {
-        TypedQuery<SourceIp> query = getEntityManager()
+    public List<SourceIp> getAllSourceIPs(int lastDays) {
+        TypedQuery<SourceIp> typedQuery = getEntityManager()
                 .createQuery(
-                        "SELECT s FROM SourceIp s WHERE s.subject = :s and s.userId = :u AND s.lastUsed >= :d",
+                        "SELECT s FROM SourceIp s WHERE s.lastUsed >= :d ORDER BY s.userId, s.ip",
                         SourceIp.class);
-        query.setParameter("u", userId);
-        query.setParameter("s", subject);
-
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, -lastDays);
-        query.setParameter("d", calendar.getTime());
+        typedQuery.setParameter("d", calendar.getTime());
 
-        List<SourceIp> resultList = query.getResultList();
+        List<SourceIp> resultList = typedQuery.getResultList();
 
-        // TODO: check if the following is necessary: is the list lazy?
-        ArrayList<SourceIp> returnList = new ArrayList<>(resultList.size());
-        returnList.addAll(resultList);
-        return returnList;
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<SourceIp> getSourceIPsFor(String userId, String subject) {
-        TypedQuery<SourceIp> query = getEntityManager().createQuery(
-                "SELECT s FROM SourceIp s WHERE s.subject = :s and s.userId = :u", SourceIp.class);
-        query.setParameter("u", userId);
-        query.setParameter("s", subject);
-        List<SourceIp> resultList = query.getResultList();
         // TODO: check if the following is necessary: is the list lazy?
         ArrayList<SourceIp> returnList = new ArrayList<>(resultList.size());
         returnList.addAll(resultList);
@@ -77,19 +59,20 @@ public class SourceIpDaoImpl extends BaseDaoImpl implements SourceIpDao {
         }
     }
 
-    @Transactional(readOnly = true)
     @Override
-    public List<SourceIp> getSourceIPsFor(int lastDays, String subject) {
-        TypedQuery<SourceIp> query = getEntityManager()
+    public List<SourceIp> getSourceIPsFor(String userId, int lastDays) {
+        TypedQuery<SourceIp> typedQuery = getEntityManager()
                 .createQuery(
-                        "SELECT s FROM SourceIp s WHERE s.subject = :s and s.lastUsed >= :d ORDER BY s.userId, s.ip",
+                        "SELECT s FROM SourceIp s WHERE s.lastUsed >= :d "
+                                + " AND s.userId = :q"
+                                + " ORDER BY s.userId, s.ip",
                         SourceIp.class);
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, -lastDays);
-        query.setParameter("d", calendar.getTime());
-        query.setParameter("s", subject);
+        typedQuery.setParameter("d", calendar.getTime());
+        typedQuery.setParameter("q", userId);
 
-        List<SourceIp> resultList = query.getResultList();
+        List<SourceIp> resultList = typedQuery.getResultList();
 
         // TODO: check if the following is necessary: is the list lazy?
         ArrayList<SourceIp> returnList = new ArrayList<>(resultList.size());
@@ -115,7 +98,7 @@ public class SourceIpDaoImpl extends BaseDaoImpl implements SourceIpDao {
                 .createQuery(
                         "SELECT s FROM SourceIp s WHERE s.lastUsed >= :d "
                                 + " AND (s.userId like :q OR s.ip like :q)"
-                                + "ORDER BY s.userId, s.ip",
+                                + " ORDER BY s.userId, s.ip",
                         SourceIp.class);
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, -lastDays);

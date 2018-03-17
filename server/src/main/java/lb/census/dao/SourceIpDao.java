@@ -10,12 +10,30 @@ public interface SourceIpDao {
 
     void save(SourceIp sourceIP);
 
-    List<SourceIp> getSourceIPsFor(String userId, String subject);
+    /**
+     * Get all the registered IP addresses of a user within the last X days.
+     *
+     * @param userId
+     * @param lastDays
+     * @return
+     */
+    List<SourceIp> getSourceIPsFor(String userId, int lastDays);
 
-    List<SourceIp> getSourceIPsFor(String userId, int lastDays, String subject);
+    /**
+     * Returns all recorded source ips in the X last days.
+     *
+     * @param lastDays
+     * @return
+     */
+    List<SourceIp> getAllSourceIPs(int lastDays);
 
-    List<SourceIp> getSourceIPsFor(int lastDays, String subject);
-
+    /**
+     * Searches source ips base on a wildcard search in user id and ip.
+     *
+     * @param query
+     * @param lastDays
+     * @return
+     */
     List<SourceIp> searchSourceIPs(String query, int lastDays);
 
     int deleteSourceIPsOf(int lastDays);
