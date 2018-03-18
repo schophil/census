@@ -6,8 +6,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Created by philippe on 14/06/2017.
@@ -16,7 +15,7 @@ import static org.junit.Assert.assertThat;
 public class AverageCalculatorTest {
 
     @Test
-    public void averageGradual1() {
+    public void averageGradualIntegersOne() {
         AverageCalculator averageCalculator = new GradualAverageCalculator(2);
 
         averageCalculator.add(3);
@@ -27,11 +26,11 @@ public class AverageCalculatorTest {
 
         BigDecimal avg = averageCalculator.getCurrentAverage();
 
-        assertThat(avg.doubleValue(), is(4.2));
+        assertThat(avg.doubleValue()).isEqualTo(4.2);
     }
 
     @Test
-    public void averageGradual2() {
+    public void averageGradualIntegersTwo() {
         AverageCalculator averageCalculator = new GradualAverageCalculator(2);
 
         averageCalculator.add(3);
@@ -48,8 +47,23 @@ public class AverageCalculatorTest {
 
         BigDecimal avg = averageCalculator.getCurrentAverage();
 
-        assertThat(avg.doubleValue(), is(6.18));
+        assertThat(avg.doubleValue()).isEqualTo(6.18);
     }
+
+//    @Test
+//    public void averageGradualDoublesOne() {
+//        AverageCalculator averageCalculator = new GradualAverageCalculator(2);
+//
+//        averageCalculator.add(0.02);
+//        averageCalculator.add(0.02);
+//        averageCalculator.add(0.04);
+//        averageCalculator.add(0.06);
+//
+//        BigDecimal avg = averageCalculator.getCurrentAverage();
+//
+//        assertThat(avg.doubleValue()).isEqualTo(0.04);
+//    }
+
 
     @Test
     public void averageSimple1() {
@@ -69,7 +83,7 @@ public class AverageCalculatorTest {
 
         BigDecimal avg = averageCalculator.getCurrentAverage();
 
-        assertThat(avg.doubleValue(), is(6.18));
+        assertThat(avg.doubleValue()).isEqualTo(6.18);
     }
 
     @Test
@@ -90,6 +104,6 @@ public class AverageCalculatorTest {
 
         BigDecimal avg = averageCalculator.getCurrentAverage();
 
-        assertThat(avg.doubleValue(), is(6.18));
+        assertThat(avg.doubleValue()).isEqualTo(6.18);
     }
 }

@@ -1,7 +1,9 @@
 package lb.census.math;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 
 /**
@@ -9,6 +11,7 @@ import java.math.RoundingMode;
  */
 public class GradualAverageCalculator implements AverageCalculator {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger("CENSUS_MATH");
     private double currentAvg = 0;
     private double currentTotal = 0;
     private int scale;
@@ -41,6 +44,7 @@ public class GradualAverageCalculator implements AverageCalculator {
         double newTotal = currentTotal + 1;
         currentAvg = (currentAvg * (currentTotal / newTotal)) + (newValue / newTotal);
         currentTotal = newTotal;
+        LOGGER.trace("After adding value {}: {}", newValue, this);
     }
 
     @Override
@@ -52,5 +56,14 @@ public class GradualAverageCalculator implements AverageCalculator {
     @Override
     public BigDecimal getCurrentAverage() {
         return new BigDecimal(currentAvg).setScale(scale, RoundingMode.HALF_UP);
+    }
+
+    @Override
+    public String toString() {
+        return "GradualAverageCalculator{" +
+                "currentAvg=" + currentAvg +
+                ", currentTotal=" + currentTotal +
+                ", scale=" + scale +
+                '}';
     }
 }

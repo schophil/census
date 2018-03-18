@@ -1,18 +1,5 @@
 package lb.census.record.recorders;
 
-import java.util.*;
-
-import lb.census.math.AverageCalculator;
-import lb.census.record.metrics.MetricsCalculator;
-import lb.census.record.metrics.SubHourMetricsCollector;
-import lb.census.record.metrics.SubKeyMetricsCollector;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import lb.census.dao.DayStatsDao;
 import lb.census.dao.TotalActivityPerHourDao;
 import lb.census.dao.UserActivityPerHourDao;
@@ -20,6 +7,15 @@ import lb.census.model.DayStats;
 import lb.census.model.TotalActivityPerHour;
 import lb.census.model.UserActivityPerHour;
 import lb.census.record.log.LogRecord;
+import lb.census.record.metrics.MetricsCalculator;
+import lb.census.record.metrics.SubHourMetricsCollector;
+import lb.census.record.metrics.SubKeyMetricsCollector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 /**
  * Records the activity per hour: global and per user.

@@ -9,6 +9,7 @@
 
     <logger name="CENSUS_RECORDERS" level="trace"/>
     <logger name="CENSUS_CONTROLLERS" level="trace"/>
+    <logger name="CENSUS_MATH" level="trace"/>
 
     <root level="error">
         <appender-ref ref="STDOUT" />
