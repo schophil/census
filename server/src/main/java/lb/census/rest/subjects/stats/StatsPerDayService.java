@@ -38,7 +38,7 @@ public class StatsPerDayService {
 
         return dayStatsDao.list(period.getFrom(), period.getTo(), subject)
                 .stream()
-                .map(OneDay::from)
+                .map(OneDay::of)
                 .collect(Collectors.toList());
     }
 
@@ -55,7 +55,7 @@ public class StatsPerDayService {
 
         return reportDao.listDailyStats(period.getFrom(), period.getTo(), subject, categoryFilters)
                 .stream()
-                .map(OneDay::from)
+                .map(OneDay::of)
                 .collect(Collectors.toList());
     }
 }

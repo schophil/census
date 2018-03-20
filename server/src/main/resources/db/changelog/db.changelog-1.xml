@@ -34,13 +34,11 @@
         </addColumn>
         <addColumn tableName="census_useractivity">
             <column name="rerror" type="number(9,0)"/>
-            <column name="raverage" type="decimal(11,2)"/>
             <column name="rmax" type="decimal(11,2)"/>
             <column name="rmin" type="decimal(11,2)"/>
         </addColumn>
         <addColumn tableName="census_dayactivity">
             <column name="rerror" type="number(9,0)"/>
-            <column name="raverage" type="decimal(11,2)"/>
             <column name="rmax" type="decimal(11,2)"/>
             <column name="rmin" type="decimal(11,2)"/>
         </addColumn>
@@ -75,13 +73,11 @@
         </addColumn>
         <addColumn tableName="census_useractivity">
             <column name="rerror" type="numeric(9,0)"/>
-            <column name="raverage" type="decimal(11,2)"/>
             <column name="rmax" type="decimal(11,2)"/>
             <column name="rmin" type="decimal(11,2)"/>
         </addColumn>
         <addColumn tableName="census_dayactivity">
             <column name="rerror" type="numeric(9,0)"/>
-            <column name="raverage" type="decimal(11,2)"/>
             <column name="rmax" type="decimal(11,2)"/>
             <column name="rmin" type="decimal(11,2)"/>
         </addColumn>

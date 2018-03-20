@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -57,43 +58,28 @@ public class DayDetailsService {
         // identifying the users that are expected but
         // were not recorded (= no activity).
         UserBaseReducer userBaseReducer = new UserBaseReducer(allUsers);
-        oneDayDetails.recordedUsers = dayStats.getUserStatsList().stream().map(userStats -> {
-            User user = userBaseReducer.reduce(userStats.getUserId());
-            OneUser oneUser = new OneUser();
-            oneUser.totalRequests = userStats.getTotalRequests();
-            oneUser.totalRequestsInError = userStats.getTotalRequestsInError();
-            oneUser.userId = userStats.getUserId();
-            if (user != null) {
-                oneUser.userName = user.getName();
-            } else {
-                oneUser.userName = "Unknown";
-            }
-            return oneUser;
-        }).collect(Collectors.toList());
+        oneDayDetails.recordedUsers = dayStats.getUserStatsList()
+                .stream()
+                .map(userStats -> OneUser.of(userStats, userBaseReducer.reduce(userStats.getUserId())))
+                .collect(Collectors.toList());
 
         // Collect the missing users.
-        oneDayDetails.missingUsers = userBaseReducer.remaining().stream().map(user -> {
-            OneUser oneUser = new OneUser();
-            oneUser.userId = user.getUserId();
-            oneUser.userName = user.getName();
-            return oneUser;
-        }).collect(Collectors.toList());
+        oneDayDetails.missingUsers = userBaseReducer.remaining()
+                .stream()
+                .map(u -> OneUser.of(u))
+                .collect(Collectors.toList());
 
         // Collect activity per hour
-        oneDayDetails.activityPerHour = totalActivityPerHourDao.getDayActivity(dayStats).stream().map(activity -> {
-            OneHour oneHour = new OneHour();
-            oneHour.hour = activity.getHour();
-            oneHour.totalRequests = activity.getTotalRequests();
-            return oneHour;
-        }).collect(Collectors.toList());
+        oneDayDetails.activityPerHour = totalActivityPerHourDao.getDayActivity(dayStats)
+                .stream()
+                .map(activity -> OneHour.of(activity))
+                .collect(Collectors.toList());
 
         // collect top ten resources
-        oneDayDetails.popularResources = resourceDao.getPopular(dayStats, 15, "Path").stream().map(resource -> {
-            OneResource oneResource = new OneResource();
-            oneResource.path = resource.getTextValue();
-            oneResource.hits = resource.getTotalRequests();
-            return oneResource;
-        }).collect(Collectors.toList());
+        oneDayDetails.popularResources = resourceDao.getPopular(dayStats, 15, "Path")
+                .stream()
+                .map(r -> OneResource.of(r))
+                .collect(Collectors.toList());
 
         return oneDayDetails;
     }
@@ -116,13 +102,8 @@ public class DayDetailsService {
         }
 
         // Collect activity per hour
-        oneUserDetails.activityPerHour = userActivityPerHourDao.getActivities(dayStats, userId).stream().map(activity -> {
-            OneHour oneHour = new OneHour();
-            oneHour.hour = activity.getHour();
-            oneHour.totalRequests = activity.getTotalRequests();
-            oneHour.averageResponseTime = activity.getAverageResponseTime();
-            return oneHour;
-        }).collect(Collectors.toList());
+        oneUserDetails.activityPerHour = userActivityPerHourDao.getActivities(dayStats, userId).stream()
+                .map(a -> OneHour.of(a)).collect(Collectors.toList());
 
         return oneUserDetails;
     }

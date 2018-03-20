@@ -15,4 +15,4 @@ current=${versions[0]}
 next=${versions[1]}
 
 jarName="./server/target/census-$next.jar"
-java -Xmx50m -jar $jarName --spring.profiles.active=local --census.data=file://$my_home --census.config=config.xml
+java -jar $jarName --spring.profiles.active=local --census.data=file://$my_home --census.config=config.xml

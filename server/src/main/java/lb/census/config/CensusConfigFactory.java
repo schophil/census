@@ -6,6 +6,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
 import lb.census.record.filters.Invert;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ public class CensusConfigFactory {
             return (CensusConfig) context.createUnmarshaller().unmarshal(url);
         } catch (JAXBException e) {
             LOGGER.error("Error reading config from " + url + ", returning empty config!");
-            LOGGER.error("Reading error: " + e.getMessage(), e);
+            LOGGER.error("Reading error: " + (StringUtils.isEmpty(e.getMessage()) ? e.getCause().getMessage() : e.getMessage()));
             return new CensusConfig();
         }
     }

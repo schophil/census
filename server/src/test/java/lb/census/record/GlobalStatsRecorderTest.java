@@ -48,7 +48,7 @@ public class GlobalStatsRecorderTest {
         logRecord.setUserId("user2");
         logRecord.setMethod("POST");
         logRecord.setResource("/rest/compose");
-        logRecord.setResponseTime(0.02);
+        logRecord.setResponseTime(0.04);
         logRecord.setResultCode("200");
         logRecord.setTimestamp(DateUtils.setHours(new Date(), 3));
         records.add(logRecord);

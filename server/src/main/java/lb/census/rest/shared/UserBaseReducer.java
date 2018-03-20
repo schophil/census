@@ -3,6 +3,7 @@ package lb.census.rest.shared;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import lb.census.model.User;
 
@@ -20,8 +21,8 @@ public class UserBaseReducer {
         }
     }
 
-    public User reduce(String userId) {
-        return userBaseMap.remove(userId);
+    public Optional<User> reduce(String userId) {
+        return Optional.ofNullable(userBaseMap.remove(userId));
     }
 
     public Collection<User> remaining() {
