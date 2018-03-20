@@ -14,6 +14,39 @@ census.dateFormat = 'dd D.M.YY';
 census.dateTimeFormat = 'dd D.M.YY';
 census.dateApiFormat = 'YYYY-MM-DD';
 census.dateTimeApiFormat = "YYYY-MM-DD'T'HH:mm:ss";
+// graph colors
+census.graphBlue = {
+  background: 'rgba(54, 162, 235, 0.5)',
+  border: 'rgba(54, 162, 235, 1)'
+};
+census.graphRed = {
+  background: 'rgba(255, 99, 132, 0.5)',
+  border: 'rgba(255, 99, 132, 1)'
+};
+census.graphYellow = {
+  background: 'rgba(255, 206, 86, 0.5)',
+  border: 'rgba(255, 206, 86, 1)'
+};
+census.graphGreen = {
+  background: 'rgba(75, 192, 192, 0.5)',
+  border: 'rgba(75, 192, 192, 1)'
+};
+census.graphPurple = {
+  background: 'rgba(153, 102, 255, 0.5)',
+  border: 'rgba(153, 102, 255, 1)'
+};
+census.graphOrange = {
+  background: 'rgba(255, 159, 64, 0.5)',
+  border: 'rgba(255, 159, 64, 1)'
+};
+census.graphOrange = {
+  background: 'rgba(255, 159, 64, 0.5)',
+  border: 'rgba(255, 159, 64, 1)'
+};
+census.graphGrey = {
+  background: 'rgba(184, 187, 188, 0.5)',
+  border: 'rgba(184, 187, 188, 1)'
+};
 
 // BEGIN filters
 census.formatDate = function (value) {
