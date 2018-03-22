@@ -108,6 +108,8 @@ public class ResourceRecorderTest {
             assertThat(resources).isNotNull();
             assertThat(resources).isNotEmpty();
             assertThat(resources.size()).isOne();
+            assertThat(resources.get(0).getTextValue()).isEqualToIgnoringCase("POST:/rest/compose");
+            assertThat(resources.get(0).getUserId()).isEqualToIgnoringCase("user2");
         }
     }
 }

@@ -50,7 +50,7 @@ public class ResourceRecorder implements Recorder {
                 Resource resource = new Resource();
                 resource.setName("Path");
                 resource.setDayStats(dayStats);
-                resource.setTextValue(entry.getKey());
+                resource.setTextValue(entry2.getKey());
                 resource.setUserId(userId);
 
                 // set the collected metrics
