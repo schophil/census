@@ -106,12 +106,27 @@ export function MockDashboardService() {
 
 		for (var i = 0; i < 24; i++) {
 			var hour = {
-				totalRequests: _.random(100, 5000),
-				averageResponseTime: _.random(0, 10, true),
+        totalRequests: _.random(100, 5000),
+        totalRequestsInError: _.random(5, 10),
+        averageResponseTime: _.random(5, 10),
+        minResponseTime: _.random(5, 10),
+        maxResponseTime: _.random(5, 10),
 				hour: i
 			};
 			data.activityPerHour.push(hour);
-		}
+    }
+    
+		data.popularResources = [];
+		for (var j = 0; j < 10; j++) {
+			data.popularResources.push({
+        path: 'GET:/fictive/resource/' + _.random(100, 200),
+        totalRequests: _.random(5, 100),
+				totalRequestsInError: _.random(5, 10),
+				averageResponseTime: _.random(5, 10),
+				minResponseTime: _.random(5, 10),
+				maxResponseTime: _.random(5, 10)
+			});
+		}    
 
 		var p = new Promise(function (resolve, reject) {
 			window.setTimeout(function () {
@@ -140,6 +155,10 @@ export function MockDashboardService() {
 			group.forEach(function (g) {
 				var hour = {
 					totalRequests: _.random(100, 5000),
+          totalRequestsInError: _.random(5, 10),
+				  averageResponseTime: _.random(5, 10),
+				  minResponseTime: _.random(5, 10),
+				  maxResponseTime: _.random(5, 10),
 					hour: i
 				};
 				g.activityPerHour.push(hour);
@@ -149,8 +168,12 @@ export function MockDashboardService() {
 		target.popularResources = [];
 		for (var j = 0; j < 10; j++) {
 			target.popularResources.push({
-				path: '/fictive/resource/' + _.random(100, 200),
-				hits: _.random(5, 100)
+        path: 'GET:/fictive/resource/' + _.random(100, 200),
+        totalRequests: _.random(5, 100),
+				totalRequestsInError: _.random(5, 10),
+				averageResponseTime: _.random(5, 10),
+				minResponseTime: _.random(5, 10),
+				maxResponseTime: _.random(5, 10)
 			});
 		}
 
@@ -160,7 +183,10 @@ export function MockDashboardService() {
 				userId: 'U' + _.random(100, 200),
 				userName: 'longer_name_' + _.random(5, 10),
 				totalRequests: _.random(5, 100),
-				totalRequestsInError: _.random(5, 10)
+				totalRequestsInError: _.random(5, 10),
+				averageResponseTime: _.random(5, 10),
+				minResponseTime: _.random(5, 10),
+				maxResponseTime: _.random(5, 10)
 			});
 		}
 

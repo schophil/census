@@ -25,40 +25,10 @@ function drawGraphs() {
 		return el.date.format('dd D.M.YY');
 	});
 	var backgrounds = this.data.map(function (el) {
-		switch (el.date.day()) {
-			case 1:
-				return 'rgba(255, 99, 132, 0.2)';
-			case 2:
-				return 'rgba(54, 162, 235, 0.2)';
-			case 3:
-				return 'rgba(255, 206, 86, 0.2)';
-			case 4:
-				return 'rgba(75, 192, 192, 0.2)';
-			case 5:
-				return 'rgba(153, 102, 255, 0.2)';
-			case 6:
-				return 'rgba(255, 159, 64, 0.2)';
-			default:
-				return 'rgba(255, 157, 15, 0.2)';
-		}
+    return census.graphColors[el.date.day()].background;
 	});
 	var borders = this.data.map(function (el) {
-		switch (el.date.day()) {
-			case 1:
-				return 'rgba(255, 99, 132, 1)';
-			case 2:
-				return 'rgba(54, 162, 235, 1)';
-			case 3:
-				return 'rgba(255, 206, 86, 1)';
-			case 4:
-				return 'rgba(75, 192, 192, 1)';
-			case 5:
-				return 'rgba(153, 102, 255, 1)';
-			case 6:
-				return 'rgba(255, 159, 64, 1)';
-			default:
-				return 'rgba(255, 157, 15, 1)';
-		}
+		return census.graphColors[el.date.day()].border;
 	});
 	// draw graph for total requests
 	{

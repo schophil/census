@@ -39,14 +39,19 @@ census.graphOrange = {
   background: 'rgba(255, 159, 64, 0.5)',
   border: 'rgba(255, 159, 64, 1)'
 };
-census.graphOrange = {
-  background: 'rgba(255, 159, 64, 0.5)',
-  border: 'rgba(255, 159, 64, 1)'
-};
 census.graphGrey = {
   background: 'rgba(184, 187, 188, 0.5)',
   border: 'rgba(184, 187, 188, 1)'
 };
+census.graphColors = [
+  census.graphBlue, 
+  census.graphRed, 
+  census.graphYellow, 
+  census.graphGreen, 
+  census.graphPurple, 
+  census.graphOrange, 
+  census.graphGrey
+];
 
 // BEGIN filters
 census.formatDate = function (value) {

@@ -3,6 +3,8 @@ import Chart from 'chart.js';
 import census from '../census';
 import moment from 'moment';
 
+import '../graphs/rtime-per-hour-graph-component';
+
 function fetchData() {
   var vm = this;
   census.consume(
@@ -29,8 +31,8 @@ function drawGraph() {
   requests.data = vm.data.activityPerHour.map(function (h) {
     return h.totalRequests;
   });
-  requests.backgroundColor = 'rgba(75, 192, 192, 0.9)';
-  requests.borderColor = 'rgba(75, 192, 192, 1)';
+  requests.backgroundColor = census.graphGreen.background;
+  requests.borderColor = census.graphGreen.border;
   requests.borderWidth = 1;
 
   var responseTime = {};
@@ -38,8 +40,8 @@ function drawGraph() {
   responseTime.data = vm.data.activityPerHour.map(function (h) {
     return h.averageResponseTime;
   });
-  responseTime.backgroundColor = 'rgba(75, 192, 192, 0.9)';
-  responseTime.borderColor = 'rgba(75, 192, 192, 1)';
+  responseTime.backgroundColor = census.graphBlue.background;
+  responseTime.borderColor = census.graphBlue.border;
   responseTime.borderWidth = 1;
 
 	var ctx = document.getElementById(this.uida);
@@ -62,38 +64,41 @@ function drawGraph() {
 			}
 		}
 	});
-
-  var ctx2 = document.getElementById(this.uidb);
-	var myChart2 = new Chart(ctx2, {
-		type: 'bar',
-		data: {
-			labels: labels,
-			datasets: [responseTime]
-		},
-		options: {
-			legend: {
-				display: true
-			},
-			scales: {
-				yAxes: [{
-					ticks: {
-						beginAtZero:true
-					}
-				}]
-			}
-		}
-	});
 }
 
 Vue.component('census-dashboard-subject-day-user', {
   template: '\
   <div>\
-    <census-panel title="Stats per hour">\
-      <div class="row">\
-        <div class="col-md-6"><canvas v-bind:id="uida" width="400" height="200"></canvas></div>\
-        <div class="col-md-6"><canvas v-bind:id="uidb" width="400" height="200"></canvas></div>\
-      </div>\
+    <census-panel title="Requests per hour">\
+      <canvas v-bind:id="uida" width="400" height="100"></canvas>\
     </census-panel>\
+    <census-panel title="Response time per hour">\
+      <census-rtime-per-hour v-bind:data="responseTimes" gid="rtimegraph"></census-rtime-per-hour>\
+    </census-panel>\
+		<census-panel title="Popular resources">\
+			<table class="table table-striped" v-if="data">\
+				<thead>\
+					<tr>\
+						<th>Resource</th>\
+            <th># requests</th>\
+            <th># errors</th>\
+            <th>avg response time (s)</th>\
+						<th>min response time (s)</th>\
+						<th>max response time (s)</th>\
+					</tr>\
+				</thead>\
+				<tbody>\
+					<tr v-for="r in data.popularResources">\
+						<td>{{ r.path }}</td>\
+            <td>{{ r.totalRequests | formatNumber }}</td>\
+						<td>{{ r.totalRequestsInError | formatNumber }}</td>\
+						<td>{{ r.averageResponseTime | formatNumber }}</td>\
+						<td>{{ r.minResponseTime | formatNumber }}</td>\
+						<td>{{ r.maxResponseTime | formatNumber }}</td>\
+					</tr>\
+				</tbody>\
+			</table>\
+		</census-panel>\
   </div>\
   \
   ',
@@ -109,7 +114,13 @@ Vue.component('census-dashboard-subject-day-user', {
 		},
 		uidb: function () {
 			return 'census_dashboard_gb_' + this.id;
-		}
+    },
+    responseTimes: function () {
+      if (this.data) {
+        return this.data.activityPerHour;
+      }
+      return null;
+    }
 	},
   watch: {
 		data: drawGraph

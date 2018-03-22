@@ -3,6 +3,8 @@ import Chart from 'chart.js';
 import census from '../census';
 import moment from 'moment';
 
+import '../graphs/rtime-per-hour-graph-component';
+
 function fetchData() {
 	var vm = this;
 	census.consume(
@@ -17,49 +19,52 @@ function fetchData() {
 }
 
 function drawGraph() {
+  drawTotalRequestsGraph(this);
+}
+
+function drawTotalRequestsGraph(vm) {
 	if (!PRODUCTION) {
-			console.log('Drawing the graph in ', this.uid);
+			console.log('Drawing the graph in ', vm.uid);
 	}
 	// prepare graph data
-	var labels = this.data[1].activityPerHour.map(function (el) {
+	var labels = vm.data[1].activityPerHour.map(function (el) {
 		return el.hour;
 	});
 
 	// prepare data for yesterday
 	var yesterday = { };
-	yesterday.label = this.yesterday.format(census.dateFormat);
-	if (this.showAdjacentDays && this.data[0].activityPerHour) {
-		yesterday.data = this.data[0].activityPerHour.map(function (el) {
+	yesterday.label = vm.yesterday.format(census.dateFormat);
+	if (vm.showAdjacentDays && vm.data[0].activityPerHour) {
+		yesterday.data = vm.data[0].activityPerHour.map(function (el) {
 			return el.totalRequests;
 		});
 	}
-	yesterday.backgroundColor = 'rgba(75, 192, 192, 0.1)';
-	yesterday.borderColor = 'rgba(75, 191, 192, 1)';
+	yesterday.backgroundColor = census.graphGreen.background;
+	yesterday.borderColor = census.graphGreen.border;
 	yesterday.borderWidth = 1;
 
 	var target = { };
-	target.label = this.date.format(census.dateFormat);
-	target.data = this.data[1].activityPerHour.map(function (el) {
+	target.label = vm.date.format(census.dateFormat);
+	target.data = vm.data[1].activityPerHour.map(function (el) {
 		return el.totalRequests;
 	});
-	target.backgroundColor = 'rgba(75, 192, 192, 0.9)';
-	target.borderColor = 'rgba(75, 192, 192, 1)';
+	target.backgroundColor = census.graphBlue.background;
+	target.borderColor = census.graphBlue.border;
 	target.borderWidth = 1;
 
 	var tomorrow = { };
-	tomorrow.label = this.tomorrow.format(census.dateFormat);
-	if (this.showAdjacentDays && this.data[2].activityPerHour) {
-		tomorrow.data = this.data[2].activityPerHour.map(function (el) {
+	tomorrow.label = vm.tomorrow.format(census.dateFormat);
+	if (vm.showAdjacentDays && vm.data[2].activityPerHour) {
+		tomorrow.data = vm.data[2].activityPerHour.map(function (el) {
 			return el.totalRequests;
 		});
 	}
-	tomorrow.backgroundColor = 'rgba(75, 192, 192, 0.4)';
-	tomorrow.borderColor = 'rgba(75, 192, 192, 1)';
+	tomorrow.backgroundColor = census.graphGrey.background;
+	tomorrow.borderColor = census.graphGrey.border;
 	tomorrow.borderWidth = 1;
 
 	// start drawing
-	var vm = this;
-	var ctx = document.getElementById(this.uid);
+	var ctx = document.getElementById(vm.uid);
 	var myChart = new Chart(ctx, {
 		type: 'bar',
 		data: {
@@ -84,7 +89,6 @@ function drawGraph() {
 			}
 		}
 	});
-	//this.chart = myChart;
 }
 
 Vue.component('census-dashboard-subject-day', {
@@ -117,18 +121,29 @@ Vue.component('census-dashboard-subject-day', {
 					</table>\
 				</div>\
 		</census-panel>\
+    <census-panel title="Response time per hour">\
+        <census-rtime-per-hour v-bind:data="responseTimes" gid="rtimegraph"></census-rtime-per-hour>\
+    </census-panel>\
 		<census-panel title="Popular resources">\
 			<table class="table table-striped" v-if="targetData">\
 				<thead>\
 					<tr>\
 						<th>Resource</th>\
-						<th>Hits</th>\
+            <th># requests</th>\
+            <th># errors</th>\
+            <th>avg response time (s)</th>\
+						<th>min response time (s)</th>\
+						<th>max response time (s)</th>\
 					</tr>\
 				</thead>\
 				<tbody>\
 					<tr v-for="r in targetData.popularResources">\
 						<td>{{ r.path }}</td>\
-						<td>{{ r.hits | formatNumber }}</td>\
+            <td>{{ r.totalRequests | formatNumber }}</td>\
+						<td>{{ r.totalRequestsInError | formatNumber }}</td>\
+						<td>{{ r.averageResponseTime | formatNumber }}</td>\
+						<td>{{ r.minResponseTime | formatNumber }}</td>\
+						<td>{{ r.maxResponseTime | formatNumber }}</td>\
 					</tr>\
 				</tbody>\
 			</table>\
@@ -143,8 +158,11 @@ Vue.component('census-dashboard-subject-day', {
 				<thead>\
 					<tr>\
 						<th>user</th>\
-						<th># requests</th>\
-						<th># errors</th>\
+            <th># requests</th>\
+            <th># errors</th>\
+            <th>avg response time (s)</th>\
+						<th>min response time (s)</th>\
+						<th>max response time (s)</th>\
 					</tr>\
 				</thead>\
 				<tbody>\
@@ -153,6 +171,9 @@ Vue.component('census-dashboard-subject-day', {
 							<td><a href="#" @click.prevent="drillDown(r.userId)">{{ r.userId }}</a> - {{ r.userName }}</td>\
 							<td>{{ r.totalRequests | formatNumber }}</td>\
 							<td>{{ r.totalRequestsInError | formatNumber }}</td>\
+							<td>{{ r.averageResponseTime | formatNumber }}</td>\
+							<td>{{ r.minResponseTime | formatNumber }}</td>\
+							<td>{{ r.maxResponseTime | formatNumber }}</td>\
 						</template>\
 					</tr>\
 				</tbody>\
@@ -201,7 +222,10 @@ Vue.component('census-dashboard-subject-day', {
 		},
 		targetData: function () {
 			return this.data ? this.data[1] : null;
-		}
+    },
+    responseTimes: function () {
+      return this.data ? this.data[1].activityPerHour : null;
+    }
 	},
 	methods: {
 		toggleDetails: function () {
