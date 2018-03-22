@@ -66,19 +66,19 @@ public class DayDetailsService {
         // Collect the missing users.
         oneDayDetails.missingUsers = userBaseReducer.remaining()
                 .stream()
-                .map(u -> OneUser.of(u))
+                .map(OneUser::of)
                 .collect(Collectors.toList());
 
         // Collect activity per hour
         oneDayDetails.activityPerHour = totalActivityPerHourDao.getDayActivity(dayStats)
                 .stream()
-                .map(activity -> OneHour.of(activity))
+                .map(OneHour::of)
                 .collect(Collectors.toList());
 
         // collect top ten resources
         oneDayDetails.popularResources = resourceDao.getPopular(dayStats, 15, "Path")
                 .stream()
-                .map(r -> OneResource.of(r))
+                .map(OneResource::of)
                 .collect(Collectors.toList());
 
         return oneDayDetails;
@@ -102,8 +102,15 @@ public class DayDetailsService {
         }
 
         // Collect activity per hour
-        oneUserDetails.activityPerHour = userActivityPerHourDao.getActivities(dayStats, userId).stream()
-                .map(a -> OneHour.of(a)).collect(Collectors.toList());
+        oneUserDetails.activityPerHour = userActivityPerHourDao.getActivities(dayStats, userId)
+                .stream()
+                .map(OneHour::of)
+                .collect(Collectors.toList());
+
+        oneUserDetails.popularResources = resourceDao.getPopular(dayStats, 15, "Path", userId)
+                .stream()
+                .map(OneResource::of)
+                .collect(Collectors.toList());
 
         return oneUserDetails;
     }

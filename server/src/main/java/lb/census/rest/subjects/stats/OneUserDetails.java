@@ -15,4 +15,5 @@ public class OneUserDetails {
     public String userId;
     public String userName;
     public List<OneHour> activityPerHour;
+    public List<OneResource> popularResources;
 }
