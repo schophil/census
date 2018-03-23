@@ -17,7 +17,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  * date, all other statistics reference this.
  */
 @Entity
-@Table(name = "census_daystats")
+@Table(name = "census_daystats", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"sdate", "subject"})
+})
 public class DayStats extends DefaultMetrics implements Serializable {
 
     /**

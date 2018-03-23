@@ -113,10 +113,6 @@ public class RecordServiceTest {
         assertThat(recorderContext.getImported()).isEqualTo(10);
         assertThat(recorderContext.getFiltered()).isEqualTo(4);
 
-        recorderContext = recordService.record(createLogData(), subject);
-        assertThat(recorderContext.getImported()).isEqualTo(10);
-        assertThat(recorderContext.getFiltered()).isEqualTo(4);
-
         dayStatsDao.getDayStats(DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH), subject.getId());
     }
 }
