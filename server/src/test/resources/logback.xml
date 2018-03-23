@@ -10,6 +10,7 @@
     <logger name="CENSUS_RECORDERS" level="trace"/>
     <logger name="CENSUS_CONTROLLERS" level="trace"/>
     <logger name="CENSUS_MATH" level="trace"/>
+    <logger name="org.hibernate.event.internal.DefaultPersistEventListener" level="trace" />
 
     <root level="error">
         <appender-ref ref="STDOUT" />

@@ -21,7 +21,7 @@ public abstract class ActivityPerHour extends DefaultMetrics {
     private String id;
     @Column(name = "dhour")
     private Integer hour;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "daystat")
     private DayStats dayStats;
 

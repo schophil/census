@@ -20,7 +20,7 @@ public class UserStats extends DefaultMetrics implements Serializable {
     private String id;
     @Column(name = "userid")
     private String userId;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "daystat")
     private DayStats dayStats;
 

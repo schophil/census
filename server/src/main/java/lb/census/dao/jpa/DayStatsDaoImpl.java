@@ -34,7 +34,13 @@ public class DayStatsDaoImpl extends BaseDaoImpl implements DayStatsDao {
         if (!getEntityManager().contains(dayStats)) {
             dayStats = getEntityManager().find(DayStats.class, dayStats.getId());
         }
-        getEntityManager().remove(dayStats);
+//        getEntityManager().createQuery("DELETE Resource r WHERE r.dayStats = :d").setParameter("d", dayStats).executeUpdate();
+//        getEntityManager().createQuery("DELETE TotalActivityPerHour r WHERE r.dayStats = :d").setParameter("d", dayStats).executeUpdate();
+//        getEntityManager().createQuery("DELETE UserActivityPerHour r WHERE r.dayStats = :d").setParameter("d", dayStats).executeUpdate();
+//        getEntityManager().createQuery("DELETE UserStats r WHERE r.dayStats = :d").setParameter("d", dayStats).executeUpdate();
+//        getEntityManager().remove(dayStats);
+//        getEntityManager().flush();
+//        getEntityManager().clear();
     }
 
     @Transactional(readOnly = true)

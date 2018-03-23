@@ -2,7 +2,10 @@ package lb.census.record;
 
 import lb.census.CommonTestsConfiguration;
 import lb.census.dao.DayStatsDao;
+import lb.census.dao.ResourceDao;
 import lb.census.dao.SubjectDao;
+import lb.census.model.DayStats;
+import lb.census.model.Resource;
 import lb.census.model.Subject;
 import lb.census.record.filters.PatternFilter;
 import lb.census.record.log.ApacheLogFormat;
@@ -20,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.*;
@@ -30,7 +34,6 @@ import static org.assertj.core.api.Assertions.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Import(CommonTestsConfiguration.class)
-@Transactional
 public class RecordServiceTest {
 
     @Autowired
@@ -39,6 +42,8 @@ public class RecordServiceTest {
     private SubjectDao subjectDao;
     @Autowired
     private DayStatsDao dayStatsDao;
+    @Autowired
+    private ResourceDao resourceDao;
 
     private LogSet createLogData() {
         DefaultLogSet defaultLogSet = new DefaultLogSet();
@@ -70,22 +75,40 @@ public class RecordServiceTest {
         return defaultLogSet;
     }
 
+    @Transactional
     @Before
     public void createSubject() {
         subjectDao.save(new Subject("starwars", "Star Wars"));
-    }
-
-    @Test
-    public void recordAndRead() {
         Subject subject = subjectDao.get("starwars");
-        RecorderContext recorderContext = recordService.record(createLogData(), subject);
-        assertThat(recorderContext.getImported()).isEqualTo(10);
-        assertThat(recorderContext.getFiltered()).isEqualTo(4);
+        recordService.record(createLogData(), subject);
     }
 
+    @Transactional
+    @Test
+    public void remove() {
+        DayStats dayStats = dayStatsDao.getDayStats(DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH), "starwars");
+        assertThat(dayStats).isNotNull();
+
+        List<Resource> resources = resourceDao.getPopular(dayStats, 5, "Path");
+        assertThat(resources).isNotEmpty();
+
+        dayStatsDao.delete(dayStats);
+
+
+
+        dayStats = dayStatsDao.getDayStats(DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH), "starwars");
+        assertThat(dayStats).isNull();
+        resources = resourceDao.getPopular(dayStats, 5, "Path");
+        assertThat(resources).isEmpty();
+    }
+
+    @Transactional
     @Test
     public void recordAndOverwrite() {
         Subject subject = subjectDao.get("starwars");
+        DayStats dayStats = dayStatsDao.getDayStats(DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH), "starwars");
+        assertThat(dayStats).isNotNull();
+
         RecorderContext recorderContext = recordService.record(createLogData(), subject);
         assertThat(recorderContext.getImported()).isEqualTo(10);
         assertThat(recorderContext.getFiltered()).isEqualTo(4);
