@@ -17,12 +17,12 @@ public class SubHourMetricsCollectorTest {
         );
 
         LogRecord[] records = {
-                makeLogRecord(2),
-                makeLogRecord(4),
-                makeLogRecord(5),
-                makeLogRecord(2),
                 makeLogRecord(3),
-                makeLogRecord(5)
+                makeLogRecord(5),
+                makeLogRecord(6),
+                makeLogRecord(3),
+                makeLogRecord(4),
+                makeLogRecord(6)
         };
 
         for (LogRecord logRecord : records) {
@@ -30,17 +30,17 @@ public class SubHourMetricsCollectorTest {
         }
 
         CounterMetrics[] metrics = collector.getMetricsCollectors(new CounterMetrics[24]);
-        Assert.assertNotNull(metrics[2]);
-        Assert.assertNotNull(metrics[4]);
-        Assert.assertNotNull(metrics[5]);
         Assert.assertNotNull(metrics[3]);
+        Assert.assertNotNull(metrics[5]);
+        Assert.assertNotNull(metrics[6]);
+        Assert.assertNotNull(metrics[4]);
 
         for (int i = 0; i < metrics.length; i++) {
             switch (i) {
-                case 2:
-                case 4:
-                case 5:
                 case 3:
+                case 5:
+                case 6:
+                case 4:
                     Assert.assertNotNull(metrics[i]);
                     break;
                 default:
@@ -48,10 +48,10 @@ public class SubHourMetricsCollectorTest {
             }
         }
 
-        Assert.assertEquals(metrics[2].getCounter(), 2);
+        Assert.assertEquals(metrics[3].getCounter(), 2);
+        Assert.assertEquals(metrics[5].getCounter(), 1);
+        Assert.assertEquals(metrics[6].getCounter(), 2);
         Assert.assertEquals(metrics[4].getCounter(), 1);
-        Assert.assertEquals(metrics[5].getCounter(), 2);
-        Assert.assertEquals(metrics[3].getCounter(), 1);
     }
 
     public LogRecord makeLogRecord(int hourOfTheDay) {
