@@ -40,7 +40,7 @@ public class DayStats extends DefaultMetrics implements Serializable {
     private String subject;
     @Column(name = "utotal")
     private Integer totalUserIds;
-    @OneToMany(mappedBy = "dayStats", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "dayStats", fetch = FetchType.EAGER)
     @OrderBy("totalRequests DESC")
     private Set<UserStats> userStats;
 

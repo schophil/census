@@ -18,7 +18,7 @@ import lb.census.record.log.LogRecord;
 @Component
 public class UserRecorder implements Recorder {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserRecorder.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("CENSUS_RECORDERS");
     private final HashSet<String> userIds = new HashSet<>();
     @Autowired
     private UserDao userDao;

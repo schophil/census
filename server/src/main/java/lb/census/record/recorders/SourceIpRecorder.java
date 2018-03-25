@@ -15,7 +15,7 @@ import java.util.Date;
 @Component
 public class SourceIpRecorder implements Recorder {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SourceIpRecorder.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("CENSUS_RECORDERS");
     @Autowired
     private SourceIpDao sourceIpDao;
     private int daysToKeep = -1; // by default we keep the ip addresses

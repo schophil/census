@@ -23,7 +23,7 @@ import java.util.Date;
 @Component
 public class ActivityPerHourRecorder implements Recorder {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ActivityPerHourRecorder.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("CENSUS_RECORDERS");
 
     @Autowired
     private DayStatsDao dayStatsDao;

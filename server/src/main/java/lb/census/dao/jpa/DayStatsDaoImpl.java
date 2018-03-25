@@ -34,10 +34,10 @@ public class DayStatsDaoImpl extends BaseDaoImpl implements DayStatsDao {
         if (!getEntityManager().contains(dayStats)) {
             dayStats = getEntityManager().find(DayStats.class, dayStats.getId());
         }
-        getEntityManager().createQuery("DELETE Resource r WHERE r.dayStats = :d").setParameter("d", dayStats).executeUpdate();
-        getEntityManager().createQuery("DELETE TotalActivityPerHour r WHERE r.dayStats = :d").setParameter("d", dayStats).executeUpdate();
-        getEntityManager().createQuery("DELETE UserActivityPerHour r WHERE r.dayStats = :d").setParameter("d", dayStats).executeUpdate();
-        getEntityManager().createQuery("DELETE UserStats r WHERE r.dayStats = :d").setParameter("d", dayStats).executeUpdate();
+        getEntityManager().createQuery("DELETE FROM Resource r WHERE r.dayStats = :d").setParameter("d", dayStats).executeUpdate();
+        getEntityManager().createQuery("DELETE FROM TotalActivityPerHour r WHERE r.dayStats = :d").setParameter("d", dayStats).executeUpdate();
+        getEntityManager().createQuery("DELETE FROM UserActivityPerHour r WHERE r.dayStats = :d").setParameter("d", dayStats).executeUpdate();
+        getEntityManager().createQuery("DELETE FROM UserStats r WHERE r.dayStats = :d").setParameter("d", dayStats).executeUpdate();
         getEntityManager().remove(dayStats);
         // The flush appears to be needed - some errors occur when in the same transaction the daystats is deleted and re-created.
         getEntityManager().flush();

@@ -22,7 +22,7 @@ import lb.census.record.log.LogRecord;
 @Component
 public class UserStatsRecorder implements Recorder {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserStatsRecorder.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("CENSUS_RECORDERS");
     private SubKeyMetricsCollector<MetricsCalculator> metricsPerUser;
     @Autowired
     private DayStatsDao dayStatsDao;

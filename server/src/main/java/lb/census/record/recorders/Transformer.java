@@ -28,7 +28,7 @@ import lb.census.record.log.LogRecord;
 @Order(value = 1)
 public class Transformer implements Recorder {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Transformer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("CENSUS_RECORDERS");
     @Autowired
     private CensusConfig censusConfig;
     private ScriptEngine scriptEngine;

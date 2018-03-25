@@ -23,7 +23,7 @@ import lb.census.record.log.LogRecord;
 @Order(value = 2)
 public class GlobalStatsRecorder implements Recorder {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GlobalStatsRecorder.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("CENSUS_RECORDERS");
     @Autowired
     private DayStatsDao dayStatsDao;
     private MetricsCalculator metricsCalculator;
@@ -53,7 +53,7 @@ public class GlobalStatsRecorder implements Recorder {
         LOGGER.debug("Create day stats for date {}", date);
         DayStats dayStats = dayStatsDao.getDayStats(date, subjectId);
         if (dayStats != null) {
-            LOGGER.debug("Delete existing day stats");
+            LOGGER.info("Delete existing day stats {}", dayStats);
             dayStatsDao.delete(dayStats);
         }
 
