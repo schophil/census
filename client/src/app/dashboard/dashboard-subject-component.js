@@ -154,10 +154,9 @@ Vue.component('census-dashboard-subject', {
 			if (!PRODUCTION) {
 				console.log('Drilling down to ', this.data[idx].date.format('DD/MM/YYYY'));
 			}
-			this.$emit('drill', {
-				subject: this.subject,
-				date: this.data[idx].date
-			});
+      this.$router.push({
+        path: '/dashboard/subject/' + this.subject.id + '/date/' + this.data[idx].date.format(census.dateApiFormat)
+      });
 		}
 	},
 	filters: {

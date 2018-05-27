@@ -125,16 +125,8 @@ Vue.component('census-dashboard', {
 		    <button type="button" class="btn btn-default" v-on:click="uncheckAll">Uncheck all</button>\
 			</form>\
     </census-panel>\
-		<div id="censusDashboardLevel1" v-show="isLevel1">\
-			<census-dashboard-subject v-on:drill="drill" v-bind:id="idx" days="30" v-for="(s, idx) in subjects" :key="s.id" v-bind:filter="filter" v-bind:subject="s"></census-dashboard-subject>\
-		</div>\
-		<div id="censusDashboardLevel2" v-if="isLevel2">\
-			<census-dashboard-subject-day v-on:drill="drill" v-bind:subject="target.subject" v-bind:date="target.date"></census-dashboard-subject-day>\
-		</div>\
-		<div id="censusDashboardLevel3" v-if="isLevel3">\
-			<census-dashboard-subject-day-user v-bind:subject="target.subject" v-bind:date="target.date" v-bind:user="target.user"></census-dashboard-subject-day-user>\
-		</div>\
-	</div>\
+    <router-view></router-view>\
+			</div>\
 	',
 	props: ['subjects'],
 	data: function () {

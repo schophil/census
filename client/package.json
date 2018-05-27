@@ -31,6 +31,11 @@
     "lodash": "^4.17.5",
     "moment": "^2.21.0",
     "spin.js": "^2.3.2",
-    "vue": "^2.5.15"
+    "vue": "^2.5.15",
+    "vue-router": "^3.0.1"
+  },
+  "jshintConfig": {
+    "esversion": 6,
+    "multistr": true
   }
 }

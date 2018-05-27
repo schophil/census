@@ -14,10 +14,18 @@
 						<a class="navbar-brand" href="#" v-on:click.stop="goToDashboard">Census</a>
 					</div>
 					<ul class="nav navbar-nav">
-						<li v-bind:class="{ active: inDashboard }"><a href="#" v-on:click.stop="goToDashboard">Dashboard</a></li>
-						<li v-bind:class="{ active: inSourceip }"><a href="#" v-on:click.stop="goToSourceip">Source ips</a></li>
-						<li v-bind:class="{ active: inSchedule }"><a href="#" v-on:click.stop="goToSchedule">Schedule</a></li>
-						<li v-bind:class="{ active: inAbout }"><a href="#" v-on:click.stop="goToAbout">About</a></li>
+						<router-link active-class="active" tag="li" to="/dashboard">
+							<a>Dashboard</a>
+						</router-link>
+						<router-link active-class="active" tag="li" to="/sourceip">
+							<a>SourceIP</a>
+						</router-link>
+						<router-link active-class="active" tag="li" to="/schedule">
+							<a>Schedule</a>
+						</router-link>
+						<router-link active-class="active" tag="li" to="/about">
+							<a>About</a>
+						</router-link>
 					</ul>
 				</div>
 			</nav>
@@ -34,10 +42,7 @@
 						<p>{{a.message}}</p>
 					</div>
 				</div>
-				<census-dashboard v-if="inDashboard" v-bind:subjects="subjects" v-on:error="onError"></census-dashboard>
-				<census-sourceip v-if="inSourceip" v-bind:subjects="subjects" v-on:error="onError"></census-sourceip>
-				<census-schedule v-if="inSchedule" v-bind:subjects="subjects" v-on:error="onError"></census-schedule>
-				<census-about v-if="inAbout"></census-about>
+				<router-view></router-view>
 			</div>
 		</div>
 		<script src="bundle.js" crossorigin="anonymous"></script>

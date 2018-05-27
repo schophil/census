@@ -2,11 +2,17 @@ import Vue from 'vue';
 import Chart from 'chart.js';
 import census from '../census';
 import moment from 'moment';
+import _ from 'lodash';
 
 import '../graphs/rtime-per-hour-graph-component';
 
 function fetchData() {
 	var vm = this;
+
+  if (_.isString(vm.date)) {
+    vm.date = moment(vm.date);
+  }
+
 	census.consume(
 		function () {
 			return census.DashboardService.dayDetails(vm.subject, vm.date);

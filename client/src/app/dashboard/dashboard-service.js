@@ -150,20 +150,21 @@ export function MockDashboardService() {
 		};
 
 		var group = [yesterday, target, tomorrow];
+
 		// create fictional data
-		for (var i = 0; i < 24; i++) {
-			group.forEach(function (g) {
-				var hour = {
-					totalRequests: _.random(100, 5000),
+    group.forEach(function (g) {
+      for (var i = 0; i < 24; i++) {
+        var hour = {
+          totalRequests: _.random(100, 5000),
           totalRequestsInError: _.random(5, 10),
-				  averageResponseTime: _.random(5, 10),
-				  minResponseTime: _.random(5, 10),
-				  maxResponseTime: _.random(5, 10),
-					hour: i
-				};
-				g.activityPerHour.push(hour);
-			});
-		}
+          averageResponseTime: _.random(5, 10),
+          minResponseTime: _.random(5, 10),
+          maxResponseTime: _.random(5, 10),
+          hour: i
+        };
+        g.activityPerHour.push(hour);
+      }
+    });
 
 		target.popularResources = [];
 		for (var j = 0; j < 10; j++) {
@@ -178,7 +179,7 @@ export function MockDashboardService() {
 		}
 
 		target.recordedUsers = [];
-		for (var j = 0; j < 10; j++) {
+		for (var k = 0; k < 10; k++) {
 			target.recordedUsers.push({
 				userId: 'U' + _.random(100, 200),
 				userName: 'longer_name_' + _.random(5, 10),
